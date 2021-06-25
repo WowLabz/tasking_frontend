@@ -1,0 +1,29 @@
+.dashboard-container {
+    height: 90vh;
+}
+
+.task-card {
+    margin: 5px;
+    padding: 10px;
+    height: 370px;
+    width: 300px;
+    border-radius: 12px;
+    /* box-shadow: 4px 4px 4px rgb(151 167 195 / 44%), -4px -4px 4px #fff; */
+    text-decoration: none;
+    gap: 10px;
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+}
+.btn-margin {
+    margin: 0 1rem;
+}
+span {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.card-footer {
+    background-color: white;
+    display: contents;
+}

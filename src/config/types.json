@@ -1,0 +1,23 @@
+{
+    "Balance": "u128",
+    "TaskDetails": {
+        "task_id": "u128",
+        "client": "AccountId",
+        "worker_id": "Option<AccountId>",
+        "task_deadline": "u64",
+        "cost": "Balance",
+        "status": "Status",
+        "task_description": "Text"
+    },
+    "Status": {
+        "_enum": ["Open", "InProgress", "PendingApproval", "Completed"]
+    },
+    "TypedEnum": {
+        "_enum": {
+            "Open": "Text",
+            "InProgress": "Text",
+            "PendingApproval": "Text",
+            "Completed": "Text"
+        }
+    }
+}
