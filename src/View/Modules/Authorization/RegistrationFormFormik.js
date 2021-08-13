@@ -20,6 +20,7 @@ import {
 } from "react-bootstrap";
 import FormErrorMessage from "./FormErrorMessage";
 import * as constants from "./constants";
+import { userSignUp } from "./actionCreators";
 
 let initialValues = {
     firstName: "",
@@ -59,7 +60,13 @@ const FixedCardHeight = {
 
 const RegistrationFormFormik = () => {
     const handleFormSubmit = async (data) => {
-        console.log(JSON.stringify(data));
+        let signUpFormData = new FormData();
+        signUpFormData.append("first_name", data.firstName);
+        signUpFormData.append("last_name", data.lastName);
+        signUpFormData.append("user_type", data.userType);
+        signUpFormData.append("email_id", data.emailId);
+        signUpFormData.append("password", data.password);
+        // userSignUp(signUpFormData);
     };
     
     return (

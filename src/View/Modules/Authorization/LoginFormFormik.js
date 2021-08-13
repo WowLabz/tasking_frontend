@@ -18,8 +18,11 @@ import {
     Modal,
     Spinner,
 } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import FormErrorMessage from "./FormErrorMessage";
 import * as constants from "./constants";
+import { userSignIn } from "./actionCreators";
 
 let initialValues = {
     userName: "",
@@ -35,13 +38,24 @@ const validationSchema = Yup.object({
 
 const FixedCardHeight = {
     height: "600px",
-}
+};
 
 const LoginFormFormik = () => {
+    const history = useHistory();
+    const isLoggedIn = useSelector((state) => state.authenticationReducer.isLoggedIn);
+
     const handleFormSubmit = async (data) => {
-        console.log(JSON.stringify(data));
+        let loginFormData = new FormData();
+        loginFormData.append("username", data.userName);
+        loginFormData.append("password", data.password);
+        console.log(loginFormData.get("username"));
+        console.log(loginFormData.get("password"));
+        // userSignIn(loginFormData);
+        if (isLoggedIn) {
+            history.push("/dashboard");
+        }
     };
-    
+
     return (
         <>
             <Formik
@@ -63,7 +77,7 @@ const LoginFormFormik = () => {
                     handleSubmit,
                 }) => (
                     <FormikForm>
-                        <Card style={{...FixedCardHeight}}>
+                        <Card style={{ ...FixedCardHeight }}>
                             <Card.Body>
                                 <FormLabelAndInput
                                     placeholder="username"
@@ -96,8 +110,8 @@ const LoginFormFormik = () => {
                 )}
             </Formik>
         </>
-    )
-}
+    );
+};
 
 const FormLabelAndInput = ({ label, helperText, isDisabled, ...props }) => {
     const [field, meta] = useField(props);
@@ -126,4 +140,4 @@ const FormLabelAndInput = ({ label, helperText, isDisabled, ...props }) => {
     );
 };
 
-export default LoginFormFormik
+export default LoginFormFormik;
