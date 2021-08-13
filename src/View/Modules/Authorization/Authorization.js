@@ -39,7 +39,7 @@ const Authorization = () => {
                                     <Card.Body>
                                         <Nav
                                             variant="pills"
-                                            className="flex-column"
+                                            className="flex-column text-center"
                                         >
                                             <Nav.Item>
                                                 <Nav.Link eventKey="first">
