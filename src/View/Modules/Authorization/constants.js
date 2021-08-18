@@ -9,8 +9,8 @@ export const INITIATING_API_CALL = "INITIATING_API_CALL"
 export const API_CALL_ERROR = "API_CALL_ERROR"
 export const API_CALL_SUCCESS = "API_CALL_SUCCESS"
 
-export const AUTH_BASE_URL = "https://localhost:3001"
+export const AUTH_BASE_URL = "http://localhost:3001"
 export const AUTH_END_POINTS = {
-    signUp: "/signup",
-    signIn: "/signin"
+    signUp: "/auth/sign-up",
+    signIn: "/auth/sign-in"
 }

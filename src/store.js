@@ -5,10 +5,15 @@ import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 
 import rootReducer from "./reducer";
+import { authenticationReducer } from "./View/Modules/Authorization/reducer";
+import { dashBoardReducer } from "./View/Modules/DashBoard/reducer";
 
 const persistConfig = {
     key: "root",
     storage,
+    whitelist: [
+        "dashBoardReducer"
+    ],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

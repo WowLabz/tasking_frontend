@@ -18,6 +18,7 @@ import {
     Modal,
     Spinner,
 } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import FormErrorMessage from "./FormErrorMessage";
 import * as constants from "./constants";
 import { userSignUp } from "./actionCreators";
@@ -59,6 +60,8 @@ const FixedCardHeight = {
 }
 
 const RegistrationFormFormik = () => {
+    const dispatch = useDispatch();
+
     const handleFormSubmit = async (data) => {
         let signUpFormData = new FormData();
         signUpFormData.append("first_name", data.firstName);
@@ -66,7 +69,7 @@ const RegistrationFormFormik = () => {
         signUpFormData.append("user_type", data.userType);
         signUpFormData.append("email_id", data.emailId);
         signUpFormData.append("password", data.password);
-        // userSignUp(signUpFormData);
+        dispatch(userSignUp(signUpFormData));
     };
     
     return (

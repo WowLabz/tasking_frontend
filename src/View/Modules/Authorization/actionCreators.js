@@ -11,9 +11,14 @@ export const userSignIn = (data) => {
             dispatch(initiatingApiCall());
             let logInUrl = AUTH_BASE_URL + AUTH_END_POINTS.signIn;
             let res = await apiHelpers.post(logInUrl, data);
-            if (res.status === "200") {
-                dispatch(signIn(res.data));
+            if (res.status === 200) {
+                dispatch(signIn(res.data.data));
                 toast.success("Login Successfull !", {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 3000,
+                });
+            } else if (res.status === 501 || res.status === 500) {
+                toast.error("Login Failed! Try again!", {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
                 });
@@ -34,14 +39,26 @@ export const userSignUp = (data) => {
             dispatch(initiatingApiCall());
             let signUpUrl = AUTH_BASE_URL + AUTH_END_POINTS.signUp;
             let res = await apiHelpers.post(signUpUrl, data);
-            if (res.status === "200") {
-                dispatch(signIn(res.data));
-                toast.success("Login Successfull !", {
+            console.log(res);
+            if (res.status === 200) {
+                window.location.reload();
+                toast.success("Registration Successfull !", {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 3000,
+                });
+                toast.success("SignIn to App!", {
+                    position: toast.POSITION.TOP_LEFT,
+                    autoClose: 5000,
+                });
+            } else if (res.status === 501 || res.status === 500) {
+                console.log("------------1-----------");
+                toast.error("Registration Failed! User already exists!", {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
                 });
             }
         } catch (error) {
+            console.log("------------2-----------");
             dispatch(apiCallError());
             toast.error(error.message, {
                 position: toast.POSITION.TOP_CENTER,

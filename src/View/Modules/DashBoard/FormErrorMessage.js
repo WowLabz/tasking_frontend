@@ -8,7 +8,7 @@ const FormErrorMessage = (props) => {
                 <Badge
                     variant="danger"
                     className="p-1"
-                    style={{ color: "white", fontSize: "small" }}
+                    style={{ color: "red", fontSize: "small" }}
                 >
                     {props.children}
                 </Badge>

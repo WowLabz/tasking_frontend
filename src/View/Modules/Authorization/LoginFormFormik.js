@@ -18,7 +18,7 @@ import {
     Modal,
     Spinner,
 } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import FormErrorMessage from "./FormErrorMessage";
 import * as constants from "./constants";
@@ -42,19 +42,23 @@ const FixedCardHeight = {
 
 const LoginFormFormik = () => {
     const history = useHistory();
-    const isLoggedIn = useSelector((state) => state.authenticationReducer.isLoggedIn);
+    const isLoggedIn = useSelector(
+        (state) => state.authenticationReducer.isLoggedIn
+    );
+    const dispatch = useDispatch();
 
     const handleFormSubmit = async (data) => {
         let loginFormData = new FormData();
         loginFormData.append("username", data.userName);
         loginFormData.append("password", data.password);
-        console.log(loginFormData.get("username"));
-        console.log(loginFormData.get("password"));
-        // userSignIn(loginFormData);
+        dispatch(userSignIn(loginFormData));
+    };
+
+    useEffect(() => {
         if (isLoggedIn) {
             history.push("/dashboard");
         }
-    };
+    }, [isLoggedIn]);
 
     return (
         <>
