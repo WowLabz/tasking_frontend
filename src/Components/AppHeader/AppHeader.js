@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Nav, Navbar, NavDropdown, Image } from "react-bootstrap";
 
 import * as constants from "../../constants/constants";
+import { TxGroupButton, TxButton } from "../../substrate-lib/components/TxButton";
+import CryptoWallet from "../CryptoWallet/CryptoWallet";
 import "./AppHeader.css";
 
 const AppHeader = () => {
@@ -31,7 +33,9 @@ const AppHeader = () => {
                         <Nav.Link href="#InProgress">InProgress</Nav.Link>
                         <Nav.Link href="#InProgress">Completed</Nav.Link>
                     </Nav>
-                    <Nav style={{ marginLeft: "auto" }}>
+                    <Nav 
+                        style={{ marginLeft: "auto" }} 
+                    >
                         {/* <Nav.Link href="#Approve">Open</Nav.Link>
                         <Nav.Link href="#Approve">Approve</Nav.Link>
                         <Nav.Link href="#InProgress">InProgress</Nav.Link>
@@ -39,6 +43,7 @@ const AppHeader = () => {
                         <NavDropdown
                             title="Accounts"
                             id="collasible-nav-dropdown"
+                            className="m-1"
                         >
                             <NavDropdown.Item href="#action/3.1">
                                 Alice
@@ -47,6 +52,13 @@ const AppHeader = () => {
                                 Bob
                             </NavDropdown.Item>
                         </NavDropdown>
+                        {/* <TxButton
+                            label="Signed"
+                            type="SIGNED-TX"
+                            color="blue"
+                            {...props}
+                        /> */}
+                        <CryptoWallet />
                     </Nav>
                     {/* <Nav className="ml-auto">
                         <Nav.Link href="#deets">More</Nav.Link>

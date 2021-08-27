@@ -16,3 +16,6 @@ const envVars = envVarNames.reduce((mem, n) => {
 
 const config = { ...configCommon, ...configEnv, ...envVars, types };
 export default config;
+
+
+// "PROVIDER_SOCKET": "ws://127.0.0.1:9944"

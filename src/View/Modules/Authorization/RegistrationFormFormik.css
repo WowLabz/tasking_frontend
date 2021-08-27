@@ -1,0 +1,7 @@
+.reg-form > *:nth-child(1) {
+    flex: 0 auto 67%;
+}
+
+.reg-form> *:nth-child(2) {
+    flex: 0 auto 27%;
+}

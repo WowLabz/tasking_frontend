@@ -8,8 +8,9 @@ const Routes = () => {
         <>
             <Router>
                 <Switch>
-                    <Route exact path="/" component={Authorization} />
+                    <Route exact path="/" component={DashBoard} />
                     <Route exact path="/dashboard" component={DashBoard} />
+                    <Route exact path="/auth" component={Authorization} />
                 </Switch>
             </Router>
         </>

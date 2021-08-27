@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import FormErrorMessage from "./FormErrorMessage";
 import * as constants from "./constants";
 import { userSignUp } from "./actionCreators";
+import "./RegistrationFormFormik.css"
 
 let initialValues = {
     firstName: "",
@@ -59,6 +60,10 @@ const FixedCardHeight = {
     height: "600px",
 }
 
+const DivHeight = {
+    height: "100px"
+}
+
 const RegistrationFormFormik = () => {
     const dispatch = useDispatch();
 
@@ -94,7 +99,7 @@ const RegistrationFormFormik = () => {
                 }) => (
                     <FormikForm>
                         <Card style={{...FixedCardHeight}}>
-                            <Card.Body>
+                            <Card.Body className="reg-form">
                                 <FormLabelAndInput
                                     placeholder="first name"
                                     name="firstName"
@@ -148,7 +153,9 @@ const RegistrationFormFormik = () => {
                                     />
                                 </div>
                             </Card.Body>
-                            <Card.Footer className="d-flex justify-content-between aligin-items-center">
+                            <Card.Footer 
+                                className="d-flex justify-content-between align-items-center"
+                            >
                                 <Button variant="warning" onClick={resetForm}>
                                     <b>Reset</b>
                                 </Button>
@@ -172,7 +179,7 @@ const FormLabelAndInput = ({ label, helperText, isDisabled, ...props }) => {
     const [field, meta] = useField(props);
 
     return (
-        <Form.Group style={{ minHeight: "12vh" }}>
+        <Form.Group style={{...DivHeight}}>
             <Form.Label className="publish-form-label mtl-5">
                 {label}
             </Form.Label>
@@ -198,7 +205,7 @@ const FormLabelAndInput = ({ label, helperText, isDisabled, ...props }) => {
 const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
     const [field, meta] = useField(props);
     return (
-        <Form.Group>
+        <Form.Group style={{...DivHeight}}>
             <Form.Label className="publish-form-label mtl-5">
                 {label}
             </Form.Label>
