@@ -1,11 +1,12 @@
 version: "3.4"
 
 services:
-    dot_marketplace:
-        image: dot_marketplace
+    dot_marketplace_frontend:
+        image: dot_marketplace_frontend
         build:
             context: .
             dockerfile: Dockerfile
         ports:
-            - "3001:5551"
+            - "9001:8000"
+        command: yarn start build:docker
         restart: always

@@ -6205,6 +6205,55 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dot_marketplace@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "dot_marketplace@workspace:."
+  dependencies:
+    "@polkadot/api": ^3.9.3
+    "@polkadot/extension-dapp": ^0.37.1
+    "@polkadot/keyring": ^5.6.3
+    "@polkadot/networks": ^5.6.3
+    "@polkadot/types": ^3.9.3
+    "@polkadot/ui-keyring": ^0.69.1
+    "@polkadot/ui-settings": ^0.69.1
+    "@polkadot/util": ^5.6.3
+    "@polkadot/util-crypto": ^5.6.3
+    axios: ^0.21.1
+    bootstrap: ^5.0.1
+    eslint: ^7.20.0
+    eslint-config-semistandard: ^15.0.1
+    eslint-config-standard: ^16.0.2
+    eslint-plugin-import: ^2.22.1
+    eslint-plugin-node: ^11.1.0
+    eslint-plugin-only-warn: ^1.0.2
+    eslint-plugin-promise: ^4.3.1
+    eslint-plugin-standard: ^5.0.0
+    formik: ^2.2.8
+    gh-pages: ^3.1.0
+    prop-types: ^15.7.2
+    query-string: ^6.13.5
+    react: ^16.14.0
+    react-app-rewired: ^2.1.8
+    react-bootstrap: ^1.6.0
+    react-copy-to-clipboard: ^5.0.3
+    react-dom: ^16.14.0
+    react-icons: ^4.2.0
+    react-redux: ^7.2.4
+    react-router-bootstrap: ^0.25.0
+    react-router-dom: ^5.2.0
+    react-scripts: ^4.0.2
+    react-toastify: ^7.0.4
+    redux: ^4.1.0
+    redux-devtools-extension: ^2.13.9
+    redux-persist: ^6.0.0
+    redux-thunk: ^2.3.0
+    semantic-ui-css: ^2.4.1
+    semantic-ui-react: ^2.0.3
+    semistandard: ^16.0.0
+    yup: ^0.32.9
+  languageName: unknown
+  linkType: soft
+
 "dotenv-expand@npm:5.1.0":
   version: 5.1.0
   resolution: "dotenv-expand@npm:5.1.0"
@@ -15303,55 +15352,6 @@ resolve@1.18.1:
   checksum: 1345ad348db3c98f7d0423762e13e816a8c1ba0b1d90d79f3528513be429f1cf68b7fa9c9d379870208586e7ff4cfb68b4121bbd904df03b17e84d62efcff288
   languageName: node
   linkType: hard
-
-"substrate-front-end-template@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "substrate-front-end-template@workspace:."
-  dependencies:
-    "@polkadot/api": ^3.9.3
-    "@polkadot/extension-dapp": ^0.37.1
-    "@polkadot/keyring": ^5.6.3
-    "@polkadot/networks": ^5.6.3
-    "@polkadot/types": ^3.9.3
-    "@polkadot/ui-keyring": ^0.69.1
-    "@polkadot/ui-settings": ^0.69.1
-    "@polkadot/util": ^5.6.3
-    "@polkadot/util-crypto": ^5.6.3
-    axios: ^0.21.1
-    bootstrap: ^5.0.1
-    eslint: ^7.20.0
-    eslint-config-semistandard: ^15.0.1
-    eslint-config-standard: ^16.0.2
-    eslint-plugin-import: ^2.22.1
-    eslint-plugin-node: ^11.1.0
-    eslint-plugin-only-warn: ^1.0.2
-    eslint-plugin-promise: ^4.3.1
-    eslint-plugin-standard: ^5.0.0
-    formik: ^2.2.8
-    gh-pages: ^3.1.0
-    prop-types: ^15.7.2
-    query-string: ^6.13.5
-    react: ^16.14.0
-    react-app-rewired: ^2.1.8
-    react-bootstrap: ^1.6.0
-    react-copy-to-clipboard: ^5.0.3
-    react-dom: ^16.14.0
-    react-icons: ^4.2.0
-    react-redux: ^7.2.4
-    react-router-bootstrap: ^0.25.0
-    react-router-dom: ^5.2.0
-    react-scripts: ^4.0.2
-    react-toastify: ^7.0.4
-    redux: ^4.1.0
-    redux-devtools-extension: ^2.13.9
-    redux-persist: ^6.0.0
-    redux-thunk: ^2.3.0
-    semantic-ui-css: ^2.4.1
-    semantic-ui-react: ^2.0.3
-    semistandard: ^16.0.0
-    yup: ^0.32.9
-  languageName: unknown
-  linkType: soft
 
 "supports-color@npm:^5.3.0":
   version: 5.5.0

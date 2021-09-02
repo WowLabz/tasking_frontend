@@ -35,7 +35,7 @@ const CryptoWallet = () => {
         console.log(`extensions: ${JSON.stringify(extensions)}`);
 
         const allAccounts = await web3Accounts();
-        setAccounts([...allAccounts]);
+        setAccounts([...allAccounts])
         console.log("---------1------------");
         console.log(`allAccounts: ${JSON.stringify(allAccounts)}`);
 
@@ -55,8 +55,12 @@ const CryptoWallet = () => {
         console.log("polka");
         console.log("------------2-------------");
         let accInfo = getAccountIdByWalletName(WALLET_NAME.polkadotjs);
-        let balance = getBalance(accInfo.address);
+        if (accInfo === undefined) {
+            alert("Add account to the polkadot-js extension!")
+            return
+        }
         console.log(accInfo);
+        let balance = getBalance(accInfo.address);
         console.log(balance);
         console.log("------------3-------------");
     };
@@ -75,7 +79,7 @@ const CryptoWallet = () => {
     
     const getAccountIdByWalletName = (walletName) => {
         let matchedAccount;
-        accounts.forEach((acc) => {
+        accounts?.forEach((acc) => {
             if (acc.meta.source === walletName) {
                 console.log(acc);
                 matchedAccount = acc;
