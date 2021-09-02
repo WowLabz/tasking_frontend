@@ -9,4 +9,7 @@ services:
         ports:
             - "9001:8000"
         command: yarn start build:docker
+        environment: 
+            - AUTH_SERVER=authentication_service
+            - BLOCKCHAIN_NODE=dot_marketplace_node
         restart: always

@@ -1,7 +1,11 @@
 import configCommon from './common.json';
+import { BLOCKCHAIN_NODE_URL } from './constants';
 // Using `require` as `import` does not support dynamic loading (yet).
-const configEnv = require(`./${process.env.NODE_ENV}.json`);
+// const configEnv = require(`./${process.env.NODE_ENV}.json`);
+
 const types = require('./types.json');
+
+const configEnv = BLOCKCHAIN_NODE_URL;
 
 // Accepting React env vars and aggregating them into `config` object.
 const envVarNames = [

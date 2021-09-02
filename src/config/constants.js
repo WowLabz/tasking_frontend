@@ -1,0 +1,1 @@
+export const BLOCKCHAIN_NODE_URL = process.env.BLOCKCHAIN_NODE;
