@@ -149,7 +149,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
         <>
             <Formik
                 initialValues={initialValues}
-                validationSchema={validationSchema}
+                // validationSchema={validationSchema}
                 enableReinitialize
                 onSubmit={async (data, { setSubmitting, resetForm }) => {
                     setSubmitting(true);
