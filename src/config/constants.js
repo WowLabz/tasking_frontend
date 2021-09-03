@@ -1,1 +1,2 @@
-export const BLOCKCHAIN_NODE_URL = process.env.BLOCKCHAIN_NODE;
+export const BLOCKCHAIN_NODE_URL = process.env.REACT_APP_BLOCKCHAIN_NODE;
+console.log(BLOCKCHAIN_NODE_URL);
