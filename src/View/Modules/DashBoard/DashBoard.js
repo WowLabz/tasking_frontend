@@ -85,73 +85,60 @@ const DashBoard = (props) => {
 
     return (
         <>
-            <AppHeader />
-            <Container
-                className="dashboard-container"
-                style={{ marginTop: "50px", marginBottom: "30px" }}
-            >
-                <Row className="p-4">
-                    <div className="d-flex justify-content-between align-items-center">
-                        <h2 style={{ margin: "0" }}>Marketplace</h2>
-                        <Button
-                            name={constants.FORM_TYPES.CREATE_TASK.type}
-                            onClick={(e) => showFormModal(e, null)}
-                        >
-                            Create New Task
-                        </Button>
-                    </div>
-                    <Card
-                        style={{
-                            borderRadius: "20px",
-                            background: "#ffc107",
-                            fontSize: "24px",
-                            textAlign: "center",
-                            marginTop: "10px",
-                        }}
-                        className="p-3"
+            <Row className="p-4">
+                <div className="d-flex justify-content-between align-items-center">
+                    <h2 style={{ margin: "0" }}>Marketplace</h2>
+                    <Button
+                        name={constants.FORM_TYPES.CREATE_TASK.type}
+                        onClick={(e) => showFormModal(e, null)}
                     >
-                        <h4>
-                            Please visit{" "}
-                            <a
-                                href={constants.DOT_MARKETPLACE}
-                                target="_blank"
-                                style={{ color: "red" }}
-                            >
-                                Dot Marketplace
-                            </a>{" "}
-                            our updated App
-                        </h4>
-                    </Card>
-                </Row>
+                        Create New Task
+                    </Button>
+                </div>
+                <Card
+                    style={{
+                        borderRadius: "20px",
+                        background: "#ffc107",
+                        fontSize: "24px",
+                        textAlign: "center",
+                        marginTop: "10px",
+                    }}
+                    className="p-3"
+                >
+                    <h4>
+                        Please visit{" "}
+                        <a
+                            href={constants.DOT_MARKETPLACE}
+                            target="_blank"
+                            style={{ color: "red" }}
+                        >
+                            Dot Marketplace
+                        </a>{" "}
+                        our updated App
+                    </h4>
+                </Card>
+            </Row>
 
-                <Row>
-                    {!tasks.length && (
-                        <span style={{ marginLeft: "45px" }} className="p-2">
-                            Showing Demo Data, You can create a new Task!
-                        </span>
-                    )}
-                    {tasks.length
-                        ? tasks.map((task, index) => (
-                              <TaskCard
-                                  data={task}
-                                  showFormModal={showFormModal}
-                              />
-                          ))
-                        : staticData.data.map((task, index) => (
-                              <TaskCard
-                                  data={task}
-                                  showFormModal={showFormModal}
-                              />
-                          ))}
-                </Row>
-                <TaskModal
-                    show={show}
-                    handleClose={handleClose}
-                    configForBackEnd={{ api, keyring }}
-                    formTypeAndData={currentFormTypeAndData}
-                />
-            </Container>
-            <AppFooter />
+            <Row>
+                {!tasks.length && (
+                    <span style={{ marginLeft: "45px" }} className="p-2">
+                        Showing Demo Data, You can create a new Task!
+                    </span>
+                )}
+                {tasks.length
+                    ? tasks.map((task, index) => (
+                          <TaskCard data={task} showFormModal={showFormModal} />
+                      ))
+                    : staticData.data.map((task, index) => (
+                          <TaskCard data={task} showFormModal={showFormModal} />
+                      ))}
+            </Row>
+            <TaskModal
+                show={show}
+                handleClose={handleClose}
+                configForBackEnd={{ api, keyring }}
+                formTypeAndData={currentFormTypeAndData}
+            />
         </>
     );
 };

@@ -12,7 +12,7 @@ const persistConfig = {
     key: "root",
     storage,
     whitelist: [
-        "dashBoardReducer"
+        "dashBoardReducer",
     ],
 };
 
