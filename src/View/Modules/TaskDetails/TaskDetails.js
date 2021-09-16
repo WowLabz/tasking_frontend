@@ -91,7 +91,6 @@ const TaskDetails = ({ match }) => {
 
 
     const getCard = (currTab) => {
-        console.log("getcard");
         switch (currTab.tabType) {
             case TAB_TYPE.TASK_DETAILS:
                 return (<TaskDescriptionCard tab={currTab}/>);

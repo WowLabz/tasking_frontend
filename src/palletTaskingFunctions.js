@@ -199,11 +199,12 @@ export const bidForTaskTx = async (api, accountIdFromKeyRing, taskId) => {
  * @param {*} api
  * @param {AccountId} accountIdFromKeyRing
  * @param {Number} taskId
+ * @param {Number} ratingsForWorker
  */
-export const approveTaskTx = async (api, accountIdFromKeyRing, taskId) => {
+export const approveTaskTx = async (api, accountIdFromKeyRing, taskId, ratingsForWorker) => {
     try {
         if (api === null) return;
-        let transaction = api.tx.palletTasking.approveTask(taskId);
+        let transaction = api.tx.palletTasking.approveTask(taskId, ratingsForWorker);
         await transaction.signAndSend(
             accountIdFromKeyRing,
             transactionEventHandler
@@ -231,6 +232,26 @@ export const taskCompletedTx = async (api, accountIdFromKeyRing, taskId) => {
         transactionErrorHandler(error);
     }
 };
+
+/**
+ * provideCustomerRatings function from palletTasking
+ * @param {*} api 
+ * @param {AccountId} accountIdFromKeyRing
+ * @param {Number} taskId
+ * @param {Number} ratingsForCustomer
+ */
+export const provideCustomerRatingsTx = async (api, accountIdFromKeyRing, taskId, ratingsForCustomer) => {
+    try {
+        if (api === null) return;
+        let transaction = api.tx.palletTasking.provideCustomerRating(taskId, ratingsForCustomer);
+        await transaction.signAndSend(
+            accountIdFromKeyRing,
+            transactionEventHandler
+        );
+    } catch (error) {
+        transactionErrorHandler(error);
+    }
+}
 
 // Accessing chain storage
 
