@@ -83,7 +83,7 @@ const TaskCard = ({ data, showFormModal }) => {
         >
             <Card
                 className="task-card  p-4"
-                // onClick={() => history.push(`/task/${task.task_id}`)}
+                onClick={() => history.push(`/taskdetails/${task_id}`)}
             >
                 <Card.Body>
                     <Card.Text className="d-flex justify-content-between align-items-center">
