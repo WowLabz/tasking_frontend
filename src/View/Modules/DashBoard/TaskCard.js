@@ -60,7 +60,19 @@ const TaskCard = ({ data, showFormModal }) => {
                       </Button>
                   ),
               }
-            : {
+            : status === "PendingRatings" 
+            ? {
+                  badgeColor: "red",
+                  button: (
+                      <Button
+                          variant="success"
+                          name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
+                          onClick={(e) => showFormModal(e, data)}
+                      >
+                          <b>Provide Customer Ratings</b>
+                      </Button>
+                  ),
+            } : {
                   badgeColor: "blue",
                   button: (
                       <Button

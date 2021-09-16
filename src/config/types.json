@@ -10,13 +10,14 @@
         "task_description": "Text"
     },
     "Status": {
-        "_enum": ["Open", "InProgress", "PendingApproval", "Completed"]
+        "_enum": ["Open", "InProgress", "PendingApproval", "PendingRatings", "Completed"]
     },
     "TypedEnum": {
         "_enum": {
             "Open": "Text",
             "InProgress": "Text",
             "PendingApproval": "Text",
+            "PendingRatings": "Text",
             "Completed": "Text"
         }
     }
