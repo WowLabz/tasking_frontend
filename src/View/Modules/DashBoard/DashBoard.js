@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import AppHeader from "../../../Components/AppHeader/AppHeader";
 import { useSubstrate } from "../../../substrate-lib";
 import TestingSubstrateLib from "../../../TestingSubstrateLib";
 import * as palletTaskingFunctions from "../../../palletTaskingFunctions";
@@ -15,7 +14,6 @@ import TaskFormFormik from "./TaskFormFormik";
 import * as constants from "./constants";
 import staticData from "../../../assets/staticData/staticData.json";
 import "react-toastify/dist/ReactToastify.min.css";
-import AppFooter from "../../../Components/AppFooter/AppFooter";
 
 toast.configure();
 
