@@ -34,6 +34,7 @@ let initialValues = {
     taskDescription: "",
     isFieldDisabled: false,
     submitButtonName: "Submit",
+    ratings: ""
 };
 
 const validationSchema = Yup.object({
@@ -45,6 +46,7 @@ const validationSchema = Yup.object({
     taskDescription: Yup.string().required("Required!"),
     isFieldDisabled: Yup.boolean(),
     submitButtonName: Yup.string(),
+    ratings: Yup.number()
 });
 
 const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
@@ -134,8 +136,17 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 return await palletTaskingFunctions.approveTaskTx(
                     api,
                     alice,
+                    data.taskId,
+                    data.ratings
+                );
+
+            case constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type:
+                return await palletTaskingFunctions.provideCustomerRatingsTx(
+                    api,
+                    bob,
                     data.taskId
                 );
+
             default:
                 break;
         }
@@ -253,6 +264,17 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                     // value={values.taskDescription}
                                     isDisabled={values.isFieldDisabled}
                                 />
+
+                                {formType.type ===
+                                    constants.FORM_TYPES.APPROVE_TASK.type && (
+                                    <FormLabelAndInput
+                                        placeholder={`Ratings for Worker`}
+                                        name="ratings"
+                                        type={"number"}
+                                        label="Ratings for worker"
+                                        helperText={"Provide ratings between 1-5"}
+                                    />
+                                )}
                             </Card.Body>
                             <Card.Footer className="d-flex justify-content-between aligin-items-center">
                                 <Button variant="warning" onClick={resetForm}>
@@ -296,7 +318,7 @@ const FormLabelAndInput = ({ label, helperText, isDisabled, ...props }) => {
                 disabled={isDisabled}
                 className="p-2"
             ></Field>
-            <span>{helperText}</span>
+            <span style={{fontSize: "small", fontWeight: "lighter", padding: "2px", margin: "1px"}}>{helperText}</span>
         </Form.Group>
     );
 };
@@ -328,7 +350,7 @@ const FormLabelAndTextArea = ({
                 disabled={isDisabled}
                 className="p-3"
             />
-            <span>{helperText}</span>
+            <span style={{fontSize: "small"}}>{helperText}</span>
         </Form.Group>
     );
 };

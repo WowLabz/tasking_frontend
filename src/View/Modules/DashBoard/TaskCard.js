@@ -83,9 +83,10 @@ const TaskCard = ({ data, showFormModal }) => {
         >
             <Card
                 className="task-card  p-4"
-                onClick={() => history.push(`/taskdetails/${task_id}`)}
             >
-                <Card.Body>
+                <Card.Body
+                onClick={() => history.push(`/taskdetails/${task_id}`)}
+                >
                     <Card.Text className="d-flex justify-content-between align-items-center">
                         <b>{_.capitalize(task_description)}</b>
                         <Badge
