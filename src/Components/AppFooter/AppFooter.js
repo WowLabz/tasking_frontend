@@ -10,6 +10,7 @@ import {
 
 import * as constants from "../../constants/constants";
 import "./AppFooter.css";
+import { BsHeartFill } from "react-icons/bs";
 
 const AppFooter = () => {
     return (
@@ -18,7 +19,7 @@ const AppFooter = () => {
             expand="lg"
             bg="dark"
             variant="dark"
-            className="nav-bar footer"
+            className="footer"
         >
             <Container>
                 <Nav style={{ margin: "auto" }}>
@@ -28,7 +29,9 @@ const AppFooter = () => {
                         style={{ color: "white" }}
                         disabled
                     >
-                        Marketplace, Built by Wow Rangers Powered by, Substrate
+                        Marketplace, Built with{" "}
+                        <BsHeartFill style={{ color: "red" }} /> by Wow Labz
+                        Powered by, Substrate
                     </Button>
                 </Nav>
             </Container>

@@ -1,3 +1,7 @@
 .expletus-sans-ff {
     font-family: "Expletus Sans", cursive;
 }
+
+.footer {
+    position: sticky !important
+}

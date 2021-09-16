@@ -6,6 +6,7 @@ import TaskDetails from "./View/Modules/TaskDetails/TaskDetails";
 import AppHeader from "./Components/AppHeader/AppHeader";
 import { Container } from "react-bootstrap";
 import AppFooter from "./Components/AppFooter/AppFooter";
+import "./View/Modules/DashBoard/Dashboard.css"
 
 const Routes = () => {
     return (
