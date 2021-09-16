@@ -23,7 +23,14 @@ const TaskCard = ({ data, showFormModal }) => {
         status === "Completed"
             ? {
                   badgeColor: "green",
-                  button: <></>,
+                  button: (
+                      <Button
+                          variant="secondary"
+                          name={`Task Successfully Completed`}
+                      >
+                          <b>Task Successfully Completed</b>
+                      </Button>
+                  ),
               }
             : status === "InProgress"
             ? {

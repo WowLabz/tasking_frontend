@@ -5,7 +5,7 @@ export const FORM_TYPES = {
     BID_FOR_TASK: { type: "Bid", title: "Bid Task" },
     COMPLETE_TASK: { type: "Complete", title: "Complete Task" },
     APPROVE_TASK: { type: "Approve", title: "Approve Task" },
-    PROVIDE_CUSTOMER_RATINGS: { type: "Customer Ratings", title: "Customer Ratings"}
+    PROVIDE_CUSTOMER_RATINGS: { type: "Provide Customer Ratings", title: "Customer Ratings"}
 };
 
 export const DEFAULT_ACCOUNT_IDS = {

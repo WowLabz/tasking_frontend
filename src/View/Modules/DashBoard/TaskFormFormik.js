@@ -91,6 +91,17 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 initialValues.isFieldDisabled = true;
                 initialValues.submitButtonName = "Approve";
                 return;
+            case `Provide Customer Ratings`:
+                initialValues.requestorName = "Bob";
+                initialValues.accountId =
+                    palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.BOB;
+                initialValues.taskId = data.task_id;
+                initialValues.taskDuration = data.task_deadline;
+                initialValues.taskCost = data.cost;
+                initialValues.taskDescription = data.task_description;
+                initialValues.isFieldDisabled = true;
+                initialValues.submitButtonName = "Provide Customer Ratings";
+                return;
             default:
                 return;
         }
@@ -265,13 +276,19 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                     isDisabled={values.isFieldDisabled}
                                 />
 
-                                {formType.type ===
-                                    constants.FORM_TYPES.APPROVE_TASK.type && (
+                                {(formType.type ===
+                                    constants.FORM_TYPES.APPROVE_TASK.type || formType.type === constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type) && (
                                     <FormLabelAndInput
-                                        placeholder={`Ratings for Worker`}
+                                        placeholder={ 
+                                            formType.type === constants.FORM_TYPES.APPROVE_TASK.type ?
+                                            `Ratings for Worker` : `Ratings for Customer`
+                                        }
                                         name="ratings"
                                         type={"number"}
-                                        label="Ratings for worker"
+                                        label={ 
+                                            formType.type === constants.FORM_TYPES.APPROVE_TASK.type ?
+                                            `Ratings for Worker` : `Ratings for Customer`
+                                        }
                                         helperText={"Provide ratings between 1-5"}
                                     />
                                 )}
