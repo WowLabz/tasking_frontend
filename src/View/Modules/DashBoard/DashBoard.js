@@ -95,7 +95,7 @@ const DashBoard = (props) => {
                         Create New Task
                     </Button>
                 </div>
-                <Card
+                {/* <Card
                     style={{
                         borderRadius: "20px",
                         background: "#ffc107",
@@ -116,7 +116,7 @@ const DashBoard = (props) => {
                         </a>{" "}
                         our updated App
                     </h4>
-                </Card>
+                </Card> */}
             </Row>
 
             <Row>
