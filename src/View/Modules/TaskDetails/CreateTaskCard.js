@@ -1,7 +1,8 @@
 import React , { useState, useEffect } from "react";
-import { Badge, Card, Col, Row } from "react-bootstrap";
+import { Badge, Card, Col, Image, Row } from "react-bootstrap";
 import { TASK_STATUS } from "./constants";
 import {getAttributesForCard} from "../DashBoard/helpers"
+import { TASK_OPEN_LOGO } from "../../../constants/constants";
 
 const CreateTaskCard = ({ tab }) => {
     const [attributesForCard, setAttributesForCard] = useState({});
@@ -48,14 +49,14 @@ const CreateTaskCard = ({ tab }) => {
                                 fontSize: "14px",
                             }}
                         >
-                            Publisher Escrow:{" "}
-                            {status === TASK_STATUS.Completed ? "0" : cost}
+                            Publisher Amt Added To Escrow:{" "}
+                            {cost}
                         </Badge>
                     </div>
                 </Col>
                 <Col md={4} xs={4} sm={4} lg={4}>
-                    <div className="d-flex flex-column justify-content-center">
-
+                    <div className="d-flex flex-column justify-content-center align-items-center">
+                        <Image width={100} height={100} src={TASK_OPEN_LOGO}/>
                     </div>
                 </Col>
             </Row>

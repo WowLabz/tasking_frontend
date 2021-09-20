@@ -52,8 +52,8 @@ const TaskDescriptionCard = ({ tab }) => {
     const computeEscrow = (cost) => {
         let val = cost.split(" ");
         let num = parseInt(val[0]);
-        return `${num * 2} ${val[1]}`
-    }
+        return `${num * 2} ${val[1]}`;
+    };
 
     return (
         <Card.Body>
@@ -61,13 +61,18 @@ const TaskDescriptionCard = ({ tab }) => {
                 <Col md={8} xs={8} sm={8} lg={8}>
                     <div
                         className="d-flex flex-column justify-content-start align-items-start"
-                        style={{ gap: "30px" }}
+                        style={{ gap: "10px" }}
                     >
                         <ul>
                             <li>Task Description: {task_description}</li>
                             <li>
                                 Publisher: <small>{client}</small>
                             </li>
+                            {status === TASK_STATUS.Completed && (
+                                <li>
+                                    Worker Id: <small>{worker_id}</small>
+                                </li>
+                            )}
                             <li>Task Deadline: {task_deadline} days</li>
                             <li>Task Cost: {cost}</li>
                         </ul>
@@ -75,7 +80,7 @@ const TaskDescriptionCard = ({ tab }) => {
                             pill
                             style={{
                                 color: "black",
-                                background: "#ffc107",
+                                background: "#ff0000",
                                 fontSize: "14px",
                             }}
                         >
@@ -87,6 +92,18 @@ const TaskDescriptionCard = ({ tab }) => {
                                 ? computeEscrow(cost)
                                 : cost}
                         </Badge>
+                        {status === TASK_STATUS.Completed && (
+                            <Badge
+                                pill
+                                style={{
+                                    color: "white",
+                                    background: "#198754",
+                                    fontSize: "14px",
+                                }}
+                            >
+                                Amount Transferred To Worker: {cost}
+                            </Badge>
+                        )}
                     </div>
                 </Col>
                 <Col md={4} xs={4} sm={4} lg={4}>
