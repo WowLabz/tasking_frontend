@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Accordion, Breadcrumb, Button, Card } from "react-bootstrap";
+import { Accordion, Badge, Breadcrumb, Button, Card } from "react-bootstrap";
 import { TabDetails, TAB_TYPE, TASK_STATUS } from "./constants";
 import "./TaskDetails.css";
 import TaskDescriptionCard from "./TaskDescriptionCard";
@@ -10,18 +10,22 @@ import CompleteTaskCard from "./CompleteTaskCard";
 import ApproveTaskCard from "./ApproveTaskCard";
 import RatingsForTaskTask from "./RatingsForTaskCard";
 import { LinkContainer } from "react-router-bootstrap";
+import { useLocation } from "react-router";
+import { getAttributesForCard } from "../DashBoard/helpers";
 
 const TaskDetails = ({ match }) => {
     const [tabs, setTabs] = useState([]);
     const [breadCrumbsArr, setBreadCrumbArr] = useState([]);
     const tasks = useSelector((state) => state.dashBoardReducer.tasks);
+    const [attributesForCard, setAttributesForCard] = useState({});
 
     const init = () => {
         const taskId = match.params.id;
-
+        
         let tempTabs;
         tasks.forEach((task) => {
             if (task.task_id === taskId) {
+                console.log(task);
                 setBreadCrumbArr([
                     {
                         link: "/",
@@ -35,6 +39,8 @@ const TaskDetails = ({ match }) => {
                     },
                 ]);
 
+                setAttributesForCard(getAttributesForCard(task.status));
+                
                 switch (task.status) {
                     case TASK_STATUS.Open:
                         tempTabs = [
@@ -203,8 +209,8 @@ const TaskDetails = ({ match }) => {
     return (
         <div className="task-details-container">
             <Breadcrumb>
-                {breadCrumbsArr.map((item) => (
-                    <LinkContainer to={item.link}>
+                {breadCrumbsArr.map((item, idx) => (
+                    <LinkContainer to={item.link} key={idx}>
                         <Breadcrumb.Item active={item.active}>
                             {item.name}
                         </Breadcrumb.Item>
@@ -218,9 +224,42 @@ const TaskDetails = ({ match }) => {
                     className="p-1 m-1"
                 >
                     <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey={tab.tabId} className="accordion-header">
-                            {tab.tabType}
-                        </Accordion.Toggle>
+                        {tab.tabType === TAB_TYPE.TASK_DETAILS ? (
+                            <Accordion.Toggle
+                                as={Card.Header}
+                                eventKey={tab.tabId}
+                                className="accordion-header d-flex justify-content-start"
+                            >
+                                {tab.tabType}
+
+                                <Badge
+                                    variant={attributesForCard.badgeColor}
+                                    className={`px-2 mx-2`}
+                                    style={{
+                                        display: "table",
+                                        color: `${
+                                            attributesForCard.badgeColor ===
+                                            "yellow"
+                                                ? "black"
+                                                : "white"
+                                        }`,
+                                        backgroundColor: `${attributesForCard.badgeColor}`,
+                                        borderRadius: "10px",
+                                        padding: "0.4rem",
+                                    }}
+                                >
+                                    {tab.task.status}
+                                </Badge>
+                            </Accordion.Toggle>
+                        ) : (
+                            <Accordion.Toggle
+                                as={Card.Header}
+                                eventKey={tab.tabId}
+                                className="accordion-header"
+                            >
+                                {tab.tabType}
+                            </Accordion.Toggle>
+                        )}
                         <Accordion.Collapse eventKey={tab.tabId}>
                             {getCard(tab)}
                         </Accordion.Collapse>

@@ -1,4 +1,4 @@
-import { GET_TASKS } from "./constants";
+import { ATTRIBUTES_FOR_TASK_CARD, GET_TASKS } from "./constants";
 
 const initialState = {
     api: null,
@@ -14,6 +14,11 @@ export const dashBoardReducer = (state = initialState, action) => {
                 ...state,
                 tasks: action.payload,
             };
+        case ATTRIBUTES_FOR_TASK_CARD:
+            return {
+                ...state,
+                tasks: action.payload
+            }
         default:
             return state;
     }

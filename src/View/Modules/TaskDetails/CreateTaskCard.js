@@ -4,8 +4,14 @@ import { Card } from 'react-bootstrap'
 const CreateTaskCard = ({tab}) => {
     return (
         <Card.Body>
-            <small>{tab.tabType}</small>
-            
+            <div className='d-flex flex-column justify-content-start align-items-start'>
+                <ul>
+                    <li>
+                        {tab.tabType}
+                    </li>
+                </ul>
+
+            </div>
         </Card.Body>
     )
 }

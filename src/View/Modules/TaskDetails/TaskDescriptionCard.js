@@ -51,7 +51,6 @@ const TaskDescriptionCard = ({ tab }) => {
 
     return (
         <Card.Body>
-            <Card.Text>
                 <Row>
                     <Col md={8} xs={8} sm={8} lg={8}>
                         <div
@@ -118,7 +117,6 @@ const TaskDescriptionCard = ({ tab }) => {
                         </div>
                     </Col>
                 </Row>
-            </Card.Text>
         </Card.Body>
     );
 };
