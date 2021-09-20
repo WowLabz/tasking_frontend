@@ -6235,6 +6235,7 @@ __metadata:
     react: ^16.14.0
     react-app-rewired: ^2.1.8
     react-bootstrap: ^1.6.0
+    react-circular-progressbar: ^2.0.4
     react-copy-to-clipboard: ^5.0.3
     react-dom: ^16.14.0
     react-icons: ^4.2.0
@@ -13223,6 +13224,15 @@ fsevents@^1.2.7:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: 0e0ed77fc068061717e0b2aacca7c84306e66585c84e538edcdea9caad8c4e920efbc5ee9a0a8254f4c2746d458092896bb5023f394f16d18914acbd2d41c943
+  languageName: node
+  linkType: hard
+
+"react-circular-progressbar@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "react-circular-progressbar@npm:2.0.4"
+  peerDependencies:
+    react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: ed8d6491869bc1e46623b297eb28f7a1e8a71c0c8de1d0c23718fa330f444dbd2545a9be1f01b4769c2230cf5abf3c00ff0a383fade95cb36a719310f2263800
   languageName: node
   linkType: hard
 

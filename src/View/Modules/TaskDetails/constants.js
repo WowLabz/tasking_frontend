@@ -6,7 +6,7 @@ export const TAB_TYPE = {
     BID_TASK: "Bid For Task",
     COMPLETE_TASK: "Complete Task",
     APPROVE_TASK: "Approve Task",
-    RATINGS_FOR_TASK: "Ratings for Task"
+    RATINGS_FOR_TASK: "Ratings for Task",
 };
 
 export const TabDetails = {
@@ -15,5 +15,13 @@ export const TabDetails = {
     description: String,
     escrow: String,
     status: String,
-    accountId: String
+    accountId: String,
+};
+
+export const TASK_STATUS = {
+    Open: "Open",
+    InProgress: "InProgress",
+    PendingApproval: "PendingApproval",
+    PendingRatings: "PendingRatings",
+    Completed: "Completed",
 };

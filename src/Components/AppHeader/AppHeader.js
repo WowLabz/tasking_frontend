@@ -16,7 +16,7 @@ const AppHeader = () => {
             variant="dark"
         >
             <Container>
-                <Navbar.Brand href="#home">
+                <Navbar.Brand href="/">
                     <Image
                         src={constants.APP_LOGO}
                         alt="MarketPlaceLogo"

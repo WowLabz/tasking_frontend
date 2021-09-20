@@ -67,19 +67,22 @@ const TaskCard = ({ data, showFormModal }) => {
                       </Button>
                   ),
               }
-            : status === "PendingRatings" 
+            : status === "PendingRatings"
             ? {
                   badgeColor: "red",
                   button: (
                       <Button
                           variant="success"
-                          name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
+                          name={
+                              constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type
+                          }
                           onClick={(e) => showFormModal(e, data)}
                       >
                           <b>Provide Customer Ratings</b>
                       </Button>
                   ),
-            } : {
+              }
+            : {
                   badgeColor: "blue",
                   button: (
                       <Button
@@ -100,11 +103,9 @@ const TaskCard = ({ data, showFormModal }) => {
             lg={4}
             className="d-flex justify-content-center align-items-center"
         >
-            <Card
-                className="task-card  p-4"
-            >
+            <Card className="task-card  p-4">
                 <Card.Body
-                // onClick={() => history.push(`/taskdetails/${task_id}`)}
+                    onClick={() => history.push(`/taskdetails/${task_id}`)}
                 >
                     <Card.Text className="d-flex justify-content-between align-items-center">
                         <b>{_.capitalize(task_description)}</b>

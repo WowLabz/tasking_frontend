@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Accordion, Button, Card } from "react-bootstrap";
-import { TabDetails, TAB_TYPE } from "./constants";
+import { Accordion, Breadcrumb, Button, Card } from "react-bootstrap";
+import { TabDetails, TAB_TYPE, TASK_STATUS } from "./constants";
 import "./TaskDetails.css";
 import TaskDescriptionCard from "./TaskDescriptionCard";
 import CreateTaskCard from "./CreateTaskCard";
@@ -9,77 +9,169 @@ import BidForTaskCard from "./BidForTaskCard";
 import CompleteTaskCard from "./CompleteTaskCard";
 import ApproveTaskCard from "./ApproveTaskCard";
 import RatingsForTaskTask from "./RatingsForTaskCard";
+import { LinkContainer } from "react-router-bootstrap";
 
 const TaskDetails = ({ match }) => {
     const [tabs, setTabs] = useState([]);
+    const [breadCrumbsArr, setBreadCrumbArr] = useState([]);
     const tasks = useSelector((state) => state.dashBoardReducer.tasks);
 
     const init = () => {
         const taskId = match.params.id;
 
+        let tempTabs;
         tasks.forEach((task) => {
             if (task.task_id === taskId) {
-
-                const {
-                    client,
-                    cost,
-                    status,
-                    task_deadline,
-                    task_description,
-                    task_id,
-                    worker_id,
-                } = task;
-
-                setTabs([
+                setBreadCrumbArr([
                     {
-                        tabId: 1,
-                        tabType: TAB_TYPE.TASK_DETAILS,
-                        label: task_description,
-                        description: task_description,
-                        taskDeadline: task_deadline,
+                        link: "/",
+                        active: false,
+                        name: "Dashboard",
                     },
                     {
-                        tabId: 2,
-                        tabType: TAB_TYPE.CREATE_TASK,
-                        label: "Create Task",
-                        description: task_description,
-                        escrow: cost,
-                        status: status,
-                        accountId: client,
-                    },
-                    {
-                        tabId: 3,
-                        tabType: TAB_TYPE.BID_TASK,
-                        label: "Bid For Task",
-                        description: task_description,
-                        escrow: cost,
-                        status: status,
-                        accountId: worker_id,
-                    },
-                    {
-                        tabId: 4,
-                        tabType: TAB_TYPE.COMPLETE_TASK,
-                        description: task_description,
-                        label: "Complete Task",
-                        escrow: cost + cost,
-                        status: status,
-                    },
-                    {
-                        tabId: 5,
-                        tabType: TAB_TYPE.APPROVE_TASK,
-                        description: task_description,
-                        label: "Approve Task",
-                        escrow: cost + cost,
-                        status: status,
-                    },
-                    {
-                        tabId: 6,
-                        tabType: TAB_TYPE.RATINGS_FOR_TASK,
-                        description: task_description,
-                        label: "Ratings for Task",
-                        status: status,
+                        link: `/taskdetails/${task.task_id}`,
+                        active: true,
+                        name: task?.task_description,
                     },
                 ]);
+
+                switch (task.status) {
+                    case TASK_STATUS.Open:
+                        tempTabs = [
+                            {
+                                tabId: 1,
+                                tabType: TAB_TYPE.TASK_DETAILS,
+                                task,
+                            },
+                            {
+                                tabId: 2,
+                                tabType: TAB_TYPE.CREATE_TASK,
+                                task,
+                            },
+                        ];
+                        break;
+                    case TASK_STATUS.InProgress:
+                        tempTabs = [
+                            {
+                                tabId: 1,
+                                tabType: TAB_TYPE.TASK_DETAILS,
+                                task,
+                            },
+                            {
+                                tabId: 2,
+                                tabType: TAB_TYPE.CREATE_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 3,
+                                tabType: TAB_TYPE.BID_TASK,
+                                task,
+                            },
+                        ];
+                        break;
+                    case TASK_STATUS.PendingApproval:
+                        tempTabs = [
+                            {
+                                tabId: 1,
+                                tabType: TAB_TYPE.TASK_DETAILS,
+                                task,
+                            },
+                            {
+                                tabId: 2,
+                                tabType: TAB_TYPE.CREATE_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 3,
+                                tabType: TAB_TYPE.BID_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 4,
+                                tabType: TAB_TYPE.COMPLETE_TASK,
+                                task,
+                            },
+                        ];
+                        break;
+                    case TASK_STATUS.PendingRatings:
+                        tempTabs = [
+                            {
+                                tabId: 1,
+                                tabType: TAB_TYPE.TASK_DETAILS,
+                                task,
+                            },
+                            {
+                                tabId: 2,
+                                tabType: TAB_TYPE.CREATE_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 3,
+                                tabType: TAB_TYPE.BID_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 4,
+                                tabType: TAB_TYPE.COMPLETE_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 5,
+                                tabType: TAB_TYPE.APPROVE_TASK,
+                                task,
+                            },
+                        ];
+                        break;
+                    case TASK_STATUS.Completed:
+                        tempTabs = [
+                            {
+                                tabId: 1,
+                                tabType: TAB_TYPE.TASK_DETAILS,
+                                task,
+                            },
+                            {
+                                tabId: 2,
+                                tabType: TAB_TYPE.CREATE_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 3,
+                                tabType: TAB_TYPE.BID_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 4,
+                                tabType: TAB_TYPE.COMPLETE_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 5,
+                                tabType: TAB_TYPE.APPROVE_TASK,
+                                task,
+                            },
+                            {
+                                tabId: 6,
+                                tabType: TAB_TYPE.RATINGS_FOR_TASK,
+                                task,
+                            },
+                        ];
+                        break;
+                    default:
+                        tempTabs = [
+                            {
+                                tabId: 1,
+                                tabType: TAB_TYPE.TASK_DETAILS,
+                                task,
+                            },
+                            {
+                                tabId: 2,
+                                tabType: TAB_TYPE.CREATE_TASK,
+                                task,
+                            },
+                        ];
+                        break;
+                }
+                setTabs(tempTabs);
             }
         });
     };
@@ -89,28 +181,36 @@ const TaskDetails = ({ match }) => {
         return () => {};
     }, []);
 
-
     const getCard = (currTab) => {
         switch (currTab.tabType) {
             case TAB_TYPE.TASK_DETAILS:
-                return (<TaskDescriptionCard tab={currTab}/>);
+                return <TaskDescriptionCard tab={currTab} />;
             case TAB_TYPE.CREATE_TASK:
-                return (<CreateTaskCard tab={currTab}/>)
+                return <CreateTaskCard tab={currTab} />;
             case TAB_TYPE.BID_TASK:
-                return (<BidForTaskCard tab={currTab}/>)
+                return <BidForTaskCard tab={currTab} />;
             case TAB_TYPE.COMPLETE_TASK:
-                return (<CompleteTaskCard tab={currTab}/>);
+                return <CompleteTaskCard tab={currTab} />;
             case TAB_TYPE.APPROVE_TASK:
-                return (<ApproveTaskCard tab={currTab}/>)
+                return <ApproveTaskCard tab={currTab} />;
             case TAB_TYPE.RATINGS_FOR_TASK:
-                return (<RatingsForTaskTask tab={currTab}/>)
+                return <RatingsForTaskTask tab={currTab} />;
             default:
                 return;
         }
-    }
+    };
 
     return (
         <div className="task-details-container">
+            <Breadcrumb>
+                {breadCrumbsArr.map((item) => (
+                    <LinkContainer to={item.link}>
+                        <Breadcrumb.Item active={item.active}>
+                            {item.name}
+                        </Breadcrumb.Item>
+                    </LinkContainer>
+                ))}
+            </Breadcrumb>
             {tabs.map((tab) => (
                 <Accordion
                     key={tab.tabId}
@@ -118,7 +218,7 @@ const TaskDetails = ({ match }) => {
                     className="p-1 m-1"
                 >
                     <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey={tab.tabId}>
+                        <Accordion.Toggle as={Card.Header} eventKey={tab.tabId} className="accordion-header">
                             {tab.tabType}
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey={tab.tabId}>
@@ -126,7 +226,7 @@ const TaskDetails = ({ match }) => {
                         </Accordion.Collapse>
                     </Card>
                 </Accordion>
-            ))} 
+            ))}
         </div>
     );
 };
