@@ -33,9 +33,31 @@ const DashBoard = (props) => {
     const handleShow = () => setShow(true);
 
     useEffect(() => {
+         const init = async () => {
+            try {
+                palletTaskingFunctions.handleOnChainEvents(api, toast);
+                const getTasksResult = await palletTaskingFunctions.getAllTasks(
+                    api
+                );
+                if (getTasksResult) {
+                    console.log(
+                        `All Tasks From Chain: ${getTasksResult.length}`
+                    );
+                    dispatch(
+                        actionCreators.setTasksFromBackEnd([
+                            ...getTasksResult.sort(
+                                (a, b) => b.task_id - a.task_id
+                            ),
+                        ])
+                    );
+                }
+            } catch (error) {
+                console.log(`catchError at useEffect : ${error}`);
+            }
+        };
         setInterval(() => {
-            actionCreators.setTasksFromBackEnd();
-        }, 5000)
+            init();
+        }, 5000);
     }, [api?.query.palletTasking]);
 
     const showFormModal = (e, data) => {

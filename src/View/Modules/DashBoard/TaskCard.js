@@ -4,9 +4,7 @@ import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import * as constants from "./constants";
 import { useDispatch, useSelector } from "react-redux";
-import { setAttributiesForTaskCard } from "./actions";
 import { TASK_STATUS } from "../TaskDetails/constants";
-import { getAttributesForCard } from "./helpers";
 
 const TaskCard = ({ data, showFormModal }) => {
     const history = useHistory();
@@ -24,34 +22,110 @@ const TaskCard = ({ data, showFormModal }) => {
     const publisher =
         client === constants.DEFAULT_ACCOUNT_IDS.ALICE ? "Alice" : "Bob";
 
-    const tasks = useSelector((state) => state.dashBoardReducer.tasks);
-    const dispatch = useDispatch();
+    const getAttributesForCard = (status) => {
+        switch (status) {
+            case TASK_STATUS.Completed:
+                return {
+                    badgeColor: "green",
+                    button: (
+                        <Button
+                            variant="secondary"
+                            name={`Task Successfully Completed`}
+                        >
+                            <b>Task Successfully Completed</b>
+                        </Button>
+                    ),
+                };
+            case TASK_STATUS.InProgress:
+                return {
+                    badgeColor: "yellow",
+                    button: [
+                        <Button
+                            key={0}
+                            variant="primary"
+                            name={constants.FORM_TYPES.COMPLETE_TASK.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Complete</b>
+                        </Button>,
+                        <Button
+                            key={1}
+                            variant="success"
+                            name={constants.FORM_TYPES.APPROVE_TASK.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Approve</b>
+                        </Button>,
+                    ],
+                };
+
+            case TASK_STATUS.PendingApproval:
+                return {
+                    badgeColor: "red",
+                    button: (
+                        <Button
+                            variant="success"
+                            name={constants.FORM_TYPES.APPROVE_TASK.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Approve</b>
+                        </Button>
+                    ),
+                };
+
+            case TASK_STATUS.PendingRatings:
+                return {
+                    badgeColor: "red",
+                    button: (
+                        <Button
+                            variant="success"
+                            name={
+                                constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS
+                                    .type
+                            }
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Provide Customer Ratings</b>
+                        </Button>
+                    ),
+                };
+            case TASK_STATUS.Open:
+                return {
+                    badgeColor: "blue",
+                    button: (
+                        <Button
+                            variant="warning"
+                            name={constants.FORM_TYPES.BID_FOR_TASK.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Bid</b>
+                        </Button>
+                    ),
+                };
+            default:
+                return {
+                    badgeColor: "blue",
+                    button: (
+                        <Button
+                            variant="warning"
+                            name={constants.FORM_TYPES.BID_FOR_TASK.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Bid</b>
+                        </Button>
+                    ),
+                };
+        }
+    };
 
     const init = () => {
         setAttributesForCard(getAttributesForCard(status));
-
-        let updatedTasksListWithAttributes = [];
-        tasks.forEach((task, index) => {
-            if (task.task_id === data.task_id) {
-                let updatedTask = {
-                    ...tasks[index],
-                    attributesForCard: getAttributesForCard,
-                };
-                console.log(updatedTask);
-                updatedTasksListWithAttributes = [...tasks, updatedTask];
-                let finalArr = _.uniqBy(
-                    updatedTasksListWithAttributes,
-                    "task_id"
-                );
-                dispatch(setAttributiesForTaskCard(finalArr));
-            }
-        });
     };
 
     useEffect(() => {
         init();
         return () => {};
-    }, []);
+    }, [data]);
 
     return (
         <Col
