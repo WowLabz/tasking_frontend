@@ -48,14 +48,14 @@ const TaskCard = ({ data, showFormModal }) => {
                         >
                             <b>Complete</b>
                         </Button>,
-                        <Button
-                            key={1}
-                            variant="success"
-                            name={constants.FORM_TYPES.APPROVE_TASK.type}
-                            onClick={(e) => showFormModal(e, data)}
-                        >
-                            <b>Approve</b>
-                        </Button>,
+                        // <Button
+                        //     key={1}
+                        //     variant="success"
+                        //     name={constants.FORM_TYPES.APPROVE_TASK.type}
+                        //     onClick={(e) => showFormModal(e, data)}
+                        // >
+                        //     <b>Approve</b>
+                        // </Button>,
                     ],
                 };
 
