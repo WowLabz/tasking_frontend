@@ -42,6 +42,17 @@ const RatingsForTaskTask = ({tab}) => {
                         <Badge
                             pill
                             style={{
+                                color: "black",
+                                background: "#ffc107",
+                                fontSize: "14px",
+                            }}
+                        >
+                            Amount Unlocked from Escrow To Worker:{" "}
+                            {cost}
+                        </Badge>
+                        <Badge
+                            pill
+                            style={{
                                 color: "white",
                                 background: "#198754",
                                 fontSize: "14px",
