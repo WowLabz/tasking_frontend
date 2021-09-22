@@ -33,8 +33,6 @@ const CryptoWallet = () => {
 
     const getAccounts = async () => {
         try {
-            console.log("---------1------------");
-
             // Extentsion
             await web3Enable("dot_marketplace");
             let allAccounts = await web3Accounts();
