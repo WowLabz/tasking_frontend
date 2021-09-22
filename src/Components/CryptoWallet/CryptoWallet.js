@@ -33,43 +33,44 @@ const CryptoWallet = () => {
 
     const getAccounts = async () => {
         try {
-            
-        console.log("---------1------------");
+            console.log("---------1------------");
 
-        // Extentsion
-        await web3Enable("dot_marketplace");
-        let allAccounts = await web3Accounts();
-        allAccounts = allAccounts.map(({ address, meta }) => ({
-            address,
-            meta: { ...meta, name: `${meta.name}` },
-        }));
-        setAccounts([...allAccounts]);
+            // Extentsion
+            await web3Enable("dot_marketplace");
+            let allAccounts = await web3Accounts();
+            allAccounts = allAccounts.map(({ address, meta }) => ({
+                address,
+                meta: { ...meta, name: `${meta.name}` },
+            }));
+            setAccounts([...allAccounts]);
 
-        console.log("allAccounts", allAccounts);
+            console.log("allAccounts", allAccounts);
 
-        // Connection to chain for balance info
-        const BLOCKCHAIN_NODE_URL = process.env.REACT_APP_BLOCKCHAIN_NODE;
-        const provider = new WsProvider(BLOCKCHAIN_NODE_URL);
-        const api = await ApiPromise.create({ provider });
+            // Connection to chain for balance info
+            const BLOCKCHAIN_NODE_URL = process.env.REACT_APP_BLOCKCHAIN_NODE;
+            const provider = new WsProvider(BLOCKCHAIN_NODE_URL);
+            const api = await ApiPromise.create({ provider });
 
-        const keyring = new Keyring({ type: "sr25519" });
-        keyring.addFromAddress(allAccounts[0].address);
-        const wowTest = keyring.getPair(allAccounts[0].address);
-        console.log("pairs", wowTest);
+            const keyring = new Keyring({ type: "sr25519" });
 
-        // const balance = await getAccountBalance(api, DEFAULT_ACCOUNT_IDS.ALICE);
-        let accBal;
-        // Subscribe to balance changes for our account
-        const unsub = await api.query.system.account(
-            allAccounts[0].address,
-            ({ nonce, data: balance }) => {
-                console.log(
-                    `free balance is ${balance.free.toHuman()} with ${balance.reserved.toHuman()} reserved and a nonce of ${nonce}`
+            console.log("entering loop for accounts");
+            allAccounts.forEach(async (acc) => {
+                keyring.addFromAddress(acc.address);
+                const wowTest = keyring.getPair(acc.address);
+                console.log("pairs", wowTest);
+                let accBal;
+                // Subscribe to balance changes for our account
+                const unsub = await api.query.system.account(
+                    acc.address,
+                    ({ nonce, data: balance }) => {
+                        console.log(
+                            `free balance is ${balance.free.toHuman()} with ${balance.reserved.toHuman()} reserved and a nonce of ${nonce}`
+                        );
+                    }
                 );
-            }
-        );
+            });
         } catch (error) {
-            console.log(`CryproWallet Error`, error);   
+            console.log(`CryproWallet Error`, error);
         }
     };
 
