@@ -139,7 +139,8 @@ export const getAccountBalance = async (api, accountId) => {
         nonce: previousNonce,
     } = await api.query.system.account(accountId);
     console.log(`Account Balance: ${previousFree}, Nonce: ${previousNonce}`);
-    return true;
+    let balanceInfo = await api.query.system.account(accountId);
+    return balanceInfo;
 };
 
 // Calling Dispatchables from the pallet tasking

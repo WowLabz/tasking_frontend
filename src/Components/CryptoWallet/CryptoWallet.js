@@ -3,9 +3,11 @@ import {
     web3Accounts,
     web3Enable,
 } from "@polkadot/extension-dapp";
-const { ApiPromise, WsProvider } = require('@polkadot/api');
+const { ApiPromise, WsProvider } = require("@polkadot/api");
 import React, { useEffect, useState } from "react";
 import { NavDropdown, Image } from "react-bootstrap";
+import Keyring from "@polkadot/keyring";
+import { cryptoWaitReady } from "@polkadot/util-crypto";
 import {
     GUARDA_WALLET_ICON,
     MATH_WALLET_ICON,
@@ -25,58 +27,84 @@ const CryptoWallet = () => {
     const [accBalances, setAccBalances] = useState({
         polka: "",
         math: "",
-        guarda: ""
+        guarda: "",
     });
     const [accounts, setAccounts] = useState(null);
-    const { api, keyring } = useSubstrate();
 
     const getAccounts = async () => {
-        const extensions = await web3Enable("dot_marketplace");
-        console.log(`extensions: ${JSON.stringify(extensions)}`);
-
-        const allAccounts = await web3Accounts();
-        setAccounts([...allAccounts])
+        try {
+            
         console.log("---------1------------");
-        console.log(`allAccounts: ${JSON.stringify(allAccounts)}`);
 
-        const account = allAccounts[0];
+        // Extentsion
+        await web3Enable("dot_marketplace");
+        let allAccounts = await web3Accounts();
+        allAccounts = allAccounts.map(({ address, meta }) => ({
+            address,
+            meta: { ...meta, name: `${meta.name}` },
+        }));
+        setAccounts([...allAccounts]);
 
-        
-        const injector = await web3FromSource(WALLET_NAME.polkadotjs);
-        console.log(`injector: ${JSON.stringify(injector)}`);
+        console.log("allAccounts", allAccounts);
+
+        // Connection to chain for balance info
+        const BLOCKCHAIN_NODE_URL = process.env.REACT_APP_BLOCKCHAIN_NODE;
+        const provider = new WsProvider(BLOCKCHAIN_NODE_URL);
+        const api = await ApiPromise.create({ provider });
+
+        const keyring = new Keyring({ type: "sr25519" });
+        keyring.addFromAddress(allAccounts[0].address);
+        const wowTest = keyring.getPair(allAccounts[0].address);
+        console.log("pairs", wowTest);
+
+        // const balance = await getAccountBalance(api, DEFAULT_ACCOUNT_IDS.ALICE);
+        let accBal;
+        // Subscribe to balance changes for our account
+        const unsub = await api.query.system.account(
+            allAccounts[0].address,
+            ({ nonce, data: balance }) => {
+                console.log(
+                    `free balance is ${balance.free.toHuman()} with ${balance.reserved.toHuman()} reserved and a nonce of ${nonce}`
+                );
+            }
+        );
+        } catch (error) {
+            console.log(`CryproWallet Error`, error);   
+        }
     };
-    
+
     const DEFAULT_ACCOUNT_IDS = {
         ALICE: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
         BOB: "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
     };
-    
+
     const onPolkaWalletClick = async () => {
         console.log("polka");
         console.log("------------2-------------");
-        let accInfo = getAccountIdByWalletName(WALLET_NAME.polkadotjs);
-        if (accInfo === undefined) {
-            alert("Add account to the polkadot-js extension!")
-            return
-        }
-        console.log(accInfo);
-        let balance = getBalance(accInfo.address);
-        console.log(balance);
-        console.log("------------3-------------");
+        // await approach2();
+        // let accInfo = getAccountIdByWalletName(WALLET_NAME.polkadotjs);
+        // if (accInfo === undefined) {
+        //     alert("Add account to the polkadot-js extension!");
+        //     return;
+        // }
+        // console.log(accInfo);
+        // let balance = await getBalance(accInfo.address);
+        // console.log("balance", balance);
+        // console.log("------------3-------------");
     };
-    
+
     const onMathWalletClick = async () => {
         console.log("math");
         // let accInfo = getAccountIdByWalletName(WALLET_NAME.math);
         // let balance = await getAccountBalance(api, accInfo.address);
     };
-    
+
     const onGuardaWalletClick = async () => {
         console.log("gurada");
         // let accInfo = getAccountIdByWalletName(WALLET_NAME.guarda);
         // let balance = await getAccountBalance(api, accInfo.address);
     };
-    
+
     const getAccountIdByWalletName = (walletName) => {
         let matchedAccount;
         accounts?.forEach((acc) => {
@@ -91,22 +119,25 @@ const CryptoWallet = () => {
     const getBalance = async (address) => {
         let accBal;
         // Initialise the provider to connect to the local node
-		const provider = new WsProvider("wss://marketplace.wowlabz.com");
-		// Create the API and wait until ready
-		const api = await ApiPromise.create({ provider });
-        
-        api.query.system.account(address, balance => {
-            accBal = balance.data.free.toHuman()
-            setAccBalances({...accBalances, polka: accBal});
-            console.log(balance.data.free.toHuman());
+        // const provider = new WsProvider("wss://marketplace.wowlabz.com");
+        const BLOCKCHAIN_NODE_URL = process.env.REACT_APP_BLOCKCHAIN_NODE;
+        const provider = new WsProvider(BLOCKCHAIN_NODE_URL);
+        // Create the API and wait until ready
+        const api = await ApiPromise.create({ provider });
+
+        let balRes = api.query.system.account(address, (balance) => {
+            accBal = balance.data.free.toHuman();
+            setAccBalances({ ...accBalances, polka: accBal });
+            console.log("balance2", balance.data.free.toHuman());
+            return accBal;
         });
-        return accBal;
-    }
-    
+        return balRes;
+    };
+
     useEffect(() => {
         getAccounts();
     }, []);
-    
+
     return (
         <NavDropdown
             title={`Connect Wallet`}
@@ -122,9 +153,11 @@ const CryptoWallet = () => {
                     alt="PolkaWalletLogo"
                     roundedCircle
                     className="p-1 m-1"
-                    />
+                />
                 Polkadot-js
-                {accBalances.polka !== "" && <small>{`  ${accBalances.polka}`}</small>}
+                {accBalances.polka !== "" && (
+                    <small>{`  ${accBalances.polka}`}</small>
+                )}
             </NavDropdown.Item>
             <NavDropdown.Item href="#action/3.2" onClick={onMathWalletClick}>
                 <Image
@@ -134,7 +167,7 @@ const CryptoWallet = () => {
                     alt="MathWalletLogo"
                     roundedCircle
                     className="p-1 m-1"
-                    />
+                />
                 Math Wallet
             </NavDropdown.Item>
             <NavDropdown.Item href="#action/3.2" onClick={onGuardaWalletClick}>
