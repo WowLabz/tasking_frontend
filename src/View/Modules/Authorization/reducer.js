@@ -1,4 +1,4 @@
-import { API_CALL_ERROR, API_CALL_SUCCESS, INITIATING_API_CALL, SIGN_IN, SIGN_UP } from "./constants";
+import { API_CALL_ERROR, API_CALL_SUCCESS, INITIATING_API_CALL, SIGN_IN, SIGN_OUT, SIGN_UP } from "./constants";
 
 const initialState = {
     isLoggedIn: false,
@@ -26,6 +26,11 @@ export const authenticationReducer = (state = initialState, action) => {
             };
         case API_CALL_SUCCESS:
             return state;
+         case SIGN_OUT:
+            return {
+                ...state,
+                isLoggedIn: false
+            }
         default:
             return state;
     }

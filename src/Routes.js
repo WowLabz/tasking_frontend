@@ -6,29 +6,52 @@ import TaskDetails from "./View/Modules/TaskDetails/TaskDetails";
 import AppHeader from "./Components/AppHeader/AppHeader";
 import { Container } from "react-bootstrap";
 import AppFooter from "./Components/AppFooter/AppFooter";
-import "./View/Modules/DashBoard/Dashboard.css"
+import "./View/Modules/DashBoard/Dashboard.css";
+import { useSelector } from "react-redux";
 
 const Routes = () => {
+    const isLoggedIn = useSelector(
+        (state) => state.authenticationReducer.isLoggedIn
+    );
+
     return (
         <>
-            <AppHeader />
-            <Container
-                className="dashboard-container"
-                style={{ marginTop: "50px", marginBottom: "30px" }}
-            >
+            {!isLoggedIn ? (
                 <Router>
                     <Switch>
-                        <Route exact path="/" component={DashBoard} />
-                        <Route exact path="/dashboard" component={DashBoard} />
-                        <Route exact path="/auth" component={Authorization} />
-                        <Route
-                            path="/taskdetails/:id"
-                            component={TaskDetails}
-                        />
+                        <Route path="/" component={Authorization} />
                     </Switch>
                 </Router>
-            </Container>
-            <AppFooter />
+            ) : (
+                <>
+                    <AppHeader />
+                    <Container
+                        className="dashboard-container"
+                        style={{ marginTop: "50px", marginBottom: "30px" }}
+                    >
+                        <Router>
+                            <Switch>
+                                <Route exact path="/" component={DashBoard} />
+                                <Route
+                                    exact
+                                    path="/dashboard"
+                                    component={DashBoard}
+                                />
+                                <Route
+                                    exact
+                                    path="/auth"
+                                    component={Authorization}
+                                />
+                                <Route
+                                    path="/taskdetails/:id"
+                                    component={TaskDetails}
+                                />
+                            </Switch>
+                        </Router>
+                    </Container>
+                    <AppFooter />
+                </>
+            )}
         </>
     );
 };

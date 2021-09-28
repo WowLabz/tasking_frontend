@@ -5,8 +5,21 @@ import * as constants from "../../constants/constants";
 import { TxGroupButton, TxButton } from "../../substrate-lib/components/TxButton";
 import CryptoWallet from "../CryptoWallet/CryptoWallet";
 import "./AppHeader.css";
+import { FaSignOutAlt } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { signOut } from "../../View/Modules/Authorization/actions";
+import { useHistory } from "react-router";
 
 const AppHeader = () => {
+     const isLoggedIn = useSelector(
+        (state) => state.authenticationReducer.isLoggedIn
+    );
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const handleLogout = (e) => {
+        dispatch(signOut());
+    }
     return (
         <Navbar
             fixed="top"
@@ -59,6 +72,23 @@ const AppHeader = () => {
                             {...props}
                         /> */}
                         <CryptoWallet />
+                        <NavDropdown
+                            title={
+                                <FaSignOutAlt
+                                    style={{
+                                        fill: "white",
+                                        width: "20",
+                                        height: "20",
+                                    }}
+                                />
+                            }
+                            id="collasible-nav-dropdown"
+                            style={{ margin: "auto" }}
+                        >
+                            <NavDropdown.Item onClick={handleLogout}>
+                                Logout
+                            </NavDropdown.Item>
+                        </NavDropdown>
                     </Nav>
                     {/* <Nav className="ml-auto">
                         <Nav.Link href="#deets">More</Nav.Link>
