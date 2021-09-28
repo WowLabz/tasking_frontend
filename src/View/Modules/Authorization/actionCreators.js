@@ -52,7 +52,7 @@ export const userSignUp = (data) => {
                 });
             } else {
                 console.log("------------1-----------");
-                toast.error("Registration Failed! User already exists!", {
+                toast.error("Registration Failed!", {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
                 });
