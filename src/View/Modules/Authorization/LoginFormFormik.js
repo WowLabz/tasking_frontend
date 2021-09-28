@@ -56,7 +56,7 @@ const LoginFormFormik = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            history.push("/dashboard");
+            history.push("/");
         }
     }, [isLoggedIn]);
 

@@ -26,6 +26,9 @@ import Transfer from "./Transfer";
 import Upgrade from "./Upgrade";
 import TestingSubstrateLib from "./TestingSubstrateLib";
 import DashBoard from "./View/Modules/DashBoard/DashBoard";
+import { useSelector } from "react-redux";
+import AppHeader from "./Components/AppHeader/AppHeader";
+import AppFooter from "./Components/AppFooter/AppFooter";
 
 function Main() {
     const [accountAddress, setAccountAddress] = useState(null);
@@ -107,9 +110,25 @@ function Main() {
 }
 
 export default function App() {
+    const isLoggedIn = useSelector(
+        (state) => state.authenticationReducer.isLoggedIn
+    );
     return (
         <SubstrateContextProvider>
-            <Routes />
+            {!isLoggedIn ? (
+                <Routes />
+            ) : (
+                <>
+                    <AppHeader />
+                    <Container
+                        className="dashboard-container"
+                        style={{ marginTop: "50px", marginBottom: "30px" }}
+                    >
+                        <Routes />
+                    </Container>
+                    <AppFooter />
+                </>
+            )}
         </SubstrateContextProvider>
     );
-}
+};
