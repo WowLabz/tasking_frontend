@@ -141,7 +141,7 @@ const RegistrationFormFormik = () => {
                                         name="password"
                                         type="password"
                                         label="Password"
-                                        helperText={""}
+                                        helperText={"1 special, 1 number, Min 6 characters"}
                                         isDisabled={false}
                                     />
                                     <FormLabelAndInput
