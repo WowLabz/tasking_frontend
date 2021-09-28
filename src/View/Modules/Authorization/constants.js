@@ -5,6 +5,7 @@ export const USERTYPE = {
 
 export const SIGN_IN = "SIGN_IN"
 export const SIGN_UP = "SIGN_UP"
+export const SIGN_OUT = "SIGN_OUT"
 export const INITIATING_API_CALL = "INITIATING_API_CALL"
 export const API_CALL_ERROR = "API_CALL_ERROR"
 export const API_CALL_SUCCESS = "API_CALL_SUCCESS"

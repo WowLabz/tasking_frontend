@@ -17,7 +17,7 @@ export const userSignIn = (data) => {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
                 });
-            } else if (res.status === 501 || res.status === 500) {
+            } else {
                 toast.error("Login Failed! Try again!", {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
