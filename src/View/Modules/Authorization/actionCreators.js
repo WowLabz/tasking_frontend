@@ -50,7 +50,7 @@ export const userSignUp = (data) => {
                     position: toast.POSITION.TOP_LEFT,
                     autoClose: 5000,
                 });
-            } else if (res.status === 501 || res.status === 500) {
+            } else {
                 console.log("------------1-----------");
                 toast.error("Registration Failed! User already exists!", {
                     position: toast.POSITION.TOP_CENTER,
