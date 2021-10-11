@@ -127,10 +127,10 @@ const DashBoard = (props) => {
                 )}
                 {tasks.length
                     ? tasks.map((task, index) => (
-                          <TaskCard data={task} showFormModal={showFormModal} />
+                          <TaskCard data={task} showFormModal={showFormModal} key={index}/>
                       ))
                     : staticData.data.map((task, index) => (
-                          <TaskCard data={task} showFormModal={showFormModal} />
+                          <TaskCard data={task} showFormModal={showFormModal} key={index}/>
                       ))}
             </Row>
             <TaskModal
