@@ -214,7 +214,7 @@ const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
                 component={FormErrorMessage}
             ></ErrorMessage>
             <Form.Control as="select" {...field} {...props}>
-                <option value="" selected disabled>
+                <option>
                     Select
                 </option>
                 {options.map((option, index) => (
