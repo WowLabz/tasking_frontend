@@ -177,7 +177,7 @@ const TaskCard = ({ data, showFormModal }) => {
                     <Card.Text>
                         <b>TaskCost:</b> {cost}
                     </Card.Text>
-                    <Card.Text className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center">
                         <div>
                             <div>
                                 <b>Start Date</b>
@@ -190,7 +190,7 @@ const TaskCard = ({ data, showFormModal }) => {
                             </div>
                             <small>{"24/6/2021"}</small>
                         </div>
-                    </Card.Text>
+                    </div>
                 </Card.Body>
                 <Card.Footer className="card-footer justify-content-center">
                     {attributesForCard.button}
