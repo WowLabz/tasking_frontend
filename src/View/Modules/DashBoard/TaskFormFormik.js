@@ -24,9 +24,11 @@ import "./TaskFormFormik.css";
 import FormErrorMessage from "./FormErrorMessage";
 import * as palletTaskingFunctions from "../../../palletTaskingFunctions";
 import * as constants from "./constants";
+import { useSelector } from "react-redux";
+import { Keyring as ExtKeyring } from "@polkadot/keyring";
 
 let initialValues = {
-    requestorName: "",
+    accountName: "",
     accountId: "",
     taskId: "",
     taskDuration: "",
@@ -34,11 +36,11 @@ let initialValues = {
     taskDescription: "",
     isFieldDisabled: false,
     submitButtonName: "Submit",
-    ratings: ""
+    ratings: "",
 };
 
 const validationSchema = Yup.object({
-    requestorName: Yup.string(),
+    accountName: Yup.string(),
     accountId: Yup.number(),
     taskId: Yup.number(),
     taskDuration: Yup.number().required("Required!"),
@@ -46,19 +48,25 @@ const validationSchema = Yup.object({
     taskDescription: Yup.string().required("Required!"),
     isFieldDisabled: Yup.boolean(),
     submitButtonName: Yup.string(),
-    ratings: Yup.number()
+    ratings: Yup.number(),
 });
 
 const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
     const { api, keyring } = configForBackEnd;
     const { formType, data } = formTypeAndData;
 
+    const connectedAccounts = useSelector(
+        (state) => state.headerReducer.accountsAvailableInWallet
+    );
+    const defaultAccounts = useSelector(
+        (state) => state.headerReducer.defaultAccounts
+    );
+
     const configForForm = () => {
         switch (formType.type) {
             case `Create New Task`:
-                initialValues.requestorName = "Alice";
-                initialValues.accountId =
-                    palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.ALICE;
+                initialValues.accountName = "";
+                initialValues.accountId = "";
                 initialValues.taskId = "";
                 initialValues.taskDuration = "";
                 initialValues.taskCost = "";
@@ -68,9 +76,8 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 return;
             case `Bid`:
             case `Complete`:
-                initialValues.requestorName = "Bob";
-                initialValues.accountId =
-                    palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.BOB;
+                initialValues.accountName = "";
+                initialValues.accountId = "";
                 initialValues.taskId = data.task_id;
                 initialValues.taskDuration = data.task_deadline;
                 initialValues.taskCost = data.cost;
@@ -81,9 +88,8 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 return;
 
             case `Approve`:
-                initialValues.requestorName = "Alice";
-                initialValues.accountId =
-                    palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.ALICE;
+                initialValues.accountName = "";
+                initialValues.accountId = "";
                 initialValues.taskId = data.task_id;
                 initialValues.taskDuration = data.task_deadline;
                 initialValues.taskCost = data.cost;
@@ -92,9 +98,8 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 initialValues.submitButtonName = "Approve";
                 return;
             case `Provide Customer Ratings`:
-                initialValues.requestorName = "Bob";
-                initialValues.accountId =
-                    palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.BOB;
+                initialValues.accountName = "";
+                initialValues.accountId = "";
                 initialValues.taskId = data.task_id;
                 initialValues.taskDuration = data.task_deadline;
                 initialValues.taskCost = data.cost;
@@ -108,58 +113,91 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
     };
 
     const handleFormSubmit = async (data) => {
-        let BobFromKeyRing = keyring.getAccount(
-            palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.BOB
-        );
-        let AliceFromKeyRing = keyring.getAccount(
-            palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.ALICE
-        );
-        let bob = keyring.getPair(BobFromKeyRing.address);
-        let alice = keyring.getPair(AliceFromKeyRing.address);
+        try {
+            let extKeyring = new ExtKeyring();
 
-        console.log(`data: ${JSON.stringify(data)}`);
+            // let BobFromKeyRing = keyring.getAccount(
+            //     palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.BOB
+            // );
+            // let AliceFromKeyRing = keyring.getAccount(
+            //     palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.ALICE
+            // );
+            // let bob = keyring.getPair(BobFromKeyRing.address);
+            // let alice = keyring.getPair(AliceFromKeyRing.address);
 
-        switch (formType.type) {
-            case constants.FORM_TYPES.CREATE_TASK.type:
-                console.log(`create`);
-                const unit = 1000000000000;
-                return await palletTaskingFunctions.createTaskTx(
-                    api,
-                    alice,
-                    data.taskDuration,
-                    data.taskCost * unit,
-                    data.taskDescription
-                );
-            case constants.FORM_TYPES.BID_FOR_TASK.type:
-                return await palletTaskingFunctions.bidForTaskTx(
-                    api,
-                    bob,
-                    data.taskId
-                );
-            case constants.FORM_TYPES.COMPLETE_TASK.type:
-                return await palletTaskingFunctions.taskCompletedTx(
-                    api,
-                    bob,
-                    data.taskId
-                );
+            // console.log(alice);
+            // console.log(bob);
 
-            case constants.FORM_TYPES.APPROVE_TASK.type:
-                return await palletTaskingFunctions.approveTaskTx(
-                    api,
-                    alice,
-                    data.taskId,
-                    data.ratings
-                );
+            let allAcc = [...defaultAccounts, ...connectedAccounts];
+            let selectedAccountMeta = (address) => {
+                let meta;
+                allAcc.forEach((acc) => {
+                    if (acc.address === address) {
+                        meta = acc;
+                    }
+                });
+                return meta;
+            };
 
-            case constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type:
-                return await palletTaskingFunctions.provideCustomerRatingsTx(
-                    api,
-                    bob,
-                    data.taskId
-                );
+            // const pair = extKeyring.addFromAddress(
+            //     data.accountId,
+            //     selectedAccountMeta(data.accountId).meta,
+            //     "sr25519"
+            // );
+            // console.log("pair", pair);
 
-            default:
-                break;
+            let signedAccount = keyring.getPair(data.accountId);
+            console.log(signedAccount);
+
+            console.log(`data: ${JSON.stringify(data)}`);
+
+            switch (formType.type) {
+                case constants.FORM_TYPES.CREATE_TASK.type:
+                    console.log(`create`);
+                    const unit = 1000000000000;
+                    return await palletTaskingFunctions.createTaskTx(
+                        api,
+                        signedAccount,
+                        data.taskDuration,
+                        data.taskCost * unit,
+                        data.taskDescription
+                    );
+                case constants.FORM_TYPES.BID_FOR_TASK.type:
+                    return await palletTaskingFunctions.bidForTaskTx(
+                        api,
+                        signedAccount,
+                        data.taskId
+                    );
+                case constants.FORM_TYPES.COMPLETE_TASK.type:
+                    return await palletTaskingFunctions.taskCompletedTx(
+                        api,
+                        signedAccount,
+                        data.taskId
+                    );
+
+                case constants.FORM_TYPES.APPROVE_TASK.type:
+                    return await palletTaskingFunctions.approveTaskTx(
+                        api,
+                        signedAccount,
+                        data.taskId,
+                        data.ratings
+                    );
+
+                case constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type:
+                    return await palletTaskingFunctions.provideCustomerRatingsTx(
+                        api,
+                        signedAccount,
+                        data.taskId
+                    );
+
+                default:
+                    break;
+            }
+        } catch (error) {
+            toast.error(`Use Default Accounts Alice or Bob, Error: ${err}`, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 5000,
+            });
         }
     };
 
@@ -187,10 +225,41 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                     isSubmitting,
                     resetForm,
                     handleSubmit,
+                    setFieldValue,
+                    handleChange,
                 }) => (
                     <FormikForm>
                         <Card className="text-left form p-1">
                             <Card.Body className="form-body">
+                                <FormLabelAndDropDown
+                                    label="Account Name"
+                                    name="accountName"
+                                    helperText={"Select valid account"}
+                                    options={[
+                                        ...connectedAccounts,
+                                        ...defaultAccounts,
+                                    ].map((acc) => acc.meta.name)}
+                                    onChange={(e) => {
+                                        setFieldValue(
+                                            "accountName",
+                                            e.target.value,
+                                            false
+                                        );
+                                        let val;
+                                        [
+                                            ...connectedAccounts,
+                                            ...defaultAccounts,
+                                        ]?.forEach((acc) => {
+                                            if (
+                                                acc.meta.name === e.target.value
+                                            ) {
+                                                val = acc.address;
+                                                return;
+                                            }
+                                        });
+                                        setFieldValue("accountId", val);
+                                    }}
+                                />
                                 <FormLabelAndInput
                                     placeholder={
                                         !values.isFieldDisabled
@@ -205,8 +274,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                     }
                                     label="AccountId"
                                     helperText={""}
-                                    // value={values.accountId.toString()}
-                                    isDisabled={values.isFieldDisabled}
+                                    isDisabled={true}
                                 />
                                 {formType.type !==
                                     constants.FORM_TYPES.CREATE_TASK.type && (
@@ -277,19 +345,30 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                 />
 
                                 {(formType.type ===
-                                    constants.FORM_TYPES.APPROVE_TASK.type || formType.type === constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type) && (
+                                    constants.FORM_TYPES.APPROVE_TASK.type ||
+                                    formType.type ===
+                                        constants.FORM_TYPES
+                                            .PROVIDE_CUSTOMER_RATINGS.type) && (
                                     <FormLabelAndInput
-                                        placeholder={ 
-                                            formType.type === constants.FORM_TYPES.APPROVE_TASK.type ?
-                                            `Ratings for Worker` : `Ratings for Customer`
+                                        placeholder={
+                                            formType.type ===
+                                            constants.FORM_TYPES.APPROVE_TASK
+                                                .type
+                                                ? `Ratings for Worker`
+                                                : `Ratings for Customer`
                                         }
                                         name="ratings"
                                         type={"number"}
-                                        label={ 
-                                            formType.type === constants.FORM_TYPES.APPROVE_TASK.type ?
-                                            `Ratings for Worker` : `Ratings for Customer`
+                                        label={
+                                            formType.type ===
+                                            constants.FORM_TYPES.APPROVE_TASK
+                                                .type
+                                                ? `Ratings for Worker`
+                                                : `Ratings for Customer`
                                         }
-                                        helperText={"Provide ratings between 1-5"}
+                                        helperText={
+                                            "Provide ratings between 1-5"
+                                        }
                                     />
                                 )}
                             </Card.Body>
@@ -335,7 +414,16 @@ const FormLabelAndInput = ({ label, helperText, isDisabled, ...props }) => {
                 disabled={isDisabled}
                 className="p-2"
             ></Field>
-            <span style={{fontSize: "small", fontWeight: "lighter", padding: "2px", margin: "1px"}}>{helperText}</span>
+            <span
+                style={{
+                    fontSize: "small",
+                    fontWeight: "lighter",
+                    padding: "2px",
+                    margin: "1px",
+                }}
+            >
+                {helperText}
+            </span>
         </Form.Group>
     );
 };
@@ -367,7 +455,7 @@ const FormLabelAndTextArea = ({
                 disabled={isDisabled}
                 className="p-3"
             />
-            <span style={{fontSize: "small"}}>{helperText}</span>
+            <span style={{ fontSize: "small" }}>{helperText}</span>
         </Form.Group>
     );
 };
@@ -384,14 +472,12 @@ const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
                 component={FormErrorMessage}
             ></ErrorMessage>
             <Form.Control as="select" {...field} {...props}>
-                <option value="" selected disabled>
-                    Select
-                </option>
+                <option>Select</option>
                 {options.map((option, index) => (
                     <option key={index}>{option}</option>
                 ))}
             </Form.Control>
-            <span>{helperText}</span>
+            <small>{helperText}</small>
         </Form.Group>
     );
 };

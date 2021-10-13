@@ -69,7 +69,7 @@ export const transactionEventHandler = ({ events = [], status }) => {
         });
 
         events.forEach(({ event: { data, method, section }, phase }) => {
-            toast.dark(`\t\t${section}:${method}`, {
+            toast.dark(`\t\t${section}:${method}:${data.toString()}`, {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 9000,
             });
@@ -95,10 +95,10 @@ export const transactionEventHandler = ({ events = [], status }) => {
  */
 export const transactionErrorHandler = (err) => {
     console.log(`Transaction Error: ${err}`);
-    // toast.danger(`Transaction Error: ${err}`, {
-    //     position: toast.POSITION.TOP_RIGHT,
-    //     autoClose: 9000,
-    // });
+    toast.error(`Transaction Error: ${err}`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+    });
 };
 
 // Sample functions for using pallet balances
