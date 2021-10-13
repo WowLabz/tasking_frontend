@@ -16,6 +16,15 @@ import {
 import { getAccountBalance } from "../../palletTaskingFunctions";
 import { useSubstrate } from "../../substrate-lib";
 import { WALLET_NAME } from "./constants";
+import { useDispatch } from "react-redux";
+import {
+    cryptoWalletConnection,
+    cryptoWalletDisconnect,
+    cryptoWalletError,
+} from "../AppHeader/actions";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+toast.configure();
 
 const connectWalletStyle = {
     border: "1px solid #f2f4f6",
@@ -30,6 +39,7 @@ const CryptoWallet = () => {
         guarda: "",
     });
     const [accounts, setAccounts] = useState(null);
+    const dispatch = useDispatch();
 
     const getAccounts = async () => {
         try {
@@ -69,6 +79,7 @@ const CryptoWallet = () => {
             });
         } catch (error) {
             console.log(`CryproWallet Error`, error);
+            dispatch(cryptoWalletError(error));
         }
     };
 
@@ -78,28 +89,49 @@ const CryptoWallet = () => {
     };
 
     const onPolkaWalletClick = async () => {
-        console.log("polka");
+        console.log("polka Wallet");
         console.log("------------2-------------");
-        // await approach2();
-        // let accInfo = getAccountIdByWalletName(WALLET_NAME.polkadotjs);
-        // if (accInfo === undefined) {
-        //     alert("Add account to the polkadot-js extension!");
-        //     return;
-        // }
-        // console.log(accInfo);
-        // let balance = await getBalance(accInfo.address);
-        // console.log("balance", balance);
-        // console.log("------------3-------------");
+        try {
+            if (accounts.length == 0) {
+                throw Error("No wallets connected");
+            }
+
+            let polkaAccounts = accounts?.filter(
+                (acc) => acc.meta.source === WALLET_NAME.polkadotjs
+            );
+            console.log("polkaAccounts", polkaAccounts);
+            dispatch(cryptoWalletConnection(polkaAccounts));
+
+            toast.info(`Polkadot Wallet Connected`, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000,
+            });
+        } catch (error) {
+            console.log("error with polkaWallet");
+            dispatch(cryptoWalletDisconnect());
+            toast.error(`Error Connecting Wallet`, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000,
+            });
+        }
     };
 
     const onMathWalletClick = async () => {
-        console.log("math");
+        console.log("math wallet");
+        toast.warn(`Feature Coming Soon`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+        });
         // let accInfo = getAccountIdByWalletName(WALLET_NAME.math);
         // let balance = await getAccountBalance(api, accInfo.address);
     };
 
     const onGuardaWalletClick = async () => {
-        console.log("gurada");
+        console.log("gurada wallet");
+        toast.warn(`Feature Coming Soon`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+        });
         // let accInfo = getAccountIdByWalletName(WALLET_NAME.guarda);
         // let balance = await getAccountBalance(api, accInfo.address);
     };
@@ -144,7 +176,7 @@ const CryptoWallet = () => {
             style={connectWalletStyle}
             className="m-1"
         >
-            <NavDropdown.Item href="#action/3.1" onClick={onPolkaWalletClick}>
+            <NavDropdown.Item onClick={onPolkaWalletClick}>
                 <Image
                     src={POLKA_WALLET_ICON}
                     width="28"
@@ -158,7 +190,7 @@ const CryptoWallet = () => {
                     <small>{`  ${accBalances.polka}`}</small>
                 )}
             </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2" onClick={onMathWalletClick}>
+            <NavDropdown.Item onClick={onMathWalletClick}>
                 <Image
                     src={MATH_WALLET_ICON}
                     width="28"
@@ -169,7 +201,7 @@ const CryptoWallet = () => {
                 />
                 Math Wallet
             </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2" onClick={onGuardaWalletClick}>
+            <NavDropdown.Item onClick={onGuardaWalletClick}>
                 <Image
                     src={GUARDA_WALLET_ICON}
                     width="28"

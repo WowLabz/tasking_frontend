@@ -2,24 +2,31 @@ import React from "react";
 import { Container, Nav, Navbar, NavDropdown, Image } from "react-bootstrap";
 
 import * as constants from "../../constants/constants";
-import { TxGroupButton, TxButton } from "../../substrate-lib/components/TxButton";
+import {
+    TxGroupButton,
+    TxButton,
+} from "../../substrate-lib/components/TxButton";
 import CryptoWallet from "../CryptoWallet/CryptoWallet";
 import "./AppHeader.css";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../View/Modules/Authorization/actions";
 import { useHistory } from "react-router";
+import ConnectedAccounts from "./ConnectedAccounts";
 
 const AppHeader = () => {
-     const isLoggedIn = useSelector(
+    const isLoggedIn = useSelector(
         (state) => state.authenticationReducer.isLoggedIn
+    );
+    const isWalletConnected = useSelector(
+        (state) => state.headerReducer.isWalletConnected
     );
     const dispatch = useDispatch();
     const history = useHistory();
 
     const handleLogout = (e) => {
         dispatch(signOut());
-    }
+    };
     return (
         <Navbar
             fixed="top"
@@ -41,37 +48,24 @@ const AppHeader = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav>
-                        <Nav.Link href="#Approve">Open</Nav.Link>
-                        <Nav.Link href="#Approve">Approve</Nav.Link>
-                        <Nav.Link href="#InProgress">InProgress</Nav.Link>
-                        <Nav.Link href="#InProgress">Completed</Nav.Link>
+                        <Nav.Link>Open</Nav.Link>
+                        <Nav.Link>Approve</Nav.Link>
+                        <Nav.Link>InProgress</Nav.Link>
+                        <Nav.Link>Completed</Nav.Link>
                     </Nav>
-                    <Nav 
-                        style={{ marginLeft: "auto" }} 
-                    >
+                    <Nav style={{ marginLeft: "auto" }}>
                         {/* <Nav.Link href="#Approve">Open</Nav.Link>
                         <Nav.Link href="#Approve">Approve</Nav.Link>
                         <Nav.Link href="#InProgress">InProgress</Nav.Link>
                         <Nav.Link href="#InProgress">Completed</Nav.Link> */}
-                        <NavDropdown
-                            title="Accounts"
-                            id="collasible-nav-dropdown"
-                            className="m-1"
-                        >
-                            <NavDropdown.Item href="#action/3.1">
-                                Alice
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                                Bob
-                            </NavDropdown.Item>
-                        </NavDropdown>
                         {/* <TxButton
                             label="Signed"
                             type="SIGNED-TX"
                             color="blue"
                             {...props}
                         /> */}
-                        <CryptoWallet />
+                        {!isWalletConnected && <CryptoWallet />}
+                        {isWalletConnected && <ConnectedAccounts />}
                         <NavDropdown
                             title={
                                 <FaSignOutAlt
