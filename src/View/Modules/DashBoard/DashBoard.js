@@ -14,6 +14,7 @@ import TaskFormFormik from "./TaskFormFormik";
 import * as constants from "./constants";
 import staticData from "../../../assets/staticData/staticData.json";
 import "react-toastify/dist/ReactToastify.min.css";
+import CardForAirDrop from "./CardForAirDrop";
 
 toast.configure();
 
@@ -95,6 +96,7 @@ const DashBoard = (props) => {
                         Create New Task
                     </Button>
                 </div>
+                <CardForAirDrop />
                 {/* <Card
                     style={{
                         borderRadius: "20px",

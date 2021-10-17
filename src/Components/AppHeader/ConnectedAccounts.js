@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccountsFromKeyRing } from "../../palletTaskingFunctions";
@@ -8,6 +8,7 @@ import { cryptoWalletAccountSelect, cryptoWalletDisconnect } from "./actions";
 const connectWalletStyle = {
     border: "1px solid #f2f4f6",
     borderRadius: "12px",
+    minWidth: "7vw"
     // boxShadow: "4px 4px 4px rgb(151 167 195 / 44%), -4px -4px 4px #f2f4f660"
 };
 
@@ -19,26 +20,16 @@ const ConnectedAccounts = () => {
         (state) => state.headerReducer.defaultAccounts
     );
     const dispatch = useDispatch();
+    const [accountName, setAccountName] = useState("Select Account");
 
     const handleAccountSelect = (e, acc) => {
+        setAccountName(acc.meta.name);
         dispatch(cryptoWalletAccountSelect(acc));
     };
 
-    useEffect(() => {
-        // let BobFromKeyRing = keyring.getAccount(
-        //     palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.BOB
-        // );
-        // let AliceFromKeyRing = keyring.getAccount(
-        //     palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.ALICE
-        // );
-        // let bob = keyring.getPair(BobFromKeyRing.address);
-        // let alice = keyring.getPair(AliceFromKeyRing.address);
-        // console.log(bob);
-        // console.log(alice);
-    }, []);
     return (
         <NavDropdown
-            title={`Connected Wallet`}
+            title={accountName}
             id="collasible-nav-dropdown"
             style={connectWalletStyle}
             className="m-1"

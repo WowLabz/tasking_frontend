@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Nav, Navbar, NavDropdown, Image } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown, Image, Button } from "react-bootstrap";
 
 import * as constants from "../../constants/constants";
 import CryptoWallet from "../CryptoWallet/CryptoWallet";
