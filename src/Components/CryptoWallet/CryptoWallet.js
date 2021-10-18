@@ -43,43 +43,28 @@ const CryptoWallet = () => {
 
     const getAccounts = async () => {
         try {
+            const api = await ApiPromise.create();
             // Extentsion
             await web3Enable("dot_marketplace");
             let allAccounts = await web3Accounts();
-            allAccounts = allAccounts.map(({ address, meta }) => ({
-                address,
-                meta: { ...meta, name: `${meta.name}` },
-            }));
+
+            allAccounts = allAccounts.map(({ address, meta }) => {
+                return {
+                    address,
+                    meta: { ...meta, name: `${meta.name}` },
+                };
+            });
+
             setAccounts([...allAccounts]);
 
             console.log("allAccounts", allAccounts);
-
-            // Connection to chain for balance info
-            const BLOCKCHAIN_NODE_URL = process.env.REACT_APP_BLOCKCHAIN_NODE;
-            const provider = new WsProvider(BLOCKCHAIN_NODE_URL);
-            const api = await ApiPromise.create({ provider });
-
-            const keyring = new Keyring({ type: "sr25519" });
-
-            console.log("entering loop for accounts");
-            allAccounts.forEach(async (acc) => {
-                keyring.addFromAddress(acc.address);
-                const wowTest = keyring.getPair(acc.address);
-                console.log("pairs", wowTest);
-                let accBal;
-                // Subscribe to balance changes for our account
-                const unsub = await api.query.system.account(
-                    acc.address,
-                    ({ nonce, data: balance }) => {
-                        console.log(
-                            `free balance is ${balance.free.toHuman()} with ${balance.reserved.toHuman()} reserved and a nonce of ${nonce}`
-                        );
-                    }
-                );
-            });
         } catch (error) {
             console.log(`CryproWallet Error`, error);
             dispatch(cryptoWalletError(error));
+            toast.error(`Connect to Polkadot-js Extension`, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000,
+            });
         }
     };
 
@@ -107,9 +92,15 @@ const CryptoWallet = () => {
                 autoClose: 2000,
             });
         } catch (error) {
-            console.log("error with polkaWallet");
             dispatch(cryptoWalletDisconnect());
-            toast.error(`Error Connecting Wallet`, {
+            console.log("error with polkaWallet", error);
+            let errorToast;
+            if (error.message === "No wallets connected") {
+                errorToast = `Connect to Polkadot-js Extension`;
+            } else {
+                errorToast = `Error: ${error.message}`;
+            }
+            toast.error(errorToast, {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 2000,
             });
