@@ -152,7 +152,9 @@ const TaskCard = ({ data, showFormModal }) => {
 
         let today = new Date();
         let start_date = today.toLocaleDateString();
-        let end_date = today.addDays(parseInt(task_deadline)).toLocaleDateString();
+        let end_date = today
+            .addDays(parseInt(task_deadline))
+            .toLocaleDateString();
         setCardDetails({
             ...data,
             publisher_name,
@@ -205,14 +207,22 @@ const TaskCard = ({ data, showFormModal }) => {
                         </Badge>
                     </Card.Text>
                     <hr />
-                    <Card.Text>
-                        <b>Publisher:</b> {cardDetails.publisher_name}
-                    </Card.Text>
-                    {cardDetails.worker_id !== null && (
-                        <Card.Text>
-                            <b>Worker:</b> {cardDetails.worker_name}
-                        </Card.Text>
-                    )}
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div>
+                                <b>Publisher Date</b>
+                            </div>
+                            <small>{cardDetails.publisher_name}</small>
+                        </div>
+                        {cardDetails.worker_id !== null && (
+                            <div>
+                                <div>
+                                    <b>Worker</b>
+                                </div>
+                                <small>{cardDetails.worker_name}</small>
+                            </div>
+                        )}
+                    </div>
                     <Card.Text>
                         <b>TaskId:</b> {cardDetails.task_id}
                     </Card.Text>
