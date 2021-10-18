@@ -26,6 +26,10 @@ import * as palletTaskingFunctions from "../../../palletTaskingFunctions";
 import * as constants from "./constants";
 import { useSelector } from "react-redux";
 import { Keyring as ExtKeyring } from "@polkadot/keyring";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import { DEFAULT_POLKA_ACCOUNTS } from "../../../Components/AppHeader/constants";
+toast.configure();
 
 let initialValues = {
     accountName: "",
@@ -114,41 +118,6 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
 
     const handleFormSubmit = async (data) => {
         try {
-            let extKeyring = new ExtKeyring();
-
-            // let BobFromKeyRing = keyring.getAccount(
-            //     palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.BOB
-            // );
-            // let AliceFromKeyRing = keyring.getAccount(
-            //     palletTaskingFunctions.DEFAULT_ACCOUNT_IDS.ALICE
-            // );
-            // let bob = keyring.getPair(BobFromKeyRing.address);
-            // let alice = keyring.getPair(AliceFromKeyRing.address);
-
-            // console.log(alice);
-            // console.log(bob);
-
-            let allAcc = [...defaultAccounts, ...connectedAccounts];
-            let selectedAccountMeta = (address) => {
-                let meta;
-                allAcc.forEach((acc) => {
-                    if (acc.address === address) {
-                        meta = acc;
-                    }
-                });
-                return meta;
-            };
-
-            // const pair = extKeyring.addFromAddress(
-            //     data.accountId,
-            //     selectedAccountMeta(data.accountId).meta,
-            //     "sr25519"
-            // );
-            // console.log("pair", pair);
-
-            let signedAccount = keyring.getPair(data.accountId);
-            console.log(signedAccount);
-
             console.log(`data: ${JSON.stringify(data)}`);
 
             switch (formType.type) {
@@ -157,7 +126,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                     const unit = 1000000000000;
                     return await palletTaskingFunctions.createTaskTx(
                         api,
-                        signedAccount,
+                        data.accountId,
                         data.taskDuration,
                         data.taskCost * unit,
                         data.taskDescription
@@ -165,20 +134,20 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 case constants.FORM_TYPES.BID_FOR_TASK.type:
                     return await palletTaskingFunctions.bidForTaskTx(
                         api,
-                        signedAccount,
+                        data.accountId,
                         data.taskId
                     );
                 case constants.FORM_TYPES.COMPLETE_TASK.type:
                     return await palletTaskingFunctions.taskCompletedTx(
                         api,
-                        signedAccount,
+                        data.accountId,
                         data.taskId
                     );
 
                 case constants.FORM_TYPES.APPROVE_TASK.type:
                     return await palletTaskingFunctions.approveTaskTx(
                         api,
-                        signedAccount,
+                        data.accountId,
                         data.taskId,
                         data.ratings
                     );
@@ -186,7 +155,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 case constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type:
                     return await palletTaskingFunctions.provideCustomerRatingsTx(
                         api,
-                        signedAccount,
+                        data.accountId,
                         data.taskId
                     );
 
@@ -194,7 +163,8 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                     break;
             }
         } catch (error) {
-            toast.error(`Use Default Accounts Alice or Bob, Error: ${err}`, {
+            console.log(error);
+            toast.error(`Use Default Accounts Alice or Bob, Error: ${error}`, {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 5000,
             });

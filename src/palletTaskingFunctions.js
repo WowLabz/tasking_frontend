@@ -1,5 +1,6 @@
 import { ApiPromise, wsProvider } from "@polkadot/api";
 import { Keyring } from "@polkadot/keyring";
+import { web3FromAddress } from "@polkadot/extension-dapp";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 toast.configure();
@@ -155,7 +156,7 @@ export const getAccountBalance = async (api, accountId) => {
  */
 export const createTaskTx = async (
     api,
-    accountIdFromKeyRing,
+    accountId,
     taskDuration,
     taskCost,
     taskTitle
@@ -167,10 +168,8 @@ export const createTaskTx = async (
             taskCost,
             taskTitle
         );
-        await transaction.signAndSend(
-            accountIdFromKeyRing,
-            transactionEventHandler
-        );
+
+        await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
     }
@@ -182,14 +181,11 @@ export const createTaskTx = async (
  * @param {AccountId} accountIdFromKeyRing
  * @param {Number} taskId
  */
-export const bidForTaskTx = async (api, accountIdFromKeyRing, taskId) => {
+export const bidForTaskTx = async (api, accountId, taskId) => {
     try {
         if (api === null) return;
         let transaction = api.tx["palletTasking"]["bidForTask"](taskId);
-        await transaction.signAndSend(
-            accountIdFromKeyRing,
-            transactionEventHandler
-        );
+        await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
     }
@@ -202,14 +198,19 @@ export const bidForTaskTx = async (api, accountIdFromKeyRing, taskId) => {
  * @param {Number} taskId
  * @param {Number} ratingsForWorker
  */
-export const approveTaskTx = async (api, accountIdFromKeyRing, taskId, ratingsForWorker) => {
+export const approveTaskTx = async (
+    api,
+    accountId,
+    taskId,
+    ratingsForWorker
+) => {
     try {
         if (api === null) return;
-        let transaction = api.tx.palletTasking.approveTask(taskId, ratingsForWorker);
-        await transaction.signAndSend(
-            accountIdFromKeyRing,
-            transactionEventHandler
+        let transaction = api.tx.palletTasking.approveTask(
+            taskId,
+            ratingsForWorker
         );
+        await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
     }
@@ -221,14 +222,11 @@ export const approveTaskTx = async (api, accountIdFromKeyRing, taskId, ratingsFo
  * @param {AccountId} accountIdFromKeyRing
  * @param {Number} taskId
  */
-export const taskCompletedTx = async (api, accountIdFromKeyRing, taskId) => {
+export const taskCompletedTx = async (api, accountId, taskId) => {
     try {
         if (api === null) return;
         let transaction = api.tx.palletTasking.taskCompleted(taskId);
-        await transaction.signAndSend(
-            accountIdFromKeyRing,
-            transactionEventHandler
-        );
+        await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
     }
@@ -236,23 +234,28 @@ export const taskCompletedTx = async (api, accountIdFromKeyRing, taskId) => {
 
 /**
  * provideCustomerRatings function from palletTasking
- * @param {*} api 
+ * @param {*} api
  * @param {AccountId} accountIdFromKeyRing
  * @param {Number} taskId
  * @param {Number} ratingsForCustomer
  */
-export const provideCustomerRatingsTx = async (api, accountIdFromKeyRing, taskId, ratingsForCustomer) => {
+export const provideCustomerRatingsTx = async (
+    api,
+    accountId,
+    taskId,
+    ratingsForCustomer
+) => {
     try {
         if (api === null) return;
-        let transaction = api.tx.palletTasking.provideCustomerRating(taskId, ratingsForCustomer);
-        await transaction.signAndSend(
-            accountIdFromKeyRing,
-            transactionEventHandler
+        let transaction = api.tx.palletTasking.provideCustomerRating(
+            taskId,
+            ratingsForCustomer
         );
+        await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
     }
-}
+};
 
 // Accessing chain storage
 
@@ -350,14 +353,11 @@ export const getCountFromStorage = async (api) => {
  * @param {Number} accountIdFromKeyRing
  * @returns
  */
-export const getTaskDetails = async (api, taskId, accountIdFromKeyRing) => {
+export const getTaskDetails = async (api, taskId, accountId) => {
     try {
         if (api === null) return;
         let transaction = api.tx.palletTasking.getDataFromStore(taskId);
-        await transaction.signAndSend(
-            accountIdFromKeyRing,
-            transactionEventHandler
-        );
+        await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
     }
@@ -454,4 +454,34 @@ export const getRunTimeVersion = (api) => {
     if (api === null) return;
     let result = api.runtimeVersion;
     console.log(`RuntimeVersion: ${result}`);
+};
+
+const handleSignedTransactions = async (transaction, accountId) => {
+    try {
+        const keyring = new Keyring({ type: "sr25519" });
+        let signedAccount;
+        let signer;
+        if (accountId === DEFAULT_ACCOUNT_IDS.ALICE) {
+            console.log("---1---");
+            signedAccount = keyring.addFromUri("//Alice");
+            signer = signedAccount.sign;
+        } else if (accountId === DEFAULT_ACCOUNT_IDS.BOB) {
+            console.log("---2---");
+            signedAccount = keyring.addFromUri("//Bob");
+            signer = signedAccount.sign;
+        } else {
+            console.log("---3---");
+            signedAccount = accountId;
+            const injectedAccount = await web3FromAddress(accountId);
+            signer = injectedAccount.signer;
+        }
+        await transaction.signAndSend(
+            signedAccount,
+            { signer },
+            transactionEventHandler
+        );
+    } catch (error) {
+        console.log(error);
+        transactionErrorHandler(error);
+    }
 };
