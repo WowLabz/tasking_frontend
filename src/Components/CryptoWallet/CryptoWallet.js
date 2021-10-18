@@ -43,7 +43,6 @@ const CryptoWallet = () => {
 
     const getAccounts = async () => {
         try {
-            const api = await ApiPromise.create();
             // Extentsion
             await web3Enable("dot_marketplace");
             let allAccounts = await web3Accounts();

@@ -7,7 +7,7 @@ import {
 } from "../../palletTaskingFunctions";
 import { useSubstrate } from "../../substrate-lib";
 import { cryptoWalletAccountSelect, cryptoWalletDisconnect } from "./actions";
-import { ApiPromise } from "@polkadot/api";
+import { ApiPromise, WsProvider } from "@polkadot/api";
 import { toast } from "react-toastify";
 
 const connectWalletStyle = {
@@ -58,7 +58,9 @@ const ConnectedAccounts = () => {
 
     const getAndSetBalanceField = async (currAcc) => {
         try {
-            const api = await ApiPromise.create();
+            const BLOCKCHAIN_NODE_URL = process.env.REACT_APP_BLOCKCHAIN_NODE;
+            const provider = new WsProvider(BLOCKCHAIN_NODE_URL);
+            const api = await ApiPromise.create({ provider });
 
             let {
                 data: { free: previousFree },
