@@ -64,7 +64,7 @@ const ConnectedAccounts = () => {
                 data: { free: previousFree },
                 nonce: previousNonce,
             } = await api.query.system.account(currAcc.address);
-            balanceRef.current.value = Math.round(previousFree / 1000000000000);
+            balanceRef.current.value = previousFree.toHuman();
 
             console.log(
                 `${currAcc.meta.name} has a balance of ${previousFree}, nonce ${previousNonce}`
