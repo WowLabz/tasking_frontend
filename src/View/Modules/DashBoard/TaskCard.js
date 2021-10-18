@@ -207,19 +207,23 @@ const TaskCard = ({ data, showFormModal }) => {
                         </Badge>
                     </Card.Text>
                     <hr />
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center my-1">
                         <div>
                             <div>
-                                <b>Publisher Date</b>
+                                <b>Publisher</b>
                             </div>
-                            <small>{cardDetails.publisher_name}</small>
+                            <small style={{ fontSize: "13px" }}>
+                                {cardDetails.publisher_name}
+                            </small>
                         </div>
                         {cardDetails.worker_id !== null && (
                             <div>
                                 <div>
                                     <b>Worker</b>
                                 </div>
-                                <small>{cardDetails.worker_name}</small>
+                                <small style={{ fontSize: "13px" }}>
+                                    {cardDetails.worker_name}
+                                </small>
                             </div>
                         )}
                     </div>
