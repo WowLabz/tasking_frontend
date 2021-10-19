@@ -1,9 +1,10 @@
-import { API_CALL_ERROR, API_CALL_SUCCESS, INITIATING_API_CALL, SIGN_IN, SIGN_OUT, SIGN_UP } from "./constants";
+import { API_CALL_ERROR, API_CALL_SUCCESS, INITIATING_API_CALL, SIGN_IN, SIGN_OUT, SIGN_UP, USER_TAGS } from "./constants";
 
 const initialState = {
     isLoggedIn: false,
     currentUserName: null,
     apiCallError: null,
+    userTags: null
 }
 
 export const authenticationReducer = (state = initialState, action) => {
@@ -26,10 +27,15 @@ export const authenticationReducer = (state = initialState, action) => {
             };
         case API_CALL_SUCCESS:
             return state;
-         case SIGN_OUT:
+        case SIGN_OUT:
             return {
                 ...state,
                 isLoggedIn: false
+            }
+        case USER_TAGS:
+            return {
+                ...state,
+                userTags: action.payload
             }
         default:
             return state;

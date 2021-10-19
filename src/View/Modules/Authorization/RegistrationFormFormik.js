@@ -226,4 +226,28 @@ const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
     );
 };
 
+const FormLabelAndDropDownWithMultipleValue = ({ label, helperText, options, ...props }) => {
+    const [field, meta] = useField(props);
+    return (
+        <Form.Group style={{...DivHeight}}>
+            <Form.Label className="publish-form-label mtl-5">
+                {label}
+            </Form.Label>
+            <ErrorMessage
+                name={field.name}
+                component={FormErrorMessage}
+            ></ErrorMessage>
+            <Form.Control as="select" {...field} {...props} multiple={true}>
+                <option>
+                    Select
+                </option>
+                {options.map((option, index) => (
+                    <option key={index}>{option}</option>
+                ))}
+            </Form.Control>
+            <small>{helperText}</small>
+        </Form.Group>
+    );
+};
+
 export default RegistrationFormFormik;

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Nav, Tab, Row, Col } from "react-bootstrap";
 import LoginFormFormik from "./LoginFormFormik";
 import RegistrationFormFormik from "./RegistrationFormFormik";
 import logo from "../../../assets/images/market-place-logo.png";
+import { getUserTags } from "./actionCreators";
+import { useDispatch } from "react-redux";
 
 const PageContainer = {
     minHeight: "100vh",
@@ -21,6 +23,14 @@ const FixedCardHeight = {
 
 
 const Authorization = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getUserTags());
+        return () => {
+        }
+    }, [])
+
     return (
         <>
             <div

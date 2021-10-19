@@ -1,4 +1,4 @@
-import { API_CALL_ERROR, API_CALL_SUCCESS, INITIATING_API_CALL, SIGN_IN, SIGN_OUT, SIGN_UP } from "./constants"
+import { API_CALL_ERROR, API_CALL_SUCCESS, INITIATING_API_CALL, SIGN_IN, SIGN_OUT, SIGN_UP, USER_TAGS } from "./constants"
 
 export const signIn = (data) => {
     return {
@@ -35,5 +35,12 @@ export const apiCallError = (data) => {
 export const apiCallSuccess = () => {
     return {
         type: API_CALL_SUCCESS
+    }
+}
+
+export const setUserTags = (data) => {
+    return {
+        type: USER_TAGS,
+        payload: data
     }
 }

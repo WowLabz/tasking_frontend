@@ -9,6 +9,7 @@ export const SIGN_OUT = "SIGN_OUT"
 export const INITIATING_API_CALL = "INITIATING_API_CALL"
 export const API_CALL_ERROR = "API_CALL_ERROR"
 export const API_CALL_SUCCESS = "API_CALL_SUCCESS"
+export const USER_TAGS = "USER_TAGS"
 
 // export const AUTH_BASE_URL = "http://localhost:3001"
 console.log(process.env);
@@ -16,5 +17,6 @@ export const AUTH_BASE_URL = process.env.REACT_APP_AUTH_SERVER;
 console.log(AUTH_BASE_URL);
 export const AUTH_END_POINTS = {
     signUp: "/auth/sign-up",
-    signIn: "/auth/sign-in"
+    signIn: "/auth/sign-in",
+    getUserTags: "/auth/get-user-tags"
 }
