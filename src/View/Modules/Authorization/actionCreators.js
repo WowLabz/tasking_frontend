@@ -2,7 +2,7 @@ import { apiCallError, apiCallSuccess, initiatingApiCall, setUserTags, signIn } 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import apiHelpers from "../../../Utilities/axiosHelpers";
-import { AUTH_BASE_URL, AUTH_END_POINTS, INITIATING_API_CALL } from "./constants";
+import { AUTH_BASE_URL, AUTH_END_POINTS } from "./constants";
 toast.configure();
 
 export const userSignIn = (data) => {
@@ -14,12 +14,12 @@ export const userSignIn = (data) => {
             if (res.status === 200) {
                 dispatch(signIn(res.data.data));
                 dispatch(apiCallSuccess());
-                toast.success("Login Successfull !", {
+                toast.success("Login Successfull!", {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
                 });
             } else {
-                toast.error("Login Failed! Try again!", {
+                toast.error(`Login Failed! Try again! ${res}`, {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
                 });
@@ -54,7 +54,7 @@ export const userSignUp = (data) => {
                 });
             } else {
                 console.log("------------1-----------");
-                toast.error("Registration Failed!", {
+                toast.error(`Registration Failed! ${res}`, {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
                 });
@@ -80,6 +80,11 @@ export const getUserTags = () => {
             if (res.status === 200) {
                 dispatch(setUserTags(res.data.data))
                 dispatch(apiCallSuccess());
+            } else {
+                toast.error(`App Not Connected! ${res}`, {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 3000,
+                });
             }
         } catch (error) {
             console.log("------------2-----------");

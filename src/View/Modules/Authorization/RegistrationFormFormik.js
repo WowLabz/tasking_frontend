@@ -48,7 +48,9 @@ const validationSchema = Yup.object({
         constants.USERTYPE.CUSTOMER,
         constants.USERTYPE.WORKER,
     ]),
-    userTags: Yup.array().min(1, "choose atleast 1 preference").required("Required!"),
+    userTags: Yup.array()
+        .min(1, "choose atleast 1 preference")
+        .required("Required!"),
     emailId: Yup.string().email("Invalid email format").required("Required!"),
     password: Yup.string()
         .min(6, "Minimum 6 characters required!")
@@ -175,7 +177,7 @@ const RegistrationFormFormik = () => {
                                     name="userTags"
                                     helperText={"choose approprotiate tags"}
                                     options={[...userTags]}
-                                    handleCustomChange={(value) =>
+                                    onChange={(value) =>
                                         setFieldValue("userTags", value, false)
                                     }
                                 />
@@ -269,7 +271,7 @@ const FormLabelAndDropDownWithMultipleValue = ({
             <Select
                 mode="multiple"
                 {...props}
-                onChange={props.handleCustomChange}
+                onChange={props.onChange}
                 style={{
                     width: "100%",
                     fontSize: "12px !important",

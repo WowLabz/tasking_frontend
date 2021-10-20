@@ -4,7 +4,7 @@ const initialState = {
     isLoggedIn: false,
     currentUserName: null,
     apiCallError: null,
-    userTags: null
+    userTags: []
 }
 
 export const authenticationReducer = (state = initialState, action) => {
