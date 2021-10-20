@@ -93,7 +93,8 @@ const CardForAirDrop = () => {
                     }}
                 >
                     <div>
-                        <h4>
+                        <h4 style={{ margin: "0" }}>Insufficient Balance?</h4>
+                        <h4 style={{ margin: "0" }}>
                             You can request air drop to get 100 tokens for
                             testing
                         </h4>
