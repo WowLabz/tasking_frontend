@@ -173,8 +173,8 @@ const CardForAirDrop = () => {
                                                         "Select valid account"
                                                     }
                                                     options={
-                                                        connectedAccounts !==
-                                                        null
+                                                        connectedAccounts.length !==
+                                                        0
                                                             ? [
                                                                   ...connectedAccounts,
                                                               ].map(

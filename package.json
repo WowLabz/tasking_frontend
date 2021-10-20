@@ -24,6 +24,7 @@
     "@polkadot/ui-settings": "^0.69.1",
     "@polkadot/util": "^5.6.3",
     "@polkadot/util-crypto": "^5.6.3",
+    "antd": "^4.16.13",
     "axios": "^0.21.1",
     "bootstrap": "^5.0.1",
     "formik": "^2.2.8",

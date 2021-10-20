@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Select } from "antd";
 import {
     ErrorMessage,
     Field,
@@ -18,11 +19,11 @@ import {
     Modal,
     Spinner,
 } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FormErrorMessage from "./FormErrorMessage";
 import * as constants from "./constants";
 import { userSignUp } from "./actionCreators";
-import "./RegistrationFormFormik.css"
+import "./RegistrationFormFormik.css";
 
 let initialValues = {
     firstName: "",
@@ -31,6 +32,7 @@ let initialValues = {
     emailId: "",
     password: "",
     confirm: "",
+    userTags: [],
 };
 
 const validationSchema = Yup.object({
@@ -46,6 +48,7 @@ const validationSchema = Yup.object({
         constants.USERTYPE.CUSTOMER,
         constants.USERTYPE.WORKER,
     ]),
+    userTags: Yup.array().min(1, "choose atleast 1 preference").required("Required!"),
     emailId: Yup.string().email("Invalid email format").required("Required!"),
     password: Yup.string()
         .min(6, "Minimum 6 characters required!")
@@ -55,17 +58,21 @@ const validationSchema = Yup.object({
         .required("Required!"),
 });
 
-
 const FixedCardHeight = {
     height: "600px",
-}
+};
 
 const DivHeight = {
-    height: "100px"
-}
+    height: "100px",
+};
 
 const RegistrationFormFormik = () => {
     const dispatch = useDispatch();
+
+    const userTags = useSelector(
+        (state) => state.authenticationReducer.userTags
+    );
+    console.log(userTags);
 
     const handleFormSubmit = async (data) => {
         let signUpFormData = new FormData();
@@ -74,9 +81,15 @@ const RegistrationFormFormik = () => {
         signUpFormData.append("user_type", data.userType);
         signUpFormData.append("email_id", data.emailId);
         signUpFormData.append("password", data.password);
+
+        if (data.userTags.length !== 0) {
+            data.userTags.forEach((tag, index) => {
+                signUpFormData.append(`user_tags[${index}]`, tag);
+            });
+        }
         dispatch(userSignUp(signUpFormData));
     };
-    
+
     return (
         <>
             <Formik
@@ -84,6 +97,7 @@ const RegistrationFormFormik = () => {
                 validationSchema={validationSchema}
                 onSubmit={async (data, { setSubmitting, resetForm }) => {
                     setSubmitting(true);
+                    console.log(data);
                     handleFormSubmit(data);
                     setSubmitting(false);
                     resetForm();
@@ -96,10 +110,14 @@ const RegistrationFormFormik = () => {
                     resetForm,
                     handleForm,
                     handleSubmit,
+                    setFieldValue,
                 }) => (
                     <FormikForm>
-                        <Card style={{...FixedCardHeight}}>
-                            <Card.Body className="reg-form">
+                        <Card style={{ ...FixedCardHeight }}>
+                            <Card.Body
+                                className="reg-form"
+                                style={{ overflow: "scroll" }}
+                            >
                                 <FormLabelAndInput
                                     placeholder="first name"
                                     name="firstName"
@@ -152,10 +170,17 @@ const RegistrationFormFormik = () => {
                                         helperText={""}
                                     />
                                 </div>
+                                <FormLabelAndDropDownWithMultipleValue
+                                    label="User Tags"
+                                    name="userTags"
+                                    helperText={"choose approprotiate tags"}
+                                    options={[...userTags]}
+                                    handleCustomChange={(value) =>
+                                        setFieldValue("userTags", value, false)
+                                    }
+                                />
                             </Card.Body>
-                            <Card.Footer 
-                                className="d-flex justify-content-between align-items-center"
-                            >
+                            <Card.Footer className="d-flex justify-content-between align-items-center">
                                 <Button variant="warning" onClick={resetForm}>
                                     <b>Reset</b>
                                 </Button>
@@ -179,7 +204,7 @@ const FormLabelAndInput = ({ label, helperText, isDisabled, ...props }) => {
     const [field, meta] = useField(props);
 
     return (
-        <Form.Group style={{...DivHeight}}>
+        <Form.Group style={{ ...DivHeight }}>
             <Form.Label className="publish-form-label mtl-5">
                 {label}
             </Form.Label>
@@ -205,7 +230,7 @@ const FormLabelAndInput = ({ label, helperText, isDisabled, ...props }) => {
 const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
     const [field, meta] = useField(props);
     return (
-        <Form.Group style={{...DivHeight}}>
+        <Form.Group style={{ ...DivHeight }}>
             <Form.Label className="publish-form-label mtl-5">
                 {label}
             </Form.Label>
@@ -214,9 +239,7 @@ const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
                 component={FormErrorMessage}
             ></ErrorMessage>
             <Form.Control as="select" {...field} {...props}>
-                <option>
-                    Select
-                </option>
+                <option>Select</option>
                 {options.map((option, index) => (
                     <option key={index}>{option}</option>
                 ))}
@@ -226,10 +249,16 @@ const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
     );
 };
 
-const FormLabelAndDropDownWithMultipleValue = ({ label, helperText, options, ...props }) => {
+const FormLabelAndDropDownWithMultipleValue = ({
+    label,
+    helperText,
+    options,
+    ...props
+}) => {
     const [field, meta] = useField(props);
+
     return (
-        <Form.Group style={{...DivHeight}}>
+        <Form.Group style={{ ...DivHeight }}>
             <Form.Label className="publish-form-label mtl-5">
                 {label}
             </Form.Label>
@@ -237,14 +266,22 @@ const FormLabelAndDropDownWithMultipleValue = ({ label, helperText, options, ...
                 name={field.name}
                 component={FormErrorMessage}
             ></ErrorMessage>
-            <Form.Control as="select" {...field} {...props} multiple={true}>
-                <option>
-                    Select
-                </option>
+            <Select
+                mode="multiple"
+                {...props}
+                onChange={props.handleCustomChange}
+                style={{
+                    width: "100%",
+                    fontSize: "12px !important",
+                    fontWeight: "400 !important",
+                }}
+            >
                 {options.map((option, index) => (
-                    <option key={index}>{option}</option>
+                    <Select.Option key={index} value={option}>
+                        {option}
+                    </Select.Option>
                 ))}
-            </Form.Control>
+            </Select>
             <small>{helperText}</small>
         </Form.Group>
     );

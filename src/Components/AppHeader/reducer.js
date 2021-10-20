@@ -9,7 +9,7 @@ import {
 const initialState = {
     isWalletConnected: false,
     currentWalletDetails: null,
-    accountsAvailableInWallet: null,
+    accountsAvailableInWallet: [],
     defaultAccounts: [...DEFAULT_POLKA_ACCOUNTS],
     walletError: null,
 };

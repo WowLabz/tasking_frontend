@@ -75,7 +75,6 @@ export const getUserTags = () => {
         try {
             dispatch(initiatingApiCall())
             let url = AUTH_BASE_URL + AUTH_END_POINTS.getUserTags;
-            console.log(url);
             let res = await apiHelpers.get(url)
             console.log(res);
             if (res.status === 200) {

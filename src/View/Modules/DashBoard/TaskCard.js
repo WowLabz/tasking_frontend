@@ -31,14 +31,18 @@ const TaskCard = ({ data, showFormModal }) => {
     );
 
     const getAccountName = (address) => {
-        let res;
-        if (address === null) return null;
-        [...connectedAccounts, ...defaultAccounts].forEach((acc, idx) => {
-            if (address === acc.address) {
-                res = acc.meta.name;
-            }
-        });
-        return res;
+        try {
+            let res;
+            if (address === null) return null;
+            [...connectedAccounts, ...defaultAccounts].forEach((acc, idx) => {
+                if (address === acc.address) {
+                    res = acc.meta.name;
+                }
+            });
+            return res;
+        } catch (error) {
+            return "Alice";
+        }
     };
 
     const getAttributesForCard = (status) => {
@@ -138,36 +142,39 @@ const TaskCard = ({ data, showFormModal }) => {
     };
 
     const init = () => {
-        const {
-            task_id,
-            client,
-            worker_id,
-            task_deadline,
-            cost,
-            status,
-            task_description,
-        } = data;
-        const publisher_name = getAccountName(client);
-        const worker_name = getAccountName(worker_id);
+        try {
+            const {
+                task_id,
+                client,
+                worker_id,
+                task_deadline,
+                cost,
+                status,
+                task_description,
+            } = data;
+            const publisher_name = getAccountName(client);
+            const worker_name = getAccountName(worker_id);
 
-        let today = new Date();
-        let start_date = today.toLocaleDateString();
-        let end_date = today
-            .addDays(parseInt(task_deadline))
-            .toLocaleDateString();
-        setCardDetails({
-            ...data,
-            publisher_name,
-            worker_name,
-            start_date,
-            end_date,
-        });
-        setAttributesForCard(getAttributesForCard(status));
+            let today = new Date();
+            let start_date = today.toLocaleDateString();
+            let end_date = today
+                .addDays(parseInt(task_deadline))
+                .toLocaleDateString();
+            setCardDetails({
+                ...data,
+                publisher_name,
+                worker_name,
+                start_date,
+                end_date,
+            });
+            setAttributesForCard(getAttributesForCard(status));
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {
         init();
-        return () => {};
     }, [data]);
 
     return (

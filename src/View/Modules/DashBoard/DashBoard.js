@@ -15,6 +15,7 @@ import * as constants from "./constants";
 import staticData from "../../../assets/staticData/staticData.json";
 import "react-toastify/dist/ReactToastify.min.css";
 import CardForAirDrop from "./CardForAirDrop";
+import { Empty } from "antd";
 
 toast.configure();
 
@@ -34,7 +35,7 @@ const DashBoard = (props) => {
     const handleShow = () => setShow(true);
 
     useEffect(() => {
-         const init = async () => {
+        const init = async () => {
             try {
                 palletTaskingFunctions.handleOnChainEvents(api, toast);
                 const getTasksResult = await palletTaskingFunctions.getAllTasks(
@@ -123,17 +124,19 @@ const DashBoard = (props) => {
 
             <Row>
                 {!tasks.length && (
-                    <span style={{ marginLeft: "45px" }} className="p-2">
-                        Showing Demo Data, You can create a new Task!
-                    </span>
+                    // <span style={{ marginLeft: "45px" }} className="p-2">
+                    //     Showing Demo Data, You can create a new Task!
+                    // </span>
+                    <Empty description={<span>Create new tasks</span>} />
                 )}
-                {tasks.length
-                    ? tasks.map((task, index) => (
-                          <TaskCard data={task} showFormModal={showFormModal} key={index}/>
-                      ))
-                    : staticData.data.map((task, index) => (
-                          <TaskCard data={task} showFormModal={showFormModal} key={index}/>
-                      ))}
+                {tasks.length > 0 &&
+                    tasks.map((task, index) => (
+                        <TaskCard
+                            data={task}
+                            showFormModal={showFormModal}
+                            key={index}
+                        />
+                    ))}
             </Row>
             <TaskModal
                 show={show}
