@@ -253,14 +253,6 @@ const TaskCard = ({ data, showFormModal }) => {
                         <b>TaskTags:</b>
                     </div>
                     <div
-                    // style={{
-                    //     display: "flex",
-                    //     flexDirection: "row",
-                    //     justifyContent: "center",
-                    //     // flexWrap: "wrap",
-                    //     // flexGrow: "1",
-                    //     width: "33%",
-                    // }}
                     >
                         {cardDetails.task_tags.map((tag, idx) => (
                             <Badge
@@ -268,9 +260,6 @@ const TaskCard = ({ data, showFormModal }) => {
                                 className={`px-2 m-1`}
                                 style={{
                                     color: `${
-                                        // attributesForCard.badgeColor === "yellow"
-                                        // ? "black"
-                                        // : "white"
                                         "white"
                                     }`,
                                     backgroundColor: `${"#272b41"}`,
