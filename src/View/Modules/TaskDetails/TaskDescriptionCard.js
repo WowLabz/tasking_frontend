@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Card, Col, Row } from "react-bootstrap";
+import { Badge, Button, Card, Col, Row } from "react-bootstrap";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { TASK_STATUS } from "./constants";
@@ -10,13 +10,17 @@ const TaskDescriptionCard = ({ tab }) => {
     const [progressValue, setProgressValue] = useState(1);
 
     const {
+        task_id,
         client,
+        worker_id,
+        task_deadline,
         cost,
         status,
-        task_deadline,
         task_description,
-        task_id,
-        worker_id,
+        publisher_name,
+        worker_name,
+        task_tags,
+        attachments,
     } = task;
 
     const getProgressValue = (status) => {
@@ -66,16 +70,71 @@ const TaskDescriptionCard = ({ tab }) => {
                         <ul>
                             <li>Task Description: {task_description}</li>
                             <li>
-                                Publisher: <small>{client}</small>
+                                Publisher Name: <span>{publisher_name}</span>
                             </li>
-                            {status === TASK_STATUS.Completed && (
+                            {status !== TASK_STATUS.Open && (
                                 <li>
-                                    Worker Id: <small>{worker_id}</small>
+                                    Worker Name: <span>{worker_name}</span>
                                 </li>
                             )}
                             <li>Task Deadline: {task_deadline} days</li>
                             <li>Task Cost: {cost}</li>
                         </ul>
+                        <div>
+                            {task_tags.map((tag, idx) => (
+                                <Badge
+                                    variant={`secondary`}
+                                    className={`px-2 m-1`}
+                                    style={{
+                                        color: `${"white"}`,
+                                        backgroundColor: `${"#272b41"}`,
+                                        borderRadius: "10px",
+                                        padding: "0.4rem",
+                                        fontSize: "10px",
+                                    }}
+                                >
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </div>
+                        {attachments.length !== 0 && (
+                            <>
+                                <div className="d-flex justify-content-start align-items-center">
+                                    <div>
+                                        <b>Attachments:</b>
+                                    </div>
+                                    {attachments.map(
+                                        (item, idx) => {
+                                            let fileNameArr = item.split("/");
+                                            let fileName =
+                                                fileNameArr[
+                                                    fileNameArr.length - 1
+                                                ];
+                                            let fileUrl =
+                                                process.env
+                                                    .REACT_APP_AUTH_SERVER +
+                                                "/files/" +
+                                                fileName;
+                                            return (
+                                                <Button
+                                                    onClick={() => {}}
+                                                    href={fileUrl}
+                                                    variant="outline-dark"
+                                                    target="_blank"
+                                                    className="mx-1"
+                                                    style={{
+                                                        fontSize: "10px",
+                                                    }}
+                                                    size="sm"
+                                                >
+                                                    {idx + 1}
+                                                </Button>
+                                            );
+                                        }
+                                    )}
+                                </div>
+                            </>
+                        )}
                         <Badge
                             pill
                             style={{
