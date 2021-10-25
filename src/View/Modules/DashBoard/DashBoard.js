@@ -37,7 +37,7 @@ const DashBoard = (props) => {
     useEffect(() => {
         const init = async () => {
             try {
-                palletTaskingFunctions.handleOnChainEvents(api, toast);
+                // palletTaskingFunctions.handleOnChainEvents(api, toast);
                 const getTasksResult = await palletTaskingFunctions.getAllTasks(
                     api
                 );
@@ -45,7 +45,6 @@ const DashBoard = (props) => {
                     console.log(
                         `All Tasks From Chain: ${getTasksResult.length}`
                     );
-                    console.log("--------checking-------");
                     console.log(getTasksResult);
                     dispatch(
                         actionCreators.setTasksFromBackEnd([

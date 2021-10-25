@@ -202,12 +202,14 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
 
             let totalNumberOfFiles = files.length;
             let attachments = [];
-            files.forEach(async (file, idx) => {
+
+            for (let i = 0; i < totalNumberOfFiles; i++) {
                 let formData = new FormData();
-                formData.append("somefile", file.originFileObj);
+                formData.append("somefile", files[i].originFileObj);
                 let fileRes = await uploadFileToServer(formData);
                 attachments.push(fileRes.url);
-            });
+            }
+
             toast.success(
                 `${totalNumberOfFiles} files uploaded successfully!`,
                 {
@@ -244,8 +246,14 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                     );
                     data.taskTags = newTaskTagsArr;
                     console.log(data);
-                    let attachments = await handleFileUpload(data.files);
-                    data.attachments = attachments;
+
+                    if (data.files.length !== 0) {
+                        let attachments = await handleFileUpload(data.files);
+                        console.log(attachments.length);
+                        data.attachments = attachments;
+                    } else {
+                        data.attachments = [];
+                    }
                     await handleFormSubmit(data);
                     setSubmitting(false);
                     resetForm();
