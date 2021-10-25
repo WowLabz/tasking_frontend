@@ -45,6 +45,12 @@ export const apiHelpers = {
       .put(url, data, headersObject)
       .then((res) => res)
       .catch((error) => error);
+  },
+
+  postWithHeaders: (url, data, headersObject) => {
+    return axios.post(url, data, headersObject)
+    .then((res) => res)
+    .catch((error) => error)
   }
 }
 

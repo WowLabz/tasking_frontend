@@ -33,7 +33,7 @@ export const headerReducer = (state = initialState, action) => {
                 ...state,
                 isWalletConnected: false,
                 currentWalletDetails: null,
-                accountsAvailableInWallet: null,
+                accountsAvailableInWallet: [],
                 walletError: action.payload,
             };
         case CRYPTO_WALLET_DISCONNECT:
@@ -41,7 +41,7 @@ export const headerReducer = (state = initialState, action) => {
                 ...state,
                 isWalletConnected: false,
                 currentWalletDetails: null,
-                accountsAvailableInWallet: null,
+                accountsAvailableInWallet: [],
             };
         default:
             return state;

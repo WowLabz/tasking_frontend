@@ -45,6 +45,8 @@ const DashBoard = (props) => {
                     console.log(
                         `All Tasks From Chain: ${getTasksResult.length}`
                     );
+                    console.log("--------checking-------");
+                    console.log(getTasksResult);
                     dispatch(
                         actionCreators.setTasksFromBackEnd([
                             ...getTasksResult.sort(

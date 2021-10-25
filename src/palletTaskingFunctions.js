@@ -159,14 +159,20 @@ export const createTaskTx = async (
     accountId,
     taskDuration,
     taskCost,
-    taskTitle
+    taskTitle,
+    publisherName,
+    taskTags,
+    publisherAttachments
 ) => {
     try {
         if (api === null) return;
         let transaction = await api.tx["palletTasking"]["createTask"](
             taskDuration,
             taskCost,
-            taskTitle
+            taskTitle,
+            publisherName,
+            taskTags,
+            publisherAttachments
         );
 
         await handleSignedTransactions(transaction, accountId);
@@ -181,10 +187,10 @@ export const createTaskTx = async (
  * @param {AccountId} accountIdFromKeyRing
  * @param {Number} taskId
  */
-export const bidForTaskTx = async (api, accountId, taskId) => {
+export const bidForTaskTx = async (api, accountId, taskId, workerName) => {
     try {
         if (api === null) return;
-        let transaction = api.tx["palletTasking"]["bidForTask"](taskId);
+        let transaction = api.tx["palletTasking"]["bidForTask"](taskId, workerName);
         await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
@@ -222,10 +228,10 @@ export const approveTaskTx = async (
  * @param {AccountId} accountIdFromKeyRing
  * @param {Number} taskId
  */
-export const taskCompletedTx = async (api, accountId, taskId) => {
+export const taskCompletedTx = async (api, accountId, taskId, workerAttachments) => {
     try {
         if (api === null) return;
-        let transaction = api.tx.palletTasking.taskCompleted(taskId);
+        let transaction = api.tx.palletTasking.taskCompleted(taskId, workerAttachments);
         await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);

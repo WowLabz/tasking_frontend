@@ -18,5 +18,6 @@ console.log(AUTH_BASE_URL);
 export const AUTH_END_POINTS = {
     signUp: "/auth/sign-up",
     signIn: "/auth/sign-in",
-    getUserTags: "/auth/get-user-tags"
+    getUserTags: "/auth/get-user-tags",
+    uploadFileToServer: "/files"
 }

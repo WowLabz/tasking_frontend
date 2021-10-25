@@ -1,4 +1,10 @@
-import { apiCallError, apiCallSuccess, initiatingApiCall, setUserTags, signIn } from "./actions";
+import {
+    apiCallError,
+    apiCallSuccess,
+    initiatingApiCall,
+    setUserTags,
+    signIn,
+} from "./actions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import apiHelpers from "../../../Utilities/axiosHelpers";
@@ -73,12 +79,12 @@ export const userSignUp = (data) => {
 export const getUserTags = () => {
     return async (dispatch) => {
         try {
-            dispatch(initiatingApiCall())
+            dispatch(initiatingApiCall());
             let url = AUTH_BASE_URL + AUTH_END_POINTS.getUserTags;
-            let res = await apiHelpers.get(url)
+            let res = await apiHelpers.get(url);
             console.log(res);
             if (res.status === 200) {
-                dispatch(setUserTags(res.data.data))
+                dispatch(setUserTags(res.data.data));
                 dispatch(apiCallSuccess());
             } else {
                 toast.error(`App Not Connected! ${res}`, {
@@ -94,5 +100,36 @@ export const getUserTags = () => {
                 autoClose: 3000,
             });
         }
+    };
+};
+
+export const uploadFileToServer = async (file) => {
+    try {
+        let url = AUTH_BASE_URL + AUTH_END_POINTS.uploadFileToServer;
+        let headerObj = {
+            headers:  {
+                "Content-Type": "multipart/form-data"
+            }
+        }
+        let res = await apiHelpers.postWithHeaders(url, file);
+        console.log(res);
+        if (res.status === 200) {
+            // toast.success(`One file uploaded successfully`, {
+            //     position: toast.POSITION.TOP_CENTER,
+            //     autoClose: 3000,
+            // });
+            return res.data.data
+        } else {
+            toast.error(`App Not Connected! ${res}`, {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 3000,
+            });
+        }
+    } catch (error) {
+        console.log(`err from actionCreator ${error}`);
+        toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 3000,
+        });
     }
-}
+};

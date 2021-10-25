@@ -6,7 +6,7 @@ export const setTasksFromBackEnd = (data) => {
         try {
             dispatch(Actions.setTasks(data));
         } catch (error) {
-            console.log(`err from actionCreator ${err}`);
+            console.log(`err from actionCreator ${error}`);
         }
     };
 };

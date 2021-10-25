@@ -20,6 +20,10 @@ import {
 } from "react-bootstrap";
 import { BsFileRichtext } from "react-icons/bs";
 
+import Select from "react-select";
+import { Upload, Select as AntSelect } from "antd";
+import makeAnimated from "react-select/animated";
+import { InboxOutlined } from "@ant-design/icons";
 import "./TaskFormFormik.css";
 import FormErrorMessage from "./FormErrorMessage";
 import * as palletTaskingFunctions from "../../../palletTaskingFunctions";
@@ -29,6 +33,7 @@ import { Keyring as ExtKeyring } from "@polkadot/keyring";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { DEFAULT_POLKA_ACCOUNTS } from "../../../Components/AppHeader/constants";
+import { uploadFileToServer } from "../Authorization/actionCreators";
 toast.configure();
 
 let initialValues = {
@@ -38,9 +43,12 @@ let initialValues = {
     taskDuration: "",
     taskCost: "",
     taskDescription: "",
+    taskTags: [],
     isFieldDisabled: false,
     submitButtonName: "Submit",
     ratings: "",
+    files: "",
+    attachments: [],
 };
 
 const validationSchema = Yup.object({
@@ -55,6 +63,14 @@ const validationSchema = Yup.object({
     ratings: Yup.number(),
 });
 
+const FixedCardHeight = {
+    height: "600px",
+};
+
+const DivHeight = {
+    height: "100px",
+};
+
 const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
     const { api, keyring } = configForBackEnd;
     const { formType, data } = formTypeAndData;
@@ -64,6 +80,10 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
     );
     const defaultAccounts = useSelector(
         (state) => state.headerReducer.defaultAccounts
+    );
+
+    const taskTagsForForm = useSelector(
+        (state) => state.authenticationReducer.userTags
     );
 
     const configForForm = () => {
@@ -129,19 +149,24 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                         data.accountId,
                         data.taskDuration,
                         data.taskCost * unit,
-                        data.taskDescription
+                        data.taskDescription,
+                        data.accountName,
+                        data.taskTags,
+                        data.attachments
                     );
                 case constants.FORM_TYPES.BID_FOR_TASK.type:
                     return await palletTaskingFunctions.bidForTaskTx(
                         api,
                         data.accountId,
-                        data.taskId
+                        data.taskId,
+                        data.accountName
                     );
                 case constants.FORM_TYPES.COMPLETE_TASK.type:
                     return await palletTaskingFunctions.taskCompletedTx(
                         api,
                         data.accountId,
-                        data.taskId
+                        data.taskId,
+                        data.attachments
                     );
 
                 case constants.FORM_TYPES.APPROVE_TASK.type:
@@ -171,6 +196,35 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
         }
     };
 
+    const handleFileUpload = async (files) => {
+        try {
+            if (files.length === 0) return;
+
+            let totalNumberOfFiles = files.length;
+            let attachments = [];
+            files.forEach(async (file, idx) => {
+                let formData = new FormData();
+                formData.append("somefile", file.originFileObj);
+                let fileRes = await uploadFileToServer(formData);
+                attachments.push(fileRes.url);
+            });
+            toast.success(
+                `${totalNumberOfFiles} files uploaded successfully!`,
+                {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000,
+                }
+            );
+            return attachments;
+        } catch (error) {
+            console.log(error);
+            toast.error(`File Upload Error: ${error}`, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
+        }
+    };
+
     useEffect(() => {
         configForForm();
     }, []);
@@ -183,7 +237,16 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 enableReinitialize
                 onSubmit={async (data, { setSubmitting, resetForm }) => {
                     setSubmitting(true);
-                    handleFormSubmit(data);
+                    let currTasksTags = data.taskTags;
+                    let newTaskTagsArr = [];
+                    currTasksTags.forEach((tag) =>
+                    newTaskTagsArr.push(tag.value)
+                    );
+                    data.taskTags = newTaskTagsArr;
+                    console.log(data);
+                    let attachments = await handleFileUpload(data.files);
+                    data.attachments = attachments;
+                    await handleFormSubmit(data);
                     setSubmitting(false);
                     resetForm();
                     handleClose();
@@ -199,8 +262,14 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                     handleChange,
                 }) => (
                     <FormikForm>
-                        <Card className="text-left form p-1">
-                            <Card.Body className="form-body">
+                        <Card
+                            className="text-left form p-1"
+                            style={{ ...FixedCardHeight }}
+                        >
+                            <Card.Body
+                                className="form-body"
+                                style={{ overflow: "scroll" }}
+                            >
                                 <FormLabelAndDropDown
                                     label="Account Name"
                                     name="accountName"
@@ -300,6 +369,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                     // value={values.taskCost}
                                     isDisabled={values.isFieldDisabled}
                                 />
+
                                 <FormLabelAndInput
                                     placeholder={
                                         !values.isFieldDisabled
@@ -314,6 +384,35 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                     isDisabled={values.isFieldDisabled}
                                 />
 
+                                <FormLabelAndDropDownWithMultipleValue
+                                    label="Task Tags"
+                                    name="taskTags"
+                                    helperText={"choose approprotiate tags"}
+                                    options={
+                                        values.isFieldDisabled
+                                            ? [...data.task_tags]
+                                            : [...taskTagsForForm]
+                                    }
+                                    onChange={(value) =>
+                                        setFieldValue("taskTags", value, false)
+                                    }
+                                    isDisabled={values.isFieldDisabled}
+                                />
+
+                                {(formType.type ===
+                                    constants.FORM_TYPES.CREATE_TASK.type ||
+                                    formType.type ===
+                                        constants.FORM_TYPES.COMPLETE_TASK
+                                            .type) && (
+                                    <FormFile
+                                        name="files"
+                                        label="Upload Files"
+                                        helperText={""}
+                                        onChange={({ fileList }) =>
+                                            setFieldValue("files", fileList)
+                                        }
+                                    />
+                                )}
                                 {(formType.type ===
                                     constants.FORM_TYPES.APPROVE_TASK.type ||
                                     formType.type ===
@@ -461,6 +560,108 @@ const FormCheckBoxAndText = ({ text, ...props }) => {
                 name={field.name}
                 component={FormErrorMessage}
             ></ErrorMessage>
+        </Form.Group>
+    );
+};
+
+const FormFile = ({ helperText, label, ...props }) => {
+    const [field, meta] = useField(props);
+    const { Dragger } = Upload;
+
+    const draggerProps = {
+        name: `${field.name}`,
+        multiple: true,
+        beforeUpload: () => {
+            return false;
+        },
+        // onChange: `${props.onChange}`,
+        // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+        // onChange: (info) => {
+        //     console.log(info.file);
+        //     const { status } = info.file;
+        //     if (status !== "uploading") {
+        //         console.log(info.file, info.fileList);
+        //     }
+        //     if (status === "done") {
+        //         message.success(
+        //             `${info.file.name} file uploaded successfully.`
+        //         );
+        //     } else if (status === "error") {
+        //         message.error(`${info.file.name} file upload failed.`);
+        //     }
+        // },
+        // onDrop: (e) => {
+        //     console.log("Dropped files", e.dataTransfer.files);
+        // },
+    };
+    return (
+        <Form.Group controlId="formFileMultiple" className="mb-3">
+            <Form.Label className="publish-form-label mtl-5">
+                {label}
+            </Form.Label>
+            <ErrorMessage
+                name={field.name}
+                component={FormErrorMessage}
+            ></ErrorMessage>
+            <Dragger {...draggerProps} onChange={props.onChange}>
+                <p className="ant-upload-drag-icon">
+                    <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">
+                    Click or drag file to this area to upload
+                </p>
+                <p className="ant-upload-hint">
+                    Support for a single or bulk upload. Strictly prohibit from
+                    uploading company data or other band files
+                </p>
+            </Dragger>
+            <span
+                style={{
+                    fontSize: "small",
+                    fontWeight: "lighter",
+                    padding: "2px",
+                    margin: "1px",
+                }}
+            >
+                {helperText}
+            </span>
+        </Form.Group>
+    );
+};
+
+const FormLabelAndDropDownWithMultipleValue = ({
+    label,
+    helperText,
+    options,
+    isDisabled,
+    ...props
+}) => {
+    const [field, meta] = useField(props);
+    const animatedComponents = makeAnimated();
+    let newOptions = options.map((tag) => ({ value: tag, label: tag }));
+
+    return (
+        <Form.Group className="my-2">
+            <Form.Label className="publish-form-label mtl-5">
+                {label}
+            </Form.Label>
+            <ErrorMessage
+                name={field.name}
+                component={FormErrorMessage}
+            ></ErrorMessage>
+            <Select
+                {...props}
+                isMulti
+                defaultValue={isDisabled ? newOptions : []}
+                options={!isDisabled ? newOptions : []}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                placeholder={helperText}
+                isDisabled={isDisabled}
+                onChange={props.onChange}
+            />
         </Form.Group>
     );
 };
