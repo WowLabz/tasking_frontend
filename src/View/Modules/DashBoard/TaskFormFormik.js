@@ -390,11 +390,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                         label="Task Tags"
                                         name="taskTags"
                                         helperText={"choose approprotiate tags"}
-                                        options={
-                                            values.isFieldDisabled
-                                                ? [...data.task_tags]
-                                                : [...taskTagsForForm]
-                                        }
+                                        options={[...taskTagsForForm]}
                                         onChange={(value) =>
                                             setFieldValue(
                                                 "taskTags",
