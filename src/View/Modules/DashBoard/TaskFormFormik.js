@@ -240,7 +240,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                     let currTasksTags = data.taskTags;
                     let newTaskTagsArr = [];
                     currTasksTags.forEach((tag) =>
-                    newTaskTagsArr.push(tag.value)
+                        newTaskTagsArr.push(tag.value)
                     );
                     data.taskTags = newTaskTagsArr;
                     console.log(data);
@@ -384,20 +384,27 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                     isDisabled={values.isFieldDisabled}
                                 />
 
-                                <FormLabelAndDropDownWithMultipleValue
-                                    label="Task Tags"
-                                    name="taskTags"
-                                    helperText={"choose approprotiate tags"}
-                                    options={
-                                        values.isFieldDisabled
-                                            ? [...data.task_tags]
-                                            : [...taskTagsForForm]
-                                    }
-                                    onChange={(value) =>
-                                        setFieldValue("taskTags", value, false)
-                                    }
-                                    isDisabled={values.isFieldDisabled}
-                                />
+                                {formType.type ===
+                                    constants.FORM_TYPES.CREATE_TASK.type && (
+                                    <FormLabelAndDropDownWithMultipleValue
+                                        label="Task Tags"
+                                        name="taskTags"
+                                        helperText={"choose approprotiate tags"}
+                                        options={
+                                            values.isFieldDisabled
+                                                ? [...data.task_tags]
+                                                : [...taskTagsForForm]
+                                        }
+                                        onChange={(value) =>
+                                            setFieldValue(
+                                                "taskTags",
+                                                value,
+                                                false
+                                            )
+                                        }
+                                        isDisabled={values.isFieldDisabled}
+                                    />
+                                )}
 
                                 {(formType.type ===
                                     constants.FORM_TYPES.CREATE_TASK.type ||
