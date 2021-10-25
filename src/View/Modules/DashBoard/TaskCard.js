@@ -21,6 +21,8 @@ const TaskCard = ({ data, showFormModal }) => {
         worker_name: null,
         start_date: null,
         end_date: null,
+        task_tags: [],
+        attachments: [],
     });
 
     const connectedAccounts = useSelector(
@@ -30,20 +32,20 @@ const TaskCard = ({ data, showFormModal }) => {
         (state) => state.headerReducer.defaultAccounts
     );
 
-    const getAccountName = (address) => {
-        try {
-            let res;
-            if (address === null) return null;
-            [...connectedAccounts, ...defaultAccounts].forEach((acc, idx) => {
-                if (address === acc.address) {
-                    res = acc.meta.name;
-                }
-            });
-            return res;
-        } catch (error) {
-            return "Alice";
-        }
-    };
+    // const getAccountName = (address) => {
+    //     try {
+    //         let res;
+    //         if (address === null) return null;
+    //         [...connectedAccounts, ...defaultAccounts].forEach((acc, idx) => {
+    //             if (address === acc.address) {
+    //                 res = acc.meta.name;
+    //             }
+    //         });
+    //         return res;
+    //     } catch (error) {
+    //         return "Alice";
+    //     }
+    // };
 
     const getAttributesForCard = (status) => {
         switch (status) {
@@ -151,9 +153,13 @@ const TaskCard = ({ data, showFormModal }) => {
                 cost,
                 status,
                 task_description,
+                publisher_name,
+                worker_name,
+                task_tags,
+                attachments,
             } = data;
-            const publisher_name = getAccountName(client);
-            const worker_name = getAccountName(worker_id);
+            // const publisher_name = getAccountName(client);
+            // const worker_name = getAccountName(worker_id);
 
             let today = new Date();
             let start_date = today.toLocaleDateString();
@@ -162,8 +168,6 @@ const TaskCard = ({ data, showFormModal }) => {
                 .toLocaleDateString();
             setCardDetails({
                 ...data,
-                publisher_name,
-                worker_name,
                 start_date,
                 end_date,
             });
