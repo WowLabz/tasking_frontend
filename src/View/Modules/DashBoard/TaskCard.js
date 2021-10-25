@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Badge, Card, Button, Col } from "react-bootstrap";
+import { Badge, Card, Button, Col, NavLink } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import * as constants from "./constants";
 import { useDispatch, useSelector } from "react-redux";
 import { TASK_STATUS } from "../TaskDetails/constants";
+import axios from "axios";
 
 const TaskCard = ({ data, showFormModal }) => {
     const history = useHistory();
@@ -248,6 +249,40 @@ const TaskCard = ({ data, showFormModal }) => {
                     <Card.Text>
                         <b>TaskCost:</b> {cardDetails.cost}
                     </Card.Text>
+                    <div>
+                        <b>TaskTags:</b>
+                    </div>
+                    <div
+                    // style={{
+                    //     display: "flex",
+                    //     flexDirection: "row",
+                    //     justifyContent: "center",
+                    //     // flexWrap: "wrap",
+                    //     // flexGrow: "1",
+                    //     width: "33%",
+                    // }}
+                    >
+                        {cardDetails.task_tags.map((tag, idx) => (
+                            <Badge
+                                variant={`secondary`}
+                                className={`px-2 m-1`}
+                                style={{
+                                    color: `${
+                                        // attributesForCard.badgeColor === "yellow"
+                                        // ? "black"
+                                        // : "white"
+                                        "white"
+                                    }`,
+                                    backgroundColor: `${"#272b41"}`,
+                                    borderRadius: "10px",
+                                    padding: "0.4rem",
+                                    fontSize: "10px",
+                                }}
+                            >
+                                {tag}
+                            </Badge>
+                        ))}
+                    </div>
                     <div className="d-flex justify-content-between align-items-center">
                         <div>
                             <div>
@@ -264,6 +299,34 @@ const TaskCard = ({ data, showFormModal }) => {
                     </div>
                 </Card.Body>
                 <Card.Footer className="card-footer justify-content-center">
+                    {cardDetails.attachments.length !== 0 && (
+                        <>
+                            <div className="d-flex justify-content-start align-items-center">
+                                <div>
+                                    <b>Attachments:</b>
+                                </div>
+                                {cardDetails.attachments.map((item, idx) => {
+                                    let fileNameArr = item.split("/");
+                                    let fileName =
+                                        fileNameArr[fileNameArr.length - 1];
+                                    let fileUrl = process.env.REACT_APP_AUTH_SERVER + "/files/" + fileName;
+                                    return <Button
+                                        onClick={() => {}}
+                                        href={fileUrl}
+                                        variant="outline-dark"
+                                        target="_blank"
+                                        className="mx-1"
+                                        style={{
+                                            fontSize: "10px",
+                                        }}
+                                        size="sm"
+                                    >
+                                        {idx + 1}
+                                    </Button>;
+                                })}
+                            </div>
+                        </>
+                    )}
                     {attributesForCard.button}
                 </Card.Footer>
             </Card>
