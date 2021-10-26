@@ -43,12 +43,12 @@ const AppHeader = () => {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav>
+                    {/* <Nav>
                         <Nav.Link>Open</Nav.Link>
                         <Nav.Link>Approve</Nav.Link>
                         <Nav.Link>InProgress</Nav.Link>
                         <Nav.Link>Completed</Nav.Link>
-                    </Nav>
+                    </Nav> */}
                     <Nav style={{ marginLeft: "auto" }}>
                         {!isWalletConnected && <CryptoWallet />}
                         {isWalletConnected && <ConnectedAccounts />}

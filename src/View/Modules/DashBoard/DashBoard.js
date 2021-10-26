@@ -25,6 +25,10 @@ const DashBoard = (props) => {
 
     const tasks = useSelector((state) => state.dashBoardReducer.tasks);
 
+    const currentUserTags = useSelector(
+        (state) => state.authenticationReducer.currentUserName.user_tags
+    );
+
     const [show, setShow] = useState(false);
     const [currentFormTypeAndData, setCurrentFormTypeAndData] = useState({
         formType: constants.FORM_TYPES.CREATE_TASK,
@@ -46,13 +50,31 @@ const DashBoard = (props) => {
                         `All Tasks From Chain: ${getTasksResult.length}`
                     );
                     console.log(getTasksResult);
+                    getTasksResult.sort((a, b) => {
+                        if (
+                            currentUserTags.every((tag) => a.task_tags.includes(tag))
+                        ) {
+                            return 1;
+                        } else if (
+                            currentUserTags.some((tag) => a.task_tags.includes(tag))
+                        ) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    });
+
                     dispatch(
-                        actionCreators.setTasksFromBackEnd([
-                            ...getTasksResult.sort(
-                                (a, b) => b.task_id - a.task_id
-                            ),
-                        ])
+                        actionCreators.setTasksFromBackEnd(getTasksResult)
                     );
+
+                    // dispatch(
+                    //     actionCreators.setTasksFromBackEnd([
+                    //         ...getTasksResult.sort(
+                    //             (a, b) => b.task_id - a.task_id
+                    //         ),
+                    //     ])
+                    // );
                 }
             } catch (error) {
                 console.log(`catchError at useEffect : ${error}`);

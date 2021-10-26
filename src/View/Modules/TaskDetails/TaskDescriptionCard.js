@@ -92,6 +92,7 @@ const TaskDescriptionCard = ({ tab }) => {
                                         padding: "0.4rem",
                                         fontSize: "10px",
                                     }}
+                                    key={idx}
                                 >
                                     {tag}
                                 </Badge>
@@ -126,6 +127,7 @@ const TaskDescriptionCard = ({ tab }) => {
                                                         fontSize: "10px",
                                                     }}
                                                     size="sm"
+                                                    key={idx}
                                                 >
                                                     {idx + 1}
                                                 </Button>
