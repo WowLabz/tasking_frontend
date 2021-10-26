@@ -51,7 +51,7 @@ const AppHeader = () => {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                        <SortTasks />
+                    {/* <SortTasks /> */}
                     <Nav>
                         {/* <NavDropdown
                             title={"Sort Tasks By"}

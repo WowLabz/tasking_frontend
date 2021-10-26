@@ -28,7 +28,6 @@ const SortTasks = () => {
                 classNamePrefix="select"
                 name="sortTasks"
                 options={selectOption}
-                defaultValue={SORT_BY.userTags}
                 placeholder={`Sort By`}
                 onChange={handleChange}
             />

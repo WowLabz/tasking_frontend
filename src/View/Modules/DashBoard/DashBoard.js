@@ -54,6 +54,7 @@ const DashBoard = (props) => {
                     console.log(getTasksResult);
 
                     let sortedArr = [];
+                    console.log(sortByOption);
                     switch (sortByOption) {
                         case constants.SORT_BY.userTags:
                             sortedArr = sortTasksByUserTags(
@@ -77,14 +78,6 @@ const DashBoard = (props) => {
                     }
 
                     dispatch(actionCreators.setTasksFromBackEnd(sortedArr));
-
-                    // dispatch(
-                    //     actionCreators.setTasksFromBackEnd([
-                    //         ...getTasksResult.sort(
-                    //             (a, b) => b.task_id - a.task_id
-                    //         ),
-                    //     ])
-                    // );
                 }
             } catch (error) {
                 console.log(`catchError at useEffect : ${error}`);
