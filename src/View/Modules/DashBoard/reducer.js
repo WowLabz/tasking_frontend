@@ -1,9 +1,15 @@
-import { ATTRIBUTES_FOR_TASK_CARD, GET_TASKS } from "./constants";
+import {
+    ATTRIBUTES_FOR_TASK_CARD,
+    GET_TASKS,
+    SORTING_OPTIONS,
+    SORT_BY,
+} from "./constants";
 
 const initialState = {
     api: null,
     keyringAccounts: null,
     tasks: [],
+    sortBy: SORT_BY.userTags,
 };
 
 export const dashBoardReducer = (state = initialState, action) => {
@@ -17,8 +23,13 @@ export const dashBoardReducer = (state = initialState, action) => {
         case ATTRIBUTES_FOR_TASK_CARD:
             return {
                 ...state,
-                tasks: action.payload
-            }
+                tasks: action.payload,
+            };
+        case SORTING_OPTIONS:
+            return {
+                ...state,
+                sortBy: action.payload,
+            };
         default:
             return state;
     }

@@ -1,5 +1,12 @@
 import React from "react";
-import { Container, Nav, Navbar, NavDropdown, Image, Button } from "react-bootstrap";
+import {
+    Container,
+    Nav,
+    Navbar,
+    NavDropdown,
+    Image,
+    Button,
+} from "react-bootstrap";
 
 import * as constants from "../../constants/constants";
 import CryptoWallet from "../CryptoWallet/CryptoWallet";
@@ -9,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "../../View/Modules/Authorization/actions";
 import { useHistory } from "react-router";
 import ConnectedAccounts from "./ConnectedAccounts";
+import SortTasks from "./SortTasks";
 
 const AppHeader = () => {
     const isLoggedIn = useSelector(
@@ -43,12 +51,17 @@ const AppHeader = () => {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    {/* <Nav>
-                        <Nav.Link>Open</Nav.Link>
-                        <Nav.Link>Approve</Nav.Link>
-                        <Nav.Link>InProgress</Nav.Link>
-                        <Nav.Link>Completed</Nav.Link>
-                    </Nav> */}
+                        <SortTasks />
+                    <Nav>
+                        {/* <NavDropdown
+                            title={"Sort Tasks By"}
+                            id="collasible-nav-dropdown"
+                        >
+                            {Object.values(SORT_BY).map((val) => (
+                                <NavDropdown.Item>{val}</NavDropdown.Item>
+                            ))}
+                        </NavDropdown> */}
+                    </Nav>
                     <Nav style={{ marginLeft: "auto" }}>
                         {!isWalletConnected && <CryptoWallet />}
                         {isWalletConnected && <ConnectedAccounts />}

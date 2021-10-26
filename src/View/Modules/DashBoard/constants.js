@@ -16,5 +16,16 @@ export const DEFAULT_ACCOUNT_IDS = {
     ALICE: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     BOB: "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
 };
+export const SORTING_OPTIONS = "SORTING_OPTIONS"
 
 export const DOT_MARKETPLACE = `http://65.2.26.225:8001/`;
+
+export const SORT_BY = {
+    userTags: "UserTags",
+    statusOpen: "Open",
+    statusInProgress: "InProgress",
+    statusPendingApproval: "PendingApproval",
+    statusPendingRatings: "PendingRatings",
+    statusCompleted: "Completed",
+    recent: "Recent",
+};

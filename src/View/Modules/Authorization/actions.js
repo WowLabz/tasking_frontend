@@ -1,4 +1,4 @@
-import { API_CALL_ERROR, API_CALL_SUCCESS, INITIATING_API_CALL, SIGN_IN, SIGN_OUT, SIGN_UP, USER_TAGS } from "./constants"
+import { API_CALL_ERROR, API_CALL_SUCCESS, INITIATING_API_CALL, SIGN_IN, SIGN_OUT, SIGN_UP, SORTING_OPTIONS, USER_TAGS } from "./constants"
 
 export const signIn = (data) => {
     return {

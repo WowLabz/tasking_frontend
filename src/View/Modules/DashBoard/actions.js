@@ -19,3 +19,10 @@ export const setAttributiesForTaskCard = (data) => {
         payload: data
     }
 }
+
+export const sortingOptions = (option) => {
+    return {
+        type: CONSTANTS.SORTING_OPTIONS,
+        payload: option
+    }
+}

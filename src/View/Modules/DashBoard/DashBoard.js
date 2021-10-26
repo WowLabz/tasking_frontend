@@ -29,6 +29,7 @@ const DashBoard = (props) => {
     const currentUserTags = useSelector(
         (state) => state.authenticationReducer.currentUserName.user_tags
     );
+    const sortByOption = useSelector((state) => state.dashBoardReducer.sortBy);
 
     const [show, setShow] = useState(false);
     const [currentFormTypeAndData, setCurrentFormTypeAndData] = useState({
@@ -52,10 +53,28 @@ const DashBoard = (props) => {
                     );
                     console.log(getTasksResult);
 
-                    let sortedArr = sortTasksByUserTags(
-                        currentUserTags,
-                        getTasksResult
-                    );
+                    let sortedArr = [];
+                    switch (sortByOption) {
+                        case constants.SORT_BY.userTags:
+                            sortedArr = sortTasksByUserTags(
+                                currentUserTags,
+                                getTasksResult
+                            );
+                            break;
+                        case constants.SORT_BY.statusOpen:
+                        case constants.SORT_BY.statusInProgress:
+                        case constants.SORT_BY.statusPendingApproval:
+                        case constants.SORT_BY.statusPendingRatings:
+                        case constants.SORT_BY.statusPendingRatings:
+                        case constants.SORT_BY.statusCompleted:
+                        case constants.SORT_BY.recent:
+                        default:
+                            sortedArr = sortTasksByUserTags(
+                                currentUserTags,
+                                getTasksResult
+                            );
+                            break;
+                    }
 
                     dispatch(actionCreators.setTasksFromBackEnd(sortedArr));
 
