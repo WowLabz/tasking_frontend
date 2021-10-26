@@ -16,6 +16,7 @@ import staticData from "../../../assets/staticData/staticData.json";
 import "react-toastify/dist/ReactToastify.min.css";
 import CardForAirDrop from "./CardForAirDrop";
 import { Empty } from "antd";
+import { sortTasksByUserTags } from "./helpers";
 
 toast.configure();
 
@@ -50,23 +51,13 @@ const DashBoard = (props) => {
                         `All Tasks From Chain: ${getTasksResult.length}`
                     );
                     console.log(getTasksResult);
-                    getTasksResult.sort((a, b) => {
-                        if (
-                            currentUserTags.every((tag) => a.task_tags.includes(tag))
-                        ) {
-                            return 1;
-                        } else if (
-                            currentUserTags.some((tag) => a.task_tags.includes(tag))
-                        ) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
-                    });
 
-                    dispatch(
-                        actionCreators.setTasksFromBackEnd(getTasksResult)
+                    let sortedArr = sortTasksByUserTags(
+                        currentUserTags,
+                        getTasksResult
                     );
+
+                    dispatch(actionCreators.setTasksFromBackEnd(sortedArr));
 
                     // dispatch(
                     //     actionCreators.setTasksFromBackEnd([

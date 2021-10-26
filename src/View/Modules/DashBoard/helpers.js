@@ -96,3 +96,16 @@ export const getAttributesForCard = (status) => {
             };
     }
 };
+
+export const sortTasksByUserTags = (currentUserTags, tasksArr) => {
+    tasksArr.sort((a, b) => {
+        if (currentUserTags.every((tag) => a.task_tags.includes(tag))) {
+            return 1;
+        } else if (currentUserTags.some((tag) => a.task_tags.includes(tag))) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+    return tasksArr;
+};
