@@ -289,7 +289,7 @@ const TaskCard = ({ data, showFormModal }) => {
                     </div>
                 </Card.Body>
                 <Card.Footer className="card-footer justify-content-center">
-                    {cardDetails.attachments.length !== 0 && (
+                    {cardDetails.attachments?.length !== 0 || cardDetails.attachments !== null && (
                         <>
                             <div className="d-flex justify-content-start align-items-center">
                                 <div>
