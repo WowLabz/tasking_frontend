@@ -254,7 +254,7 @@ const TaskCard = ({ data, showFormModal }) => {
                     </div>
                     <div
                     >
-                        {cardDetails.task_tags.map((tag, idx) => (
+                        {cardDetails.task_tags?.map((tag, idx) => (
                             <Badge
                                 variant={`secondary`}
                                 className={`px-2 m-1`}
@@ -295,7 +295,7 @@ const TaskCard = ({ data, showFormModal }) => {
                                 <div>
                                     <b>Attachments:</b>
                                 </div>
-                                {cardDetails.attachments.map((item, idx) => {
+                                {cardDetails.attachments?.map((item, idx) => {
                                     let fileNameArr = item.split("/");
                                     let fileName =
                                         fileNameArr[fileNameArr.length - 1];
