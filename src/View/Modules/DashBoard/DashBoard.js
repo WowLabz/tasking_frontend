@@ -47,7 +47,7 @@ const DashBoard = (props) => {
                 const getTasksResult = await palletTaskingFunctions.getAllTasks(
                     api
                 );
-                if (getTasksResult?.length !== 0) {
+                if (getTasksResult) {
                     console.log(
                         `All Tasks From Chain: ${getTasksResult.length}`
                     );
@@ -149,7 +149,7 @@ const DashBoard = (props) => {
             </Row>
 
             <Row>
-                {!tasks.length && (
+                {!tasks.length || tasks.length === 0 && (
                     // <span style={{ marginLeft: "45px" }} className="p-2">
                     //     Showing Demo Data, You can create a new Task!
                     // </span>
