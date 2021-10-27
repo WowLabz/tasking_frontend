@@ -254,7 +254,7 @@ const TaskCard = ({ data, showFormModal }) => {
                     </div>
                     <div
                     >
-                        {cardDetails.task_tags?.map((tag, idx) => (
+                        {cardDetails.task_tags.map((tag, idx) => (
                             <Badge
                                 variant={`secondary`}
                                 className={`px-2 m-1`}

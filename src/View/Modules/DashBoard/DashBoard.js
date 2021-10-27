@@ -149,7 +149,7 @@ const DashBoard = (props) => {
             </Row>
 
             <Row>
-                {!tasks.length || tasks.length === 0 && (
+                {!tasks.length && (
                     // <span style={{ marginLeft: "45px" }} className="p-2">
                     //     Showing Demo Data, You can create a new Task!
                     // </span>
