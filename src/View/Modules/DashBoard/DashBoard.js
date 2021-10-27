@@ -47,7 +47,7 @@ const DashBoard = (props) => {
                 const getTasksResult = await palletTaskingFunctions.getAllTasks(
                     api
                 );
-                if (getTasksResult) {
+                if (getTasksResult.length !== 0) {
                     console.log(
                         `All Tasks From Chain: ${getTasksResult.length}`
                     );
