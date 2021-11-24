@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Badge, Button, Card, Col, Row } from "react-bootstrap";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import Attachments from "../DashBoard/Attachments";
 import { TASK_STATUS } from "./constants";
 
 const TaskDescriptionCard = ({ tab }) => {
@@ -99,43 +100,7 @@ const TaskDescriptionCard = ({ tab }) => {
                             ))}
                         </div>
                         {attachments.length !== 0 && (
-                            <>
-                                <div className="d-flex justify-content-start align-items-center">
-                                    <div>
-                                        <b>Attachments:</b>
-                                    </div>
-                                    {attachments.map(
-                                        (item, idx) => {
-                                            let fileNameArr = item.split("/");
-                                            let fileName =
-                                                fileNameArr[
-                                                    fileNameArr.length - 1
-                                                ];
-                                            let fileUrl =
-                                                process.env
-                                                    .REACT_APP_AUTH_SERVER +
-                                                "/files/" +
-                                                fileName;
-                                            return (
-                                                <Button
-                                                    onClick={() => {}}
-                                                    href={fileUrl}
-                                                    variant="outline-dark"
-                                                    target="_blank"
-                                                    className="mx-1"
-                                                    style={{
-                                                        fontSize: "10px",
-                                                    }}
-                                                    size="sm"
-                                                    key={idx}
-                                                >
-                                                    {idx + 1}
-                                                </Button>
-                                            );
-                                        }
-                                    )}
-                                </div>
-                            </>
+                            <Attachments attachments={attachments} />
                         )}
                         <Badge
                             pill

@@ -346,7 +346,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                 <FormLabelAndInput
                                     placeholder={
                                         !values.isFieldDisabled
-                                            ? `TaskDuration`
+                                            ? `TaskDuration (in Days)`
                                             : ""
                                     }
                                     name="taskDuration"
@@ -355,7 +355,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                             ? "number"
                                             : "text"
                                     }
-                                    label="Task Duration"
+                                    label="Task Duration (in Days)"
                                     helperText={""}
                                     // value={values.taskDuration}
                                     isDisabled={values.isFieldDisabled}
@@ -363,7 +363,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                 <FormLabelAndInput
                                     placeholder={
                                         !values.isFieldDisabled
-                                            ? `TaskCost`
+                                            ? `TaskCost (in Units)`
                                             : ""
                                     }
                                     name="taskCost"
@@ -372,7 +372,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                                             ? "number"
                                             : "text"
                                     }
-                                    label="Task Cost"
+                                    label="Task Cost (in Units)"
                                     helperText={""}
                                     // value={values.taskCost}
                                     isDisabled={values.isFieldDisabled}
