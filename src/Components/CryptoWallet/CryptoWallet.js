@@ -12,6 +12,7 @@ import {
     GUARDA_WALLET_ICON,
     MATH_WALLET_ICON,
     POLKA_WALLET_ICON,
+    TEST_WALLET_ICON,
 } from "../../constants/constants";
 import { getAccountBalance } from "../../palletTaskingFunctions";
 import { useSubstrate } from "../../substrate-lib";
@@ -21,6 +22,7 @@ import {
     cryptoWalletConnection,
     cryptoWalletDisconnect,
     cryptoWalletError,
+    testWalletConnection,
 } from "../AppHeader/actions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
@@ -33,11 +35,6 @@ const connectWalletStyle = {
 };
 
 const CryptoWallet = () => {
-    const [accBalances, setAccBalances] = useState({
-        polka: "",
-        math: "",
-        guarda: "",
-    });
     const [accounts, setAccounts] = useState(null);
     const dispatch = useDispatch();
 
@@ -70,6 +67,10 @@ const CryptoWallet = () => {
     const DEFAULT_ACCOUNT_IDS = {
         ALICE: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
         BOB: "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+    };
+
+    const onTestWalletClick = () => {
+        dispatch(testWalletConnection());
     };
 
     const onPolkaWalletClick = async () => {
@@ -166,6 +167,17 @@ const CryptoWallet = () => {
             style={connectWalletStyle}
             className="m-1"
         >
+            <NavDropdown.Item onClick={onTestWalletClick}>
+                <Image
+                    src={TEST_WALLET_ICON}
+                    width="28"
+                    height="28"
+                    alt="TestWalletLogo"
+                    roundedCircle
+                    className="p-1 m-1"
+                />
+                Test Wallet
+            </NavDropdown.Item>
             <NavDropdown.Item onClick={onPolkaWalletClick}>
                 <Image
                     src={POLKA_WALLET_ICON}
@@ -176,9 +188,6 @@ const CryptoWallet = () => {
                     className="p-1 m-1"
                 />
                 Polkadot-js
-                {accBalances.polka !== "" && (
-                    <small>{`  ${accBalances.polka}`}</small>
-                )}
             </NavDropdown.Item>
             <NavDropdown.Item onClick={onMathWalletClick}>
                 <Image

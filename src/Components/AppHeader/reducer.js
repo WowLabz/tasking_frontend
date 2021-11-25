@@ -4,6 +4,7 @@ import {
     CRYPTO_WALLET_DISCONNECT,
     CRYPTO_WALLET_ERROR,
     DEFAULT_POLKA_ACCOUNTS,
+    TEST_WALLET_CONNECTION,
 } from "./constants";
 
 const initialState = {
@@ -16,6 +17,12 @@ const initialState = {
 
 export const headerReducer = (state = initialState, action) => {
     switch (action.type) {
+        case TEST_WALLET_CONNECTION:
+            return {
+                ...state,
+                isWalletConnected: true,
+                currentWalletDetails: null,
+            }
         case CRYPTO_WALLET_CONNECTION:
             return {
                 ...state,
