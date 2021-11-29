@@ -30,6 +30,9 @@ const DashBoard = (props) => {
         (state) => state.authenticationReducer.currentUserName.user_tags
     );
     const sortByOption = useSelector((state) => state.dashBoardReducer.sortBy);
+    const isWalletConnected = useSelector(
+        (state) => state.headerReducer.isWalletConnected
+    );
 
     const [show, setShow] = useState(false);
     const [currentFormTypeAndData, setCurrentFormTypeAndData] = useState({
@@ -118,7 +121,16 @@ const DashBoard = (props) => {
                     <h2 style={{ margin: "0" }}>Marketplace</h2>
                     <Button
                         name={constants.FORM_TYPES.CREATE_TASK.type}
-                        onClick={(e) => showFormModal(e, null)}
+                        onClick={(e) => {
+                            if (!isWalletConnected) {
+                                toast.error(`Connect crypto wallet`, {
+                                    position: toast.POSITION.TOP_RIGHT,
+                                    autoClose: 2000,
+                                });
+                            } else {
+                                showFormModal(e, null);
+                            }
+                        }}
                     >
                         Create New Task
                     </Button>
@@ -182,27 +194,30 @@ const TaskModal = ({
 }) => {
     const { formType } = formTypeAndData;
     const { type, title } = formType;
+
     return (
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header>
-                <Modal.Title>
-                    <b>{title}</b>
-                </Modal.Title>
-                <Modal.Title
-                    onClick={handleClose}
-                    style={{ cursor: "pointer" }}
-                >
-                    &#10005;
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <TaskFormFormik
-                    configForBackEnd={configForBackEnd}
-                    formTypeAndData={formTypeAndData}
-                    handleClose={handleClose}
-                />
-            </Modal.Body>
-        </Modal>
+        <>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>
+                        <b>{title}</b>
+                    </Modal.Title>
+                    <Modal.Title
+                        onClick={handleClose}
+                        style={{ cursor: "pointer" }}
+                    >
+                        &#10005;
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <TaskFormFormik
+                        configForBackEnd={configForBackEnd}
+                        formTypeAndData={formTypeAndData}
+                        handleClose={handleClose}
+                    />
+                </Modal.Body>
+            </Modal>
+        </>
     );
 };
 

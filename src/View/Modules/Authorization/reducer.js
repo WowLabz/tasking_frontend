@@ -24,7 +24,7 @@ export const authenticationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 apiCallError: action.payload
-            };
+            }
         case API_CALL_SUCCESS:
             return state;
         case SIGN_OUT:

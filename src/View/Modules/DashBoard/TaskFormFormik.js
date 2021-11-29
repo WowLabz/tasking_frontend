@@ -18,8 +18,6 @@ import {
     Modal,
     Spinner,
 } from "react-bootstrap";
-import { BsFileRichtext } from "react-icons/bs";
-
 import Select from "react-select";
 import { Upload, Select as AntSelect } from "antd";
 import makeAnimated from "react-select/animated";
@@ -74,6 +72,14 @@ const DivHeight = {
 const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
     const { api, keyring } = configForBackEnd;
     const { formType, data } = formTypeAndData;
+
+    const currentWalletDetails = useSelector(
+        (state) => state.headerReducer.currentWalletDetails
+    );
+
+    const isWalletConnected = useSelector(
+        (state) => state.headerReducer.isWalletConnected
+    );
 
     const connectedAccounts = useSelector(
         (state) => state.headerReducer.accountsAvailableInWallet
@@ -233,241 +239,253 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
 
     return (
         <>
-            <Formik
-                initialValues={initialValues}
-                // validationSchema={validationSchema}
-                enableReinitialize
-                onSubmit={async (data, { setSubmitting, resetForm }) => {
-                    setSubmitting(true);
-                    let currTasksTags = data.taskTags;
-                    let newTaskTagsArr = [];
-                    currTasksTags.forEach((tag) =>
-                        newTaskTagsArr.push(tag.value)
-                    );
-                    data.taskTags = newTaskTagsArr;
-                    console.log(data);
+                <Formik
+                    initialValues={initialValues}
+                    // validationSchema={validationSchema}
+                    enableReinitialize
+                    onSubmit={async (data, { setSubmitting, resetForm }) => {
+                        setSubmitting(true);
+                        let currTasksTags = data.taskTags;
+                        let newTaskTagsArr = [];
+                        currTasksTags.forEach((tag) =>
+                            newTaskTagsArr.push(tag.value)
+                        );
+                        data.taskTags = newTaskTagsArr;
+                        console.log(data);
 
-                    if (data.files.length !== 0) {
-                        let attachments = await handleFileUpload(data.files);
-                        console.log(attachments.length);
-                        data.attachments = attachments;
-                    } else {
-                        data.attachments = [];
-                    }
-                    await handleFormSubmit(data);
-                    setSubmitting(false);
-                    resetForm();
-                    handleClose();
-                }}
-            >
-                {({
-                    values,
-                    errors,
-                    isSubmitting,
-                    resetForm,
-                    handleSubmit,
-                    setFieldValue,
-                    handleChange,
-                }) => (
-                    <FormikForm>
-                        <Card
-                            className="text-left form p-1"
-                            style={{ ...FixedCardHeight }}
-                        >
-                            <Card.Body
-                                className="form-body"
-                                style={{ overflow: "scroll" }}
+                        if (data.files.length !== 0) {
+                            let attachments = await handleFileUpload(
+                                data.files
+                            );
+                            console.log(attachments.length);
+                            data.attachments = attachments;
+                        } else {
+                            data.attachments = [];
+                        }
+                        await handleFormSubmit(data);
+                        setSubmitting(false);
+                        resetForm();
+                        handleClose();
+                    }}
+                >
+                    {({
+                        values,
+                        errors,
+                        isSubmitting,
+                        resetForm,
+                        handleSubmit,
+                        setFieldValue,
+                        handleChange,
+                    }) => (
+                        <FormikForm>
+                            <Card
+                                className="text-left form p-1"
+                                style={{ ...FixedCardHeight }}
                             >
-                                <FormLabelAndDropDown
-                                    label="Account Name"
-                                    name="accountName"
-                                    helperText={"Select valid account"}
-                                    options={[
-                                        ...connectedAccounts,
-                                        ...defaultAccounts,
-                                    ].map((acc) => acc.meta.name)}
-                                    onChange={(e) => {
-                                        setFieldValue(
-                                            "accountName",
-                                            e.target.value,
-                                            false
-                                        );
-                                        let val;
-                                        [
-                                            ...connectedAccounts,
-                                            ...defaultAccounts,
-                                        ]?.forEach((acc) => {
-                                            if (
-                                                acc.meta.name === e.target.value
-                                            ) {
-                                                val = acc.address;
-                                                return;
-                                            }
-                                        });
-                                        setFieldValue("accountId", val);
-                                    }}
-                                />
-                                <FormLabelAndInput
-                                    placeholder={
-                                        !values.isFieldDisabled
-                                            ? `AccountId`
-                                            : ""
-                                    }
-                                    name="accountId"
-                                    type={
-                                        !values.isFieldDisabled
-                                            ? "text"
-                                            : "text"
-                                    }
-                                    label="AccountId"
-                                    helperText={""}
-                                    isDisabled={true}
-                                />
-                                {formType.type !==
-                                    constants.FORM_TYPES.CREATE_TASK.type && (
+                                <Card.Body
+                                    className="form-body"
+                                    style={{ overflow: "scroll" }}
+                                >
+                                    <FormLabelAndSelectedDropDown
+                                        label="Account Name"
+                                        name="accountName"
+                                        helperText={"Select valid account"}
+                                        options={[
+                                            currentWalletDetails,
+                                        ]?.map((acc) => acc.meta.name)}
+                                        onChange={(e) => {
+                                            setFieldValue(
+                                                "accountName",
+                                                e.target.value,
+                                                false
+                                            );
+                                            let val;
+                                            [
+                                                ...connectedAccounts,
+                                                ...defaultAccounts,
+                                            ]?.forEach((acc) => {
+                                                if (
+                                                    acc.meta.name ===
+                                                    e.target.value
+                                                ) {
+                                                    val = acc.address;
+                                                    return;
+                                                }
+                                            });
+                                            setFieldValue("accountId", val);
+                                        }}
+                                    />
                                     <FormLabelAndInput
                                         placeholder={
                                             !values.isFieldDisabled
-                                                ? `TaskId`
+                                                ? `AccountId`
                                                 : ""
                                         }
-                                        name="taskId"
+                                        name="accountId"
+                                        type={
+                                            !values.isFieldDisabled
+                                                ? "text"
+                                                : "text"
+                                        }
+                                        label="AccountId"
+                                        helperText={""}
+                                        isDisabled={true}
+                                        value={currentWalletDetails.address}
+                                    />
+                                    {formType.type !==
+                                        constants.FORM_TYPES.CREATE_TASK
+                                            .type && (
+                                        <FormLabelAndInput
+                                            placeholder={
+                                                !values.isFieldDisabled
+                                                    ? `TaskId`
+                                                    : ""
+                                            }
+                                            name="taskId"
+                                            type={
+                                                !values.isFieldDisabled
+                                                    ? "number"
+                                                    : "text"
+                                            }
+                                            label="TaskId"
+                                            helperText={""}
+                                            // value={values.taskId}
+                                            isDisabled={values.isFieldDisabled}
+                                        />
+                                    )}
+                                    <FormLabelAndInput
+                                        placeholder={
+                                            !values.isFieldDisabled
+                                                ? `TaskDuration (in Days)`
+                                                : ""
+                                        }
+                                        name="taskDuration"
                                         type={
                                             !values.isFieldDisabled
                                                 ? "number"
                                                 : "text"
                                         }
-                                        label="TaskId"
+                                        label="Task Duration (in Days)"
                                         helperText={""}
-                                        // value={values.taskId}
+                                        // value={values.taskDuration}
                                         isDisabled={values.isFieldDisabled}
                                     />
-                                )}
-                                <FormLabelAndInput
-                                    placeholder={
-                                        !values.isFieldDisabled
-                                            ? `TaskDuration (in Days)`
-                                            : ""
-                                    }
-                                    name="taskDuration"
-                                    type={
-                                        !values.isFieldDisabled
-                                            ? "number"
-                                            : "text"
-                                    }
-                                    label="Task Duration (in Days)"
-                                    helperText={""}
-                                    // value={values.taskDuration}
-                                    isDisabled={values.isFieldDisabled}
-                                />
-                                <FormLabelAndInput
-                                    placeholder={
-                                        !values.isFieldDisabled
-                                            ? `TaskCost (in Units)`
-                                            : ""
-                                    }
-                                    name="taskCost"
-                                    type={
-                                        !values.isFieldDisabled
-                                            ? "number"
-                                            : "text"
-                                    }
-                                    label="Task Cost (in Units)"
-                                    helperText={""}
-                                    // value={values.taskCost}
-                                    isDisabled={values.isFieldDisabled}
-                                />
-
-                                <FormLabelAndInput
-                                    placeholder={
-                                        !values.isFieldDisabled
-                                            ? `TaskDescription`
-                                            : ""
-                                    }
-                                    name="taskDescription"
-                                    type="text"
-                                    label="Task Description"
-                                    helperText={""}
-                                    // value={values.taskDescription}
-                                    isDisabled={values.isFieldDisabled}
-                                />
-
-                                {formType.type ===
-                                    constants.FORM_TYPES.CREATE_TASK.type && (
-                                    <FormLabelAndDropDownWithMultipleValue
-                                        label="Task Tags"
-                                        name="taskTags"
-                                        helperText={"choose approprotiate tags"}
-                                        options={[...taskTagsForForm]}
-                                        onChange={(value) =>
-                                            setFieldValue(
-                                                "taskTags",
-                                                value,
-                                                false
-                                            )
-                                        }
-                                        isDisabled={values.isFieldDisabled}
-                                    />
-                                )}
-
-                                {(formType.type ===
-                                    constants.FORM_TYPES.CREATE_TASK.type ||
-                                    formType.type ===
-                                        constants.FORM_TYPES.COMPLETE_TASK
-                                            .type) && (
-                                    <FormFile
-                                        name="files"
-                                        label="Upload Files"
-                                        helperText={""}
-                                        onChange={({ fileList }) =>
-                                            setFieldValue("files", fileList)
-                                        }
-                                    />
-                                )}
-                                {(formType.type ===
-                                    constants.FORM_TYPES.APPROVE_TASK.type ||
-                                    formType.type ===
-                                        constants.FORM_TYPES
-                                            .PROVIDE_CUSTOMER_RATINGS.type) && (
                                     <FormLabelAndInput
                                         placeholder={
-                                            formType.type ===
-                                            constants.FORM_TYPES.APPROVE_TASK
-                                                .type
-                                                ? `Ratings for Worker`
-                                                : `Ratings for Customer`
+                                            !values.isFieldDisabled
+                                                ? `TaskCost (in Units)`
+                                                : ""
                                         }
-                                        name="ratings"
-                                        type={"number"}
-                                        label={
-                                            formType.type ===
-                                            constants.FORM_TYPES.APPROVE_TASK
-                                                .type
-                                                ? `Ratings for Worker`
-                                                : `Ratings for Customer`
+                                        name="taskCost"
+                                        type={
+                                            !values.isFieldDisabled
+                                                ? "number"
+                                                : "text"
                                         }
-                                        helperText={
-                                            "Provide ratings between 1-5"
-                                        }
+                                        label="Task Cost (in Units)"
+                                        helperText={""}
+                                        // value={values.taskCost}
+                                        isDisabled={values.isFieldDisabled}
                                     />
-                                )}
-                            </Card.Body>
-                            <Card.Footer className="d-flex justify-content-between aligin-items-center">
-                                <Button variant="warning" onClick={resetForm}>
-                                    <b>Reset</b>
-                                </Button>
-                                <Button
-                                    variant="dark"
-                                    type="submit"
-                                    name={values.submitButtonName}
-                                >
-                                    <b>{values.submitButtonName}</b>
-                                </Button>
-                            </Card.Footer>
-                        </Card>
-                    </FormikForm>
-                )}
-            </Formik>
+
+                                    <FormLabelAndInput
+                                        placeholder={
+                                            !values.isFieldDisabled
+                                                ? `TaskDescription`
+                                                : ""
+                                        }
+                                        name="taskDescription"
+                                        type="text"
+                                        label="Task Description"
+                                        helperText={""}
+                                        // value={values.taskDescription}
+                                        isDisabled={values.isFieldDisabled}
+                                    />
+
+                                    {formType.type ===
+                                        constants.FORM_TYPES.CREATE_TASK
+                                            .type && (
+                                        <FormLabelAndDropDownWithMultipleValue
+                                            label="Task Tags"
+                                            name="taskTags"
+                                            helperText={
+                                                "choose approprotiate tags"
+                                            }
+                                            options={[...taskTagsForForm]}
+                                            onChange={(value) =>
+                                                setFieldValue(
+                                                    "taskTags",
+                                                    value,
+                                                    false
+                                                )
+                                            }
+                                            isDisabled={values.isFieldDisabled}
+                                        />
+                                    )}
+
+                                    {(formType.type ===
+                                        constants.FORM_TYPES.CREATE_TASK.type ||
+                                        formType.type ===
+                                            constants.FORM_TYPES.COMPLETE_TASK
+                                                .type) && (
+                                        <FormFile
+                                            name="files"
+                                            label="Upload Files"
+                                            helperText={""}
+                                            onChange={({ fileList }) =>
+                                                setFieldValue("files", fileList)
+                                            }
+                                        />
+                                    )}
+                                    {(formType.type ===
+                                        constants.FORM_TYPES.APPROVE_TASK
+                                            .type ||
+                                        formType.type ===
+                                            constants.FORM_TYPES
+                                                .PROVIDE_CUSTOMER_RATINGS
+                                                .type) && (
+                                        <FormLabelAndInput
+                                            placeholder={
+                                                formType.type ===
+                                                constants.FORM_TYPES
+                                                    .APPROVE_TASK.type
+                                                    ? `Ratings for Worker`
+                                                    : `Ratings for Customer`
+                                            }
+                                            name="ratings"
+                                            type={"number"}
+                                            label={
+                                                formType.type ===
+                                                constants.FORM_TYPES
+                                                    .APPROVE_TASK.type
+                                                    ? `Ratings for Worker`
+                                                    : `Ratings for Customer`
+                                            }
+                                            helperText={
+                                                "Provide ratings between 1-5"
+                                            }
+                                        />
+                                    )}
+                                </Card.Body>
+                                <Card.Footer className="d-flex justify-content-between aligin-items-center">
+                                    <Button
+                                        variant="warning"
+                                        onClick={resetForm}
+                                    >
+                                        <b>Reset</b>
+                                    </Button>
+                                    <Button
+                                        variant="dark"
+                                        type="submit"
+                                        name={values.submitButtonName}
+                                    >
+                                        <b>{values.submitButtonName}</b>
+                                    </Button>
+                                </Card.Footer>
+                            </Card>
+                        </FormikForm>
+                    )}
+                </Formik>
         </>
     );
 };
@@ -540,7 +558,13 @@ const FormLabelAndTextArea = ({
     );
 };
 
-const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
+const FormLabelAndDropDown = ({
+    label,
+    helperText,
+    options,
+    selectIndex,
+    ...props
+}) => {
     const [field, meta] = useField(props);
     return (
         <Form.Group>
@@ -553,9 +577,13 @@ const FormLabelAndDropDown = ({ label, helperText, options, ...props }) => {
             ></ErrorMessage>
             <Form.Control as="select" {...field} {...props}>
                 <option>Select</option>
-                {options.map((option, index) => (
-                    <option key={index}>{option}</option>
-                ))}
+                {options.map((option, index) => {
+                    return (
+                        <option key={index} selected>
+                            {option}
+                        </option>
+                    );
+                })}
             </Form.Control>
             <small>{helperText}</small>
         </Form.Group>
@@ -673,6 +701,33 @@ const FormLabelAndDropDownWithMultipleValue = ({
                 isDisabled={isDisabled}
                 onChange={props.onChange}
             />
+        </Form.Group>
+    );
+};
+
+const FormLabelAndSelectedDropDown = ({
+    label,
+    helperText,
+    options,
+    selectIndex,
+    ...props
+}) => {
+    const [field, meta] = useField(props);
+    return (
+        <Form.Group>
+            <Form.Label className="publish-form-label mtl-5">
+                {label}
+            </Form.Label>
+            <ErrorMessage
+                name={field.name}
+                component={FormErrorMessage}
+            ></ErrorMessage>
+            <Form.Control as="select" {...field} {...props}>
+                {options.map((option, index) => {
+                    return <option key={index}>{option}</option>;
+                })}
+            </Form.Control>
+            <small>{helperText}</small>
         </Form.Group>
     );
 };
