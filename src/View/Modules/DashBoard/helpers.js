@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import { TASK_STATUS } from "../TaskDetails/constants";
 import * as constants from "./constants";
 
-export const getAttributesForCard = (status) => {
+export const getAttributesForCard = (status, data, showFormModal) => {
     switch (status) {
         case TASK_STATUS.Completed:
             return {
@@ -82,6 +82,7 @@ export const getAttributesForCard = (status) => {
                 ),
             };
         default:
+            console.log(`----------status: ${status}-------------`);
             return {
                 badgeColor: "blue",
                 button: (
@@ -99,9 +100,9 @@ export const getAttributesForCard = (status) => {
 
 export const sortTasksByUserTags = (currentUserTags, tasksArr) => {
     tasksArr.sort((a, b) => {
-        if (currentUserTags.every((tag) => a.task_tags.includes(tag))) {
+        if (currentUserTags.every((tag) => a.taskTags.includes(tag))) {
             return 1;
-        } else if (currentUserTags.some((tag) => a.task_tags.includes(tag))) {
+        } else if (currentUserTags.some((tag) => a.taskTags.includes(tag))) {
             return -1;
         } else {
             return 0;

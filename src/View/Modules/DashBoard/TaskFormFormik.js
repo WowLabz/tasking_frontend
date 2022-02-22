@@ -108,10 +108,10 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
             case `Complete`:
                 initialValues.accountName = currentWalletDetails.meta.name;
                 initialValues.accountId = currentWalletDetails.address;
-                initialValues.taskId = data.task_id;
-                initialValues.taskDuration = data.task_deadline;
+                initialValues.taskId = data.taskId;
+                initialValues.taskDuration = data.taskDeadline;
                 initialValues.taskCost = data.cost;
-                initialValues.taskDescription = data.task_description;
+                initialValues.taskDescription = data.taskDescription;
                 initialValues.isFieldDisabled = true;
                 initialValues.submitButtonName =
                     formType.type === `Bid` ? "Bid" : "Complete";
@@ -120,20 +120,20 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
             case `Approve`:
                 initialValues.accountName = currentWalletDetails.meta.name;
                 initialValues.accountId = currentWalletDetails.address;
-                initialValues.taskId = data.task_id;
-                initialValues.taskDuration = data.task_deadline;
+                initialValues.taskId = data.taskId;
+                initialValues.taskDuration = data.taskDeadline;
                 initialValues.taskCost = data.cost;
-                initialValues.taskDescription = data.task_description;
+                initialValues.taskDescription = data.taskDescription;
                 initialValues.isFieldDisabled = true;
                 initialValues.submitButtonName = "Approve";
                 return;
             case `Provide Customer Ratings`:
                 initialValues.accountName = currentWalletDetails.meta.name;
                 initialValues.accountId = currentWalletDetails.address;
-                initialValues.taskId = data.task_id;
-                initialValues.taskDuration = data.task_deadline;
+                initialValues.taskId = data.taskId;
+                initialValues.taskDuration = data.taskDeadline;
                 initialValues.taskCost = data.cost;
-                initialValues.taskDescription = data.task_description;
+                initialValues.taskDescription = data.taskDescription;
                 initialValues.isFieldDisabled = true;
                 initialValues.submitButtonName = "Provide Customer Ratings";
                 return;

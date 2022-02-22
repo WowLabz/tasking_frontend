@@ -83,7 +83,7 @@ const DashBoard = (props) => {
                     dispatch(actionCreators.setTasksFromBackEnd(sortedArr));
                 }
             } catch (error) {
-                console.log(`catchError at useEffect : ${error}`);
+                console.log(`catchError at useEffect : ${error.stack}`);
             }
         };
         setInterval(() => {

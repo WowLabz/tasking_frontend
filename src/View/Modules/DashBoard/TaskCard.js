@@ -130,6 +130,7 @@ const TaskCard = ({ data, showFormModal }) => {
                     ),
                 };
             default:
+            console.log(`----------status: ${status}-------------`);
                 return {
                     badgeColor: "blue",
                     button: (
@@ -148,16 +149,16 @@ const TaskCard = ({ data, showFormModal }) => {
     const init = () => {
         try {
             const {
-                task_id,
+                taskId,
                 client,
-                worker_id,
-                task_deadline,
+                workerId,
+                taskDeadline,
                 cost,
                 status,
-                task_description,
-                publisher_name,
-                worker_name,
-                task_tags,
+                taskDescription,
+                publisherName,
+                workerName,
+                taskTags,
                 attachments,
             } = data;
             // const publisher_name = getAccountName(client);
@@ -166,7 +167,7 @@ const TaskCard = ({ data, showFormModal }) => {
             let today = new Date();
             let startDate = today.toLocaleDateString();
             let endDate = today
-                .addDays(parseInt(task_deadline))
+                .addDays(parseInt(taskDeadline))
                 .toLocaleDateString();
             setCardDetails({
                 ...data,
