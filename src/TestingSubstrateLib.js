@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSubstrate } from "./substrate-lib";
 
-import { ApiPromise, wsProvider } from "@polkadot/api";
+import { ApiPromise, WsProvider } from "@polkadot/api";
 import { Keyring } from "@polkadot/keyring";
 
 const TestingSubstrateLib = () => {
@@ -59,7 +59,7 @@ const TestingSubstrateLib = () => {
 
     const traditionalConnectionToParachain = async () => {
         const api = await ApiPromise.create({
-            provider: wsProvider,
+            provider: WsProvider,
             types: {
                 Balance: "u64",
                 TaskDetails: {
