@@ -12,18 +12,18 @@ const TaskCard = ({ data, showFormModal }) => {
     const history = useHistory();
     const [attributesForCard, setAttributesForCard] = useState({});
     const [cardDetails, setCardDetails] = useState({
-        task_id: null,
+        taskId: null,
         client: null,
-        worker_id: null,
-        task_deadline: null,
+        workerId: null,
+        taskDeadline: null,
         cost: null,
         status: null,
-        task_description: null,
-        publisher_name: null,
-        worker_name: null,
-        start_date: null,
-        end_date: null,
-        task_tags: [],
+        taskDescription: null,
+        publisherName: null,
+        workerName: null,
+        startDate: null,
+        endDate: null,
+        taskTags: [],
         attachments: [],
     });
 
@@ -164,14 +164,14 @@ const TaskCard = ({ data, showFormModal }) => {
             // const worker_name = getAccountName(worker_id);
 
             let today = new Date();
-            let start_date = today.toLocaleDateString();
-            let end_date = today
+            let startDate = today.toLocaleDateString();
+            let endDate = today
                 .addDays(parseInt(task_deadline))
                 .toLocaleDateString();
             setCardDetails({
                 ...data,
-                start_date,
-                end_date,
+                startDate,
+                endDate,
             });
             setAttributesForCard(getAttributesForCard(status));
         } catch (error) {
@@ -195,12 +195,12 @@ const TaskCard = ({ data, showFormModal }) => {
                 <Card.Body
                     onClick={() =>
                         history.push({
-                            pathname: `/taskdetails/${cardDetails.task_id}`,
+                            pathname: `/taskdetails/${cardDetails.taskId}`,
                         })
                     }
                 >
                     <Card.Text className="d-flex justify-content-between align-items-center">
-                        <b>{_.capitalize(cardDetails.task_description)}</b>
+                        <b>{_.capitalize(cardDetails.taskDescription)}</b>
                         <Badge
                             variant={attributesForCard.badgeColor}
                             className={`px-2 mx-2`}
@@ -226,26 +226,26 @@ const TaskCard = ({ data, showFormModal }) => {
                                 <b>Publisher</b>
                             </div>
                             <small style={{ fontSize: "13px" }}>
-                                {cardDetails.publisher_name}
+                                {cardDetails.publisherName}
                             </small>
                         </div>
-                        {cardDetails.worker_id !== null && (
+                        {cardDetails.workerId !== null && (
                             <div>
                                 <div>
                                     <b>Worker</b>
                                 </div>
                                 <small style={{ fontSize: "13px" }}>
-                                    {cardDetails.worker_name}
+                                    {cardDetails.workerName}
                                 </small>
                             </div>
                         )}
                     </div>
                     <Card.Text>
-                        <b>TaskId:</b> {cardDetails.task_id}
+                        <b>TaskId:</b> {cardDetails.taskId}
                     </Card.Text>
                     <Card.Text>
                         <b>TaskDeadline: </b>
-                        {cardDetails.task_deadline} days
+                        {cardDetails.taskDeadline} days
                     </Card.Text>
                     <Card.Text>
                         <b>TaskCost:</b> {cardDetails.cost}
@@ -254,7 +254,7 @@ const TaskCard = ({ data, showFormModal }) => {
                         <b>TaskTags:</b>
                     </div>
                     <div>
-                        {cardDetails.task_tags.map((tag, idx) => (
+                        {cardDetails.taskTags.map((tag, idx) => (
                             <Badge
                                 variant={`secondary`}
                                 className={`px-2 m-1`}
@@ -276,18 +276,18 @@ const TaskCard = ({ data, showFormModal }) => {
                             <div>
                                 <b>Start Date</b>
                             </div>
-                            <small>{cardDetails.start_date}</small>
+                            <small>{cardDetails.startDate}</small>
                         </div>
                         <div>
                             <div>
                                 <b>End Date</b>
                             </div>
-                            <small>{cardDetails.end_date}</small>
+                            <small>{cardDetails.endDate}</small>
                         </div>
                     </div>
                 </Card.Body>
                 <Card.Footer className="card-footer">
-                    {cardDetails.attachments.length !== 0 && (
+                    {cardDetails.attachments?.length !== 0 && (
                         <Attachments attachments={cardDetails.attachments} />
                     )}
                     {attributesForCard.button}

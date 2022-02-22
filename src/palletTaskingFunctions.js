@@ -54,40 +54,54 @@ export const getAccountsFromKeyRing = () => {
  * To Handle Events while making transactions on chain
  * @param {events} param
  */
-export const transactionEventHandler = ({ events = [], status }) => {
+export const transactionEventHandler = (events, status) => {
     console.log("Transaction status:", status.type);
-    toast.info(`Transaction status: ${status.type}`, {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 5000,
-    });
+    // toast.info(`Transaction status: ${status.type}`, {
+    //     position: toast.POSITION.TOP_RIGHT,
+    //     autoClose: 5000,
+    // });
+    const toastArr = [];
 
     if (status.isInBlock) {
         console.log("Included at block hash", status.asInBlock.toHex());
         console.log("Events:");
-        toast.info(`Included at block hash ${status.asInBlock.toHex()}`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-        });
+        // toast.info(`Included at block hash ${status.asInBlock.toHex()}`, {
+        //     position: toast.POSITION.TOP_RIGHT,
+        //     autoClose: 3000,
+        // });
 
         events.forEach(({ event: { data, method, section }, phase }) => {
-            toast.dark(`\t\t${section}:${method}:${data.toString()}`, {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 9000,
-            });
+            if (method === "ExtrinsicFailed") {
+                toast.error(`Error: \t\t${data.toString()}`, {
+                    autoClose: 5000,
+                    position: "bottom-right",
+                });
+            } else if (method === "ExtrinsicSuccess") {
+                console.log(`data: ${data}`);
+                console.log(`method: ${method}`);
+                console.log(`section: ${section}`);
+            } else {
+                // toast.success(`Success: \t\t${section}:${method}: ${data.toString()}`, {
+                //   autoClose: 5000,
+                // });
+            }
+
             console.log(
                 "\t",
                 phase.toString(),
                 `: ${section}.${method}`,
                 data.toString()
             );
+            toastArr.push(`\n${section}.${method}`);
         });
     } else if (status.isFinalized) {
         console.log("Finalized block hash", status.asFinalized.toHex());
-        toast.success(`Finalized block hash ${status.asFinalized.toHex()}`, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 5000,
-        });
+        // toast.success(`Finalized block hash ${status.asFinalized.toHex()}`, {
+        //     position: toast.POSITION.TOP_RIGHT,
+        //     autoClose: 5000,
+        // });
     }
+    return toastArr;
 };
 
 /**
@@ -190,7 +204,10 @@ export const createTaskTx = async (
 export const bidForTaskTx = async (api, accountId, taskId, workerName) => {
     try {
         if (api === null) return;
-        let transaction = api.tx["palletTasking"]["bidForTask"](taskId, workerName);
+        let transaction = api.tx["palletTasking"]["bidForTask"](
+            taskId,
+            workerName
+        );
         await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
@@ -228,10 +245,18 @@ export const approveTaskTx = async (
  * @param {AccountId} accountIdFromKeyRing
  * @param {Number} taskId
  */
-export const taskCompletedTx = async (api, accountId, taskId, workerAttachments) => {
+export const taskCompletedTx = async (
+    api,
+    accountId,
+    taskId,
+    workerAttachments
+) => {
     try {
         if (api === null) return;
-        let transaction = api.tx.palletTasking.taskCompleted(taskId, workerAttachments);
+        let transaction = api.tx.palletTasking.taskCompleted(
+            taskId,
+            workerAttachments
+        );
         await handleSignedTransactions(transaction, accountId);
     } catch (error) {
         transactionErrorHandler(error);
@@ -484,7 +509,15 @@ const handleSignedTransactions = async (transaction, accountId) => {
         await transaction.signAndSend(
             signedAccount,
             { signer },
-            transactionEventHandler
+            ({ events = [], status }) => {
+                let toastArr = transactionEventHandler(events, status);
+                if (toastArr?.length !== 0) {
+                    toast.success(`${toastArr}`, {
+                        autoClose: 5000,
+                        position: "top-right",
+                    });
+                }
+            }
         );
     } catch (error) {
         console.log(error);

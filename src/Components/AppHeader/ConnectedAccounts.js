@@ -5,7 +5,7 @@ import {
     DEFAULT_ACCOUNT_IDS,
     getAccountsFromKeyRing,
 } from "../../palletTaskingFunctions";
-import { useSubstrate } from "../../substrate-lib";
+import { useSubstrateState } from "../../substrate-lib";
 import { cryptoWalletAccountSelect, cryptoWalletDisconnect } from "./actions";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { toast } from "react-toastify";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSubstrate } from "./substrate-lib";
+import { useSubstrateState } from "./substrate-lib";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as ActionCreators from "./View/Modules/DashBoard/actionCreators";
@@ -10,7 +10,7 @@ import * as palletTaskingFunctions from "./palletTaskingFunctions";
  * @returns
  */
 const PalletTaskingTesting = () => {
-    const { api, keyring } = useSubstrate();
+    const { api, keyring } = useSubstrateState();
 
     const dispatch = useDispatch();
     const tasks = useSelector((state) => state.dashBoardReducer.tasks);

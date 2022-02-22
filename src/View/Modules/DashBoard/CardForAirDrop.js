@@ -7,7 +7,7 @@ import {
     Formik,
     useField,
 } from "formik";
-import { useSubstrate } from "../../../substrate-lib";
+import { useSubstrateState } from "../../../substrate-lib";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
 import FormErrorMessage from "./FormErrorMessage";
@@ -47,7 +47,7 @@ const CardForAirDrop = () => {
     const isWalletConnected = useSelector(
         (state) => state.headerReducer.isWalletConnected
     );
-    const { api, keyring } = useSubstrate();
+    const { api, keyring } = useSubstrateState();
     const [modalShow, setModalShow] = useState(false);
 
     const handleFormSubmit = async (data) => {

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import { useSubstrate } from "../../../substrate-lib";
+import { useSubstrateState } from "../../../substrate-lib";
 import TestingSubstrateLib from "../../../TestingSubstrateLib";
 import * as palletTaskingFunctions from "../../../palletTaskingFunctions";
 import * as actionCreators from "./actionCreators";
@@ -21,7 +21,7 @@ import { sortTasksByUserTags } from "./helpers";
 toast.configure();
 
 const DashBoard = (props) => {
-    const { api, keyring } = useSubstrate();
+    const { api, keyring } = useSubstrateState();
     const dispatch = useDispatch();
 
     const tasks = useSelector((state) => state.dashBoardReducer.tasks);
