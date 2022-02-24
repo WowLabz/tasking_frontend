@@ -136,28 +136,6 @@ const DashBoard = (props) => {
                     </Button>
                 </div>
                 <CardForAirDrop />
-                {/* <Card
-                    style={{
-                        borderRadius: "20px",
-                        background: "#ffc107",
-                        fontSize: "24px",
-                        textAlign: "center",
-                        marginTop: "10px",
-                    }}
-                    className="p-3"
-                >
-                    <h4>
-                        Please visit{" "}
-                        <a
-                            href={constants.DOT_MARKETPLACE}
-                            target="_blank"
-                            style={{ color: "red" }}
-                        >
-                            Dot Marketplace
-                        </a>{" "}
-                        our updated App
-                    </h4>
-                </Card> */}
             </Row>
 
             <Row>

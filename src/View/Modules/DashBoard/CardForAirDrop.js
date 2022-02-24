@@ -60,7 +60,7 @@ const CardForAirDrop = () => {
                 api,
                 alice,
                 data.accountNumber,
-                100 * 1000000000000
+                500 * 1000000000000
             );
         } catch (error) {
             console.log(error);
@@ -95,7 +95,7 @@ const CardForAirDrop = () => {
                     <div>
                         <h4 style={{ margin: "0" }}>Insufficient Balance?</h4>
                         <h4 style={{ margin: "0" }}>
-                            You can request air drop to get 100 tokens for
+                            You can request air drop to get 500 tokens for
                             testing
                         </h4>
                     </div>

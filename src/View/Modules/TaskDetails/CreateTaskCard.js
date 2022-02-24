@@ -12,10 +12,10 @@ const CreateTaskCard = ({ tab }) => {
         client,
         cost,
         status,
-        task_deadline,
-        task_description,
-        task_id,
-        worker_id,
+        taskDeadline,
+        taskDescription,
+        taskId,
+        workerId,
     } = task;
 
     const init = () => {

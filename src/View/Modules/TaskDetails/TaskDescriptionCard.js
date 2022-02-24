@@ -11,16 +11,16 @@ const TaskDescriptionCard = ({ tab }) => {
     const [progressValue, setProgressValue] = useState(1);
 
     const {
-        task_id,
+        taskId,
         client,
-        worker_id,
-        task_deadline,
+        workerId,
+        taskDeadline,
         cost,
         status,
-        task_description,
-        publisher_name,
-        worker_name,
-        task_tags,
+        taskDescription,
+        publisherName,
+        workerName,
+        taskTags,
         attachments,
     } = task;
 
@@ -69,20 +69,20 @@ const TaskDescriptionCard = ({ tab }) => {
                         style={{ gap: "10px" }}
                     >
                         <ul>
-                            <li>Task Description: {task_description}</li>
+                            <li>Task Description: {taskDescription}</li>
                             <li>
-                                Publisher Name: <span>{publisher_name}</span>
+                                Publisher Name: <span>{publisherName}</span>
                             </li>
                             {status !== TASK_STATUS.Open && (
                                 <li>
-                                    Worker Name: <span>{worker_name}</span>
+                                    Worker Name: <span>{workerName}</span>
                                 </li>
                             )}
-                            <li>Task Deadline: {task_deadline} days</li>
+                            <li>Task Deadline: {taskDeadline} days</li>
                             <li>Task Cost: {cost}</li>
                         </ul>
                         <div>
-                            {task_tags.map((tag, idx) => (
+                            {taskTags.map((tag, idx) => (
                                 <Badge
                                     variant={`secondary`}
                                     className={`px-2 m-1`}

@@ -24,7 +24,7 @@ const TaskDetails = ({ match }) => {
         
         let tempTabs;
         tasks.forEach((task) => {
-            if (task.task_id === taskId) {
+            if (task.taskId === taskId) {
                 console.log(task);
                 setBreadCrumbArr([
                     {
@@ -33,9 +33,9 @@ const TaskDetails = ({ match }) => {
                         name: "Dashboard",
                     },
                     {
-                        link: `/taskdetails/${task.task_id}`,
+                        link: `/taskdetails/${task.taskId}`,
                         active: true,
-                        name: task?.task_description,
+                        name: task?.taskDescription,
                     },
                 ]);
 
