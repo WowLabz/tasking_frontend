@@ -17,7 +17,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import {
     getAccountBalance,
     getAccountsFromKeyRing,
-    transferUsingPalletTasking,
+    transferUsingPalletBalances,
 } from "../../../palletTaskingFunctions";
 import { DEFAULT_ACCOUNT_IDS } from "./constants";
 toast.configure();
@@ -56,7 +56,7 @@ const CardForAirDrop = () => {
                 DEFAULT_ACCOUNT_IDS.ALICE
             );
             let alice = keyring.getPair(AliceFromKeyRing.address);
-            await transferUsingPalletTasking(
+            await transferUsingPalletBalances(
                 api,
                 alice,
                 data.accountNumber,

@@ -402,7 +402,7 @@ export const getTaskDetails = async (api, taskId, accountId) => {
  * @param {Number} transferAmount
  * @returns
  */
-export const transferUsingPalletTasking = async (
+export const transferUsingPalletBalances = async (
     api,
     fromAccountIdFromKeyRing,
     toAccountId,
@@ -410,14 +410,15 @@ export const transferUsingPalletTasking = async (
 ) => {
     try {
         if (api === null) return;
-        let transaction = api.tx.palletTasking.transferMoney(
+        let transaction = api.tx.balances.transfer(
             toAccountId,
             transferAmount
         );
-        await transaction.signAndSend(
-            fromAccountIdFromKeyRing,
-            transactionEventHandler
-        );
+        // await transaction.signAndSend(
+        //     fromAccountIdFromKeyRing,
+        //     transactionEventHandler
+        // );
+        await handleSignedTransactions(transaction, DEFAULT_ACCOUNT_IDS.ALICE);
     } catch (error) {
         transactionErrorHandler(error);
     }
