@@ -137,6 +137,36 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 initialValues.isFieldDisabled = true;
                 initialValues.submitButtonName = "Provide Customer Ratings";
                 return;
+            case `Close`:
+                initialValues.accountName = currentWalletDetails.meta.name;
+                initialValues.accountId = currentWalletDetails.address;
+                initialValues.taskId = data.taskId;
+                initialValues.taskDuration = data.taskDeadline;
+                initialValues.taskCost = data.cost;
+                initialValues.taskDescription = data.taskDescription;
+                initialValues.isFieldDisabled = true;
+                initialValues.submitButtonName = "Close";
+                return;
+            case `Raise Dispute`:
+                initialValues.accountName = currentWalletDetails.meta.name;
+                initialValues.accountId = currentWalletDetails.address;
+                initialValues.taskId = data.taskId;
+                initialValues.taskDuration = data.taskDeadline;
+                initialValues.taskCost = data.cost;
+                initialValues.taskDescription = data.taskDescription;
+                initialValues.isFieldDisabled = true;
+                initialValues.submitButtonName = "Raise Dispute";
+                return;
+            case `Disapprove`:
+                initialValues.accountName = currentWalletDetails.meta.name;
+                initialValues.accountId = currentWalletDetails.address;
+                initialValues.taskId = data.taskId;
+                initialValues.taskDuration = data.taskDeadline;
+                initialValues.taskCost = data.cost;
+                initialValues.taskDescription = data.taskDescription;
+                initialValues.isFieldDisabled = true;
+                initialValues.submitButtonName = "Disapprove";
+                return;
             default:
                 return;
         }
@@ -190,6 +220,41 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                         data.taskId
                     );
 
+                case constants.FORM_TYPES.CLOSE_TASK.type:
+                    return await palletTaskingFunctions.closeTaskTx(
+                        api,
+                        data.accountId,
+                        data.taskId
+                    );
+
+                case constants.FORM_TYPES.RAISE_DISPUTE.type: {
+                    let userType = getUserType();
+                    return await palletTaskingFunctions.raiseDisputeTx(
+                        api,
+                        data.accountId,
+                        data.taskId,
+                        userType
+                    );
+                }
+
+                case constants.FORM_TYPES.DISAPPROVE_TASK.type: {
+                    let userType = getUserType();
+
+                    if (userType === constants.USER_TYPE.WORKER) {
+                        toast.error(`Only Customer Can Disapprove`, {
+                            autoClose: 3000,
+                            position: "bottom-right",
+                        });
+                        return;
+                    }
+
+                    return await palletTaskingFunctions.disapproveTaskTx(
+                        api,
+                        data.accountId,
+                        data.taskId
+                    );
+                }
+
                 default:
                     break;
             }
@@ -200,6 +265,12 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                 autoClose: 5000,
             });
         }
+    };
+
+    const getUserType = () => {
+        return data.publisher === currentWalletDetails.address
+            ? constants.USER_TYPE.CUSTOMER
+            : constants.USER_TYPE.WORKER;
     };
 
     const handleFileUpload = async (files) => {

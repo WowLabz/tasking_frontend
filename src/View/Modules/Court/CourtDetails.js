@@ -5,7 +5,7 @@ import "react-circular-progressbar/dist/styles.css";
 import Attachments from "../DashBoard/Attachments";
 import { TASK_STATUS } from "./constants";
 
-const TaskDescriptionCard = ({ tab }) => {
+const CourtDetails = ({ tab }) => {
     const { tabId, tabType, task } = tab;
     const MAX_PROGRESS_VALUE = 5;
     const [progressValue, setProgressValue] = useState(1);
@@ -179,4 +179,4 @@ const TaskDescriptionCard = ({ tab }) => {
     );
 };
 
-export default TaskDescriptionCard;
+export default CourtDetails;

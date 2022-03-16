@@ -24,6 +24,12 @@ const TaskCard = ({ data, showFormModal }) => {
         startDate: null,
         endDate: null,
         taskTags: [],
+        workerAttachments: [],
+        publisherAttachments: [],
+    });
+
+    const [attachments, setAttachments] = useState({
+        showAttachments: false,
         attachments: [],
     });
 
@@ -75,35 +81,42 @@ const TaskCard = ({ data, showFormModal }) => {
                         >
                             <b>Complete</b>
                         </Button>,
-                        // <Button
-                        //     key={1}
-                        //     variant="success"
-                        //     name={constants.FORM_TYPES.APPROVE_TASK.type}
-                        //     onClick={(e) => showFormModal(e, data)}
-                        // >
-                        //     <b>Approve</b>
-                        // </Button>,
                     ],
                 };
 
             case TASK_STATUS.PendingApproval:
                 return {
                     badgeColor: "red",
-                    button: (
+                    button: [
                         <Button
                             variant="success"
                             name={constants.FORM_TYPES.APPROVE_TASK.type}
                             onClick={(e) => showFormModal(e, data)}
                         >
                             <b>Approve</b>
-                        </Button>
-                    ),
+                        </Button>,
+                        <Button
+                            variant="danger"
+                            name={constants.FORM_TYPES.APPROVE_TASK.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Disapprove</b>
+                        </Button>,
+                        <Button
+                            key={1}
+                            variant="warning"
+                            name={constants.FORM_TYPES.RAISE_DISPUTE.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Raise Dispute</b>
+                        </Button>,
+                    ],
                 };
 
-            case TASK_STATUS.PendingRatings:
+            case TASK_STATUS.CustomerRatingPending:
                 return {
                     badgeColor: "red",
-                    button: (
+                    button: [
                         <Button
                             variant="success"
                             name={
@@ -113,6 +126,109 @@ const TaskCard = ({ data, showFormModal }) => {
                             onClick={(e) => showFormModal(e, data)}
                         >
                             <b>Provide Customer Ratings</b>
+                        </Button>,
+                        <Button
+                            variant="danger"
+                            name={
+                                constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS
+                                    .type
+                            }
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Disapprove Worker Ratings</b>
+                        </Button>,
+                        <Button
+                            key={1}
+                            variant="warning"
+                            name={constants.FORM_TYPES.RAISE_DISPUTE.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Raise Dispute</b>
+                        </Button>,
+                    ],
+                };
+            case TASK_STATUS.CustomerRatingProvided:
+                return {
+                    badgeColor: "red",
+                    button: [
+                        <Button
+                            variant="success"
+                            name={constants.FORM_TYPES.CLOSE_TASK.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Close</b>
+                        </Button>,
+                        <Button
+                            variant="danger"
+                            name={
+                                constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS
+                                    .type
+                            }
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Disapprove Customer Ratings</b>
+                        </Button>,
+                        <Button
+                            key={1}
+                            variant="warning"
+                            name={constants.FORM_TYPES.RAISE_DISPUTE.type}
+                            onClick={(e) => showFormModal(e, data)}
+                        >
+                            <b>Raise Dispute</b>
+                        </Button>,
+                    ],
+                };
+            case TASK_STATUS.DisputeRaised:
+                return {
+                    badgeColor: "red",
+                    button: (
+                        <Button
+                            variant="success"
+                            name={
+                                constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS
+                                    .type
+                            }
+                            onClick={(e) =>
+                                history.push(`/court/${data.taskId}`)
+                            }
+                        >
+                            <b>Show Court</b>
+                        </Button>
+                    ),
+                };
+            case TASK_STATUS.VodingPeriod:
+                return {
+                    badgeColor: "red",
+                    button: (
+                        <Button
+                            variant="success"
+                            name={
+                                constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS
+                                    .type
+                            }
+                            onClick={(e) =>
+                                history.push(`/court/${data.taskId}`)
+                            }
+                        >
+                            <b>Show Court</b>
+                        </Button>
+                    ),
+                };
+            case TASK_STATUS.JuryDecisionReached:
+                return {
+                    badgeColor: "red",
+                    button: (
+                        <Button
+                            variant="success"
+                            name={
+                                constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS
+                                    .type
+                            }
+                            onClick={(e) =>
+                                history.push(`/court/${data.taskId}`)
+                            }
+                        >
+                            <b>Show Court</b>
                         </Button>
                     ),
                 };
@@ -130,7 +246,7 @@ const TaskCard = ({ data, showFormModal }) => {
                     ),
                 };
             default:
-            console.log(`----------status: ${status}-------------`);
+                console.log(`----------status: ${status}-------------`);
                 return {
                     badgeColor: "blue",
                     button: (
@@ -139,42 +255,56 @@ const TaskCard = ({ data, showFormModal }) => {
                             name={constants.FORM_TYPES.BID_FOR_TASK.type}
                             onClick={(e) => showFormModal(e, data)}
                         >
-                            <b>Bid</b>
+                            <b>Default</b>
                         </Button>
                     ),
                 };
         }
     };
 
+    const handleAttachments = (workerAttachments, publisherAttachments) => {
+        let tempAttachments = [];
+        if (workerAttachments !== null && workerAttachments.length !== 0) {
+            for (let i = 0; i < workerAttachments.length; i++) {
+                tempAttachments.push(workerAttachments[i]);
+            }
+        } else if (
+            publisherAttachments !== null &&
+            publisherAttachments.length !== 0
+        ) {
+            for (let i = 0; i < publisherAttachments.length; i++) {
+                tempAttachments.push(publisherAttachments[i]);
+            }
+        }
+
+        if (attachments.length !== 0) {
+            setAttachments({
+                showAttachments: true,
+                attachments: tempAttachments,
+            });
+        }
+    };
+
     const init = () => {
         try {
-            const {
-                taskId,
-                client,
-                workerId,
-                taskDeadline,
-                cost,
-                status,
-                taskDescription,
-                publisherName,
-                workerName,
-                taskTags,
-                attachments,
-            } = data;
             // const publisher_name = getAccountName(client);
             // const worker_name = getAccountName(worker_id);
 
             let today = new Date();
             let startDate = today.toLocaleDateString();
             let endDate = today
-                .addDays(parseInt(taskDeadline))
+                .addDays(parseInt(data.taskDeadline))
                 .toLocaleDateString();
+            handleAttachments(
+                data.workerAttachments,
+                data.publisherAttachments
+            );
             setCardDetails({
                 ...data,
                 startDate,
                 endDate,
             });
-            setAttributesForCard(getAttributesForCard(status));
+            setAttributesForCard(getAttributesForCard(data.status));
         } catch (error) {
             console.log(error);
         }
@@ -288,8 +418,11 @@ const TaskCard = ({ data, showFormModal }) => {
                     </div>
                 </Card.Body>
                 <Card.Footer className="card-footer">
-                    {cardDetails.attachments?.length !== 0 && (
-                        <Attachments attachments={cardDetails.attachments} />
+                    {attachments.showAttachments && (
+                        <Attachments
+                            attachments={attachments.attachments}
+                            name="Attachments"
+                        />
                     )}
                     {attributesForCard.button}
                 </Card.Footer>

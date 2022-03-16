@@ -288,6 +288,49 @@ export const provideCustomerRatingsTx = async (
     }
 };
 
+export const closeTaskTx = async (
+    api,
+    accountId,
+    taskId,
+) => {
+    try {
+        if (api === null) return;
+        let transaction = api.tx.palletTasking.closeTask(taskId);
+        await handleSignedTransactions(transaction, accountId);
+    } catch (error) {
+        transactionErrorHandler(error);
+    }
+};
+
+export const raiseDisputeTx = async (
+    api,
+    accountId,
+    taskId,
+    userType
+) => {
+    try {
+        if (api === null) return;
+        let transaction = api.tx.palletTasking.raiseDispute(taskId, userType);
+        await handleSignedTransactions(transaction, accountId);
+    } catch (error) {
+        transactionErrorHandler(error);
+    }
+};
+
+export const disapproveTaskTx = async (
+    api,
+    accountId,
+    taskId,
+) => {
+    try {
+        if (api === null) return;
+        let transaction = api.tx.palletTasking.disapproveTask(taskId);
+        await handleSignedTransactions(transaction, accountId);
+    } catch (error) {
+        transactionErrorHandler(error);
+    }
+};
+
 // Accessing chain storage
 
 /**
@@ -410,14 +453,7 @@ export const transferUsingPalletBalances = async (
 ) => {
     try {
         if (api === null) return;
-        let transaction = api.tx.balances.transfer(
-            toAccountId,
-            transferAmount
-        );
-        // await transaction.signAndSend(
-        //     fromAccountIdFromKeyRing,
-        //     transactionEventHandler
-        // );
+        let transaction = api.tx.balances.transfer(toAccountId, transferAmount);
         await handleSignedTransactions(transaction, DEFAULT_ACCOUNT_IDS.ALICE);
     } catch (error) {
         transactionErrorHandler(error);

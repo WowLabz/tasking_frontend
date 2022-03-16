@@ -22,6 +22,10 @@ export const TASK_STATUS = {
     Open: "Open",
     InProgress: "InProgress",
     PendingApproval: "PendingApproval",
-    PendingRatings: "PendingRatings",
+    CustomerRatingPending: "CustomerRatingPending",
+    CustomerRatingProvided: "CustomerRatingProvided",
+    DisputeRaised: "DisputeRaised",
+    VodingPeriod: "VotingPeriod",
+    JuryDecisionReached: "JuryDecisionReached",
     Completed: "Completed",
 };

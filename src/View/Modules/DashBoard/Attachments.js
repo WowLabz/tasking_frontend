@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-const Attachments = ({ attachments }) => {
+const Attachments = ({ name, attachments }) => {
     return (
         <div
             className="d-flex flex-column justify-content-start align-items-start"
@@ -10,7 +10,7 @@ const Attachments = ({ attachments }) => {
             }}
         >
             <div>
-                <b>Attachments:</b>
+                <b>{name ? name : Attachments}:</b>
             </div>
             <div
                 className="d-flex justify-content-start align-items-start"

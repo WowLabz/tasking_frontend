@@ -28,14 +28,14 @@ export const getAttributesForCard = (status, data, showFormModal) => {
                     >
                         <b>Complete</b>
                     </Button>,
-                    <Button
-                        key={1}
-                        variant="success"
-                        name={constants.FORM_TYPES.APPROVE_TASK.type}
-                        onClick={(e) => showFormModal(e, data)}
-                    >
-                        <b>Approve</b>
-                    </Button>,
+                    // <Button
+                    //     key={1}
+                    //     variant="success"
+                    //     name={constants.FORM_TYPES.APPROVE_TASK.type}
+                    //     onClick={(e) => showFormModal(e, data)}
+                    // >
+                    //     <b>Approve</b>
+                    // </Button>,
                 ],
             };
 
@@ -53,7 +53,7 @@ export const getAttributesForCard = (status, data, showFormModal) => {
                 ),
             };
 
-        case TASK_STATUS.PendingRatings:
+        case TASK_STATUS.CustomerRatingPending:
             return {
                 badgeColor: "red",
                 button: (
@@ -65,6 +65,66 @@ export const getAttributesForCard = (status, data, showFormModal) => {
                         onClick={(e) => showFormModal(e, data)}
                     >
                         <b>Provide Customer Ratings</b>
+                    </Button>
+                ),
+            };
+        case TASK_STATUS.CustomerRatingProvided:
+            return {
+                badgeColor: "red",
+                button: (
+                    <Button
+                        variant="success"
+                        name={
+                            constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type
+                        }
+                        onClick={(e) => showFormModal(e, data)}
+                    >
+                        <b>Close</b>
+                    </Button>
+                ),
+            };
+        case TASK_STATUS.DisputeRaised:
+            return {
+                badgeColor: "red",
+                button: (
+                    <Button
+                        variant="success"
+                        name={
+                            constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type
+                        }
+                        onClick={(e) => showFormModal(e, data)}
+                    >
+                        <b>DisputeRaised</b>
+                    </Button>
+                ),
+            };
+        case TASK_STATUS.VodingPeriod:
+            return {
+                badgeColor: "red",
+                button: (
+                    <Button
+                        variant="success"
+                        name={
+                            constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type
+                        }
+                        onClick={(e) => showFormModal(e, data)}
+                    >
+                        <b>VotingPeriod</b>
+                    </Button>
+                ),
+            };
+        case TASK_STATUS.JuryDecisionReached:
+            return {
+                badgeColor: "red",
+                button: (
+                    <Button
+                        variant="success"
+                        name={
+                            constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type
+                        }
+                        onClick={(e) => showFormModal(e, data)}
+                    >
+                        <b>JuryDecisionReached</b>
                     </Button>
                 ),
             };
@@ -91,7 +151,7 @@ export const getAttributesForCard = (status, data, showFormModal) => {
                         name={constants.FORM_TYPES.BID_FOR_TASK.type}
                         onClick={(e) => showFormModal(e, data)}
                     >
-                        <b>Bid</b>
+                        <b>Default</b>
                     </Button>
                 ),
             };

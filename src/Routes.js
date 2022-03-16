@@ -5,6 +5,7 @@ import Authorization from "./View/Modules/Authorization/Authorization";
 import TaskDetails from "./View/Modules/TaskDetails/TaskDetails";
 import "./View/Modules/DashBoard/Dashboard.css";
 import ProtectedRoute from "./ProtectedRoutes";
+import Court from "./View/Modules/Court/Court";
 
 const Routes = ({ match }) => {
     return (
@@ -16,6 +17,10 @@ const Routes = ({ match }) => {
                     <ProtectedRoute
                         path="/taskdetails/:id"
                         component={TaskDetails}
+                    />
+                    <ProtectedRoute
+                        path="/court/:id"
+                        component={Court}
                     />
                 </Switch>
             </Router>

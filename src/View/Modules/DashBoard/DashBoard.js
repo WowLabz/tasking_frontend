@@ -105,6 +105,12 @@ const DashBoard = (props) => {
                 ? constants.FORM_TYPES.APPROVE_TASK.title
                 : formTypeOnClick === "Provide Customer Ratings"
                 ? constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.title
+                : formTypeOnClick === `Close`
+                ? constants.FORM_TYPES.CLOSE_TASK.title
+                : formTypeOnClick === `Raise Dispute`
+                ? constants.FORM_TYPES.RAISE_DISPUTE.title
+                : formTypeOnClick === `Disapprove`
+                ? constants.FORM_TYPES.DISAPPROVE_TASK.title
                 : "Form";
 
         setCurrentFormTypeAndData({

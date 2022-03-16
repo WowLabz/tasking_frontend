@@ -10,15 +10,16 @@ export const FORM_TYPES = {
         type: "Provide Customer Ratings",
         title: "Customer Ratings",
     },
+    CLOSE_TASK: { type: "Close", title: "Close Task" },
+    RAISE_DISPUTE: { type: "Raise Dispute", title: "Raise Dispute" },
+    DISAPPROVE_TASK: { type: "Disapprove", title: "Disapprove Task" },
 };
 
 export const DEFAULT_ACCOUNT_IDS = {
     ALICE: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     BOB: "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
 };
-export const SORTING_OPTIONS = "SORTING_OPTIONS"
-
-export const DOT_MARKETPLACE = `http://65.2.26.225:8001/`;
+export const SORTING_OPTIONS = "SORTING_OPTIONS";
 
 export const SORT_BY = {
     userTags: "UserTags",
@@ -28,4 +29,9 @@ export const SORT_BY = {
     statusPendingRatings: "PendingRatings",
     statusCompleted: "Completed",
     recent: "Recent",
+};
+
+export const USER_TYPE = {
+    CUSTOMER: "Customer",
+    WORKER: "Worker",
 };
