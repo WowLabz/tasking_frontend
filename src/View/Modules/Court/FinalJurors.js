@@ -123,6 +123,9 @@ const FinalJurors = ({ tab }) => {
               <div className="d-flex justify-content-center align-items-center h-100">
                 <Button
                   variant="outline-primary"
+                  disabled={
+                    reduxTask?.status === TASK_STATUS.Completed ? true : false
+                  }
                   onClick={() => {
                     if (isWalletConnected) {
                       setModalShow(true);
@@ -281,6 +284,9 @@ const FinalJurors = ({ tab }) => {
                 <div className="d-flex justify-content-center align-items-center h-100">
                   <Button
                     variant="outline-primary"
+                    disabled={
+                      reduxTask?.status === TASK_STATUS.Completed ? true : false
+                    }
                     onClick={() => {
                       if (isWalletConnected) {
                         setModalShow(true);

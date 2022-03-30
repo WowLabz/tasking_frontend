@@ -13,6 +13,7 @@ import { useLocation } from 'react-router';
 import { getAttributesForCard } from '../DashBoard/helpers';
 import CourtDetails from './CourtDetails';
 import FinalJurors from './FinalJurors';
+import CourtSummary from './CourtSummary';
 
 const Court = ({ match }) => {
   const [tabs, setTabs] = useState([]);
@@ -119,11 +120,6 @@ const Court = ({ match }) => {
               },
               {
                 tabId: 4,
-                tabType: COURT_TAB_TYPE.COMPLETE_TASK,
-                task,
-              },
-              {
-                tabId: 5,
                 tabType: COURT_TAB_TYPE.APPROVE_TASK,
                 task,
               },
@@ -148,17 +144,7 @@ const Court = ({ match }) => {
               },
               {
                 tabId: 4,
-                tabType: COURT_TAB_TYPE.COMPLETE_TASK,
-                task,
-              },
-              {
-                tabId: 5,
-                tabType: COURT_TAB_TYPE.APPROVE_TASK,
-                task,
-              },
-              {
-                tabId: 6,
-                tabType: COURT_TAB_TYPE.RATINGS_FOR_TASK,
+                tabType: COURT_TAB_TYPE.COURT_SUMMARY,
                 task,
               },
             ];
@@ -180,19 +166,57 @@ const Court = ({ match }) => {
                 tabType: COURT_TAB_TYPE.FINAL_JURORS,
                 task,
               },
-              //   {
-              //     tabId: 4,
-              //     tabType: COURT_TAB_TYPE.COMPLETE_TASK,
-              //     task,
-              //   },
-              //   {
-              //     tabId: 5,
-              //     tabType: COURT_TAB_TYPE.APPROVE_TASK,
-              //     task,
-              //   },
               {
-                tabId: 6,
-                tabType: COURT_TAB_TYPE.RATINGS_FOR_TASK,
+                tabId: 4,
+                tabType: COURT_TAB_TYPE.COURT_SUMMARY,
+                task,
+              },
+            ];
+            break;
+          case TASK_STATUS.VotingPeriod:
+            tempTabs = [
+              {
+                tabId: 1,
+                tabType: COURT_TAB_TYPE.COURT_DETAILS,
+                task,
+              },
+              {
+                tabId: 2,
+                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
+                task,
+              },
+              {
+                tabId: 3,
+                tabType: COURT_TAB_TYPE.FINAL_JURORS,
+                task,
+              },
+              {
+                tabId: 4,
+                tabType: COURT_TAB_TYPE.COURT_SUMMARY,
+                task,
+              },
+            ];
+            break;
+          case TASK_STATUS.JuryDecisionReached:
+            tempTabs = [
+              {
+                tabId: 1,
+                tabType: COURT_TAB_TYPE.COURT_DETAILS,
+                task,
+              },
+              {
+                tabId: 2,
+                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
+                task,
+              },
+              {
+                tabId: 3,
+                tabType: COURT_TAB_TYPE.FINAL_JURORS,
+                task,
+              },
+              {
+                tabId: 4,
+                tabType: COURT_TAB_TYPE.COURT_SUMMARY,
                 task,
               },
             ];
@@ -236,6 +260,8 @@ const Court = ({ match }) => {
         return <ApproveTaskCard tab={currTab} />;
       case COURT_TAB_TYPE.RATINGS_FOR_TASK:
         return <RatingsForTaskTask tab={currTab} />;
+      case COURT_TAB_TYPE.COURT_SUMMARY:
+        return <CourtSummary tab={currTab} />;
       default:
         return;
     }

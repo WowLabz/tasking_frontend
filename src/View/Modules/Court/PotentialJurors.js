@@ -109,10 +109,15 @@ const PotentialJurors = ({ tab }) => {
           <Col md={4} xs={4} sm={4} lg={4}>
             <div className="d-flex justify-content-center align-items-center h-100">
               {Object.keys(reduxTask?.dispute?.finalJurors).includes(juror) ? (
-                <p>Accepted</p>
+                <Button variant="outline-secondary" disabled>
+                  Accepted
+                </Button>
               ) : (
                 <Button
                   variant="outline-primary"
+                  disabled={
+                    reduxTask?.status === TASK_STATUS.Completed ? true : false
+                  }
                   onClick={() => {
                     if (isWalletConnected) {
                       setModalShow(true);
