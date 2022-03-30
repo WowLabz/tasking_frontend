@@ -324,6 +324,38 @@ export const disapproveTaskTx = async (api, accountId, taskId) => {
   }
 };
 
+export const acceptJuryDutyTx = async (api, accountId, taskId) => {
+  try {
+    if (api === null) return;
+    let transaction = api.tx.palletTasking.acceptJuryDuty(taskId);
+    await handleSignedTransactions(transaction, accountId);
+  } catch (error) {
+    transactionErrorHandler(error);
+  }
+};
+
+export const castVoteTx = async (
+  api,
+  accountId,
+  taskId,
+  votedFor,
+  customerRating,
+  workerRating
+) => {
+  try {
+    if (api === null) return;
+    let transaction = api.tx.palletTasking.castVote(
+      taskId,
+      votedFor,
+      customerRating,
+      workerRating
+    );
+    await handleSignedTransactions(transaction, accountId);
+  } catch (error) {
+    transactionErrorHandler(error);
+  }
+};
+
 // Accessing chain storage
 
 /**
