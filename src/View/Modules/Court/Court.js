@@ -291,7 +291,6 @@ const Court = ({ match }) => {
                 className="accordion-header d-flex justify-content-start"
               >
                 {tab.tabType}
-
                 <Badge
                   variant={attributesForCard.badgeColor}
                   className={`px-2 mx-2`}

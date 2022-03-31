@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TASK_STATUS } from '../TaskDetails/constants';
 import axios from 'axios';
 import Attachments from './Attachments';
+import BalanceImg from '../../../assets/images/balance.png';
 
 const TaskCard = ({ data, showFormModal }) => {
   const history = useHistory();
@@ -301,7 +302,18 @@ const TaskCard = ({ data, showFormModal }) => {
           }
         >
           <Card.Text className="d-flex justify-content-between align-items-center">
-            <b>{_.capitalize(cardDetails.taskDescription)}</b>
+            <div className="d-flex align-items-center">
+              <b>{_.capitalize(cardDetails.taskDescription)}</b>
+              {data.dispute !== null && (
+                <img
+                  src={BalanceImg}
+                  alt="balance"
+                  width={20}
+                  height={20}
+                  style={{ marginLeft: '8px', marginTop: '-9px' }}
+                />
+              )}
+            </div>
             <Badge
               variant={attributesForCard.badgeColor}
               className={`px-2 mx-2`}
@@ -384,23 +396,6 @@ const TaskCard = ({ data, showFormModal }) => {
               <small>{cardDetails.endDate}</small>
             </div>
           </div>
-
-          {data.dispute !== null && (
-            <div className="d-flex justify-content-end align-items-center">
-              <Badge
-                className={`px-2 m-1`}
-                style={{
-                  color: `${'white'}`,
-                  backgroundColor: `${'#53CBF0'}`,
-                  borderRadius: '10px',
-                  padding: '0.4rem',
-                  fontSize: '10px',
-                }}
-              >
-                Court was Summoned
-              </Badge>
-            </div>
-          )}
         </Card.Body>
         <Card.Footer className="card-footer">
           {attachments.showAttachments && (
