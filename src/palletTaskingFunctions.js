@@ -356,6 +356,16 @@ export const castVoteTx = async (
   }
 };
 
+export const disapproveRatingTx = async (api, accountId, taskId, userType) => {
+  try {
+    if (api === null) return;
+    let transaction = api.tx.palletTasking.disapproveRating(taskId, userType);
+    await handleSignedTransactions(transaction, accountId);
+  } catch (error) {
+    transactionErrorHandler(error);
+  }
+};
+
 // Accessing chain storage
 
 /**

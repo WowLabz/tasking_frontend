@@ -123,7 +123,7 @@ const TaskCard = ({ data, showFormModal }) => {
             </Button>,
             <Button
               variant="danger"
-              name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
+              name={constants.FORM_TYPES.DISAPPROVE_WORKER_RATINGS.type}
               onClick={(e) => showFormModal(e, data)}
             >
               <b>Disapprove Worker Ratings</b>
@@ -151,7 +151,7 @@ const TaskCard = ({ data, showFormModal }) => {
             </Button>,
             <Button
               variant="danger"
-              name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
+              name={constants.FORM_TYPES.DISAPPROVE_CUSTOMER_RATINGS.type}
               onClick={(e) => showFormModal(e, data)}
             >
               <b>Disapprove Customer Ratings</b>
