@@ -356,6 +356,28 @@ export const castVoteTx = async (
   }
 };
 
+export const sudoJurorCastVoteTx = async (
+  api,
+  accountId,
+  taskId,
+  votedFor,
+  customerRating,
+  workerRating
+) => {
+  try {
+    if (api === null) return;
+    let transaction = api.tx.palletTasking.sudoJurorVote(
+      taskId,
+      votedFor,
+      customerRating,
+      workerRating
+    );
+    await handleSignedTransactions(transaction, accountId);
+  } catch (error) {
+    transactionErrorHandler(error);
+  }
+};
+
 export const disapproveRatingTx = async (api, accountId, taskId, userType) => {
   try {
     if (api === null) return;

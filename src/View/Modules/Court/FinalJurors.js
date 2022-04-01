@@ -25,7 +25,10 @@ import { TASK_OPEN_LOGO } from '../../../constants/constants';
 import { getJuror } from './helpers';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { castVoteTx } from '../../../palletTaskingFunctions';
+import {
+  castVoteTx,
+  sudoJurorCastVoteTx,
+} from '../../../palletTaskingFunctions';
 import { useSubstrateState } from '../../../substrate-lib';
 
 const FinalJurors = ({ tab }) => {
@@ -71,7 +74,7 @@ const FinalJurors = ({ tab }) => {
     ratingsForCustomer: '',
   };
 
-  const castVote = async (votedFor, customerRating, workerRating) => {
+  const finalJurorCastVote = async (votedFor, customerRating, workerRating) => {
     await castVoteTx(
       api,
       currentWalletDetails.address,
@@ -82,10 +85,42 @@ const FinalJurors = ({ tab }) => {
     );
   };
 
-  const handleFormSubmit = async (data) => {
+  const sudoJurorCastVote = async (votedFor, customerRating, workerRating) => {
+    await sudoJurorCastVoteTx(
+      api,
+      currentWalletDetails.address,
+      task.taskId,
+      votedFor,
+      customerRating,
+      workerRating
+    );
+  };
+
+  const handleFinalJurorFormSubmit = async (data) => {
     try {
       console.log('Form data:', data);
-      castVote(data.votedFor, data.ratingsForCustomer, data.ratingsForWorker);
+      finalJurorCastVote(
+        data.votedFor,
+        data.ratingsForCustomer,
+        data.ratingsForWorker
+      );
+    } catch (error) {
+      console.log(error);
+      toast.error(`Use Default Accounts Alice or Bob, Error: ${error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      });
+    }
+  };
+
+  const handleSudoJurorFormSubmit = async (data) => {
+    try {
+      console.log('Form data:', data);
+      sudoJurorCastVote(
+        data.votedFor,
+        data.ratingsForCustomer,
+        data.ratingsForWorker
+      );
     } catch (error) {
       console.log(error);
       toast.error(`Use Default Accounts Alice or Bob, Error: ${error}`, {
@@ -168,7 +203,7 @@ const FinalJurors = ({ tab }) => {
                       onSubmit={async (data, { setSubmitting, resetForm }) => {
                         console.log('form data', data);
                         setSubmitting(true);
-                        await handleFormSubmit(data);
+                        await handleSudoJurorFormSubmit(data);
                         setSubmitting(false);
                         resetForm();
                         handleClose();
@@ -332,7 +367,7 @@ const FinalJurors = ({ tab }) => {
                         ) => {
                           console.log('form data', data);
                           setSubmitting(true);
-                          await handleFormSubmit(data);
+                          await handleFinalJurorFormSubmit(data);
                           setSubmitting(false);
                           resetForm();
                           handleClose();
