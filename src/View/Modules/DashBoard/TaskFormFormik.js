@@ -42,6 +42,8 @@ let initialValues = {
   taskCost: '',
   taskDescription: '',
   taskTags: [],
+  workerRating: '',
+  customerRating: '',
   isFieldDisabled: false,
   submitButtonName: 'Submit',
   ratings: '',
@@ -174,6 +176,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
         initialValues.taskDuration = data.taskDeadline;
         initialValues.taskCost = data.cost;
         initialValues.taskDescription = data.taskDescription;
+        initialValues.workerRating = data.finalWorkerRating;
         initialValues.isFieldDisabled = true;
         initialValues.submitButtonName = 'Disapprove Worker Ratings';
         return;
@@ -184,6 +187,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
         initialValues.taskDuration = data.taskDeadline;
         initialValues.taskCost = data.cost;
         initialValues.taskDescription = data.taskDescription;
+        initialValues.customerRating = data.finalCustomerRating;
         initialValues.isFieldDisabled = true;
         initialValues.submitButtonName = 'Disapprove Customer Ratings';
         return;
@@ -237,7 +241,8 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
           return await palletTaskingFunctions.provideCustomerRatingsTx(
             api,
             data.accountId,
-            data.taskId
+            data.taskId,
+            data.ratings
           );
 
         case constants.FORM_TYPES.CLOSE_TASK.type:
@@ -489,6 +494,30 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                   // value={values.taskDescription}
                   isDisabled={values.isFieldDisabled}
                 />
+
+                {formType.type ===
+                  constants.FORM_TYPES.DISAPPROVE_WORKER_RATINGS.type && (
+                  <FormLabelAndInput
+                    name="workerRating"
+                    type="text"
+                    label="Worker Rating"
+                    helperText={''}
+                    // value={values.taskDescription}
+                    isDisabled={values.isFieldDisabled}
+                  />
+                )}
+
+                {formType.type ===
+                  constants.FORM_TYPES.DISAPPROVE_CUSTOMER_RATINGS.type && (
+                  <FormLabelAndInput
+                    name="customerRating"
+                    type="text"
+                    label="Customer Rating"
+                    helperText={''}
+                    // value={values.taskDescription}
+                    isDisabled={values.isFieldDisabled}
+                  />
+                )}
 
                 {formType.type === constants.FORM_TYPES.CREATE_TASK.type && (
                   <FormLabelAndDropDownWithMultipleValue
