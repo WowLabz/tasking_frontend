@@ -16,6 +16,7 @@ export const DEFAULT_ACCOUNT_IDS = {
   FERDIE: '5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL',
 };
 
+// this will be as per project with milestones
 export const TYPES = {
   Balance: 'u64',
   TaskDetails: {
@@ -27,7 +28,7 @@ export const TYPES = {
     cost: 'Balance',
     is_bidded: 'bool',
     is_completed: 'bool',
-  },
+  }
 };
 
 /**
@@ -200,6 +201,35 @@ export const createTaskTx = async (
 
     await handleSignedTransactions(transaction, accountId);
   } catch (error) {
+    transactionErrorHandler(error);
+  }
+};
+
+// create project transaction
+export const createProjectTx = async (
+  api,
+  accountId,
+  project 
+) => {
+  try {
+    if(api == null) return;
+    const publisherName = project.publisherName;
+    const projectName = project.name;
+    const tags = project.tags;
+    const milestoneOne = project.milestones[0];
+    const restMilestones = [...project.milestones];
+    restMilestones.shift();
+    console.log(project.publisherName);
+    let transaction = await api.tx.palletTasking.createProject(
+      publisherName, 
+      projectName, 
+      tags, 
+      milestoneOne, 
+      restMilestones
+    );
+    
+    await handleSignedTransactions(transaction,accountId);
+  } catch(error) {
     transactionErrorHandler(error);
   }
 };

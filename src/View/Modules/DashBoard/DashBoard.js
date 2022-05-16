@@ -3,14 +3,15 @@ import { Container, Row, Col, Button, Modal, Card } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 import { useSubstrateState } from '../../../substrate-lib';
 import TestingSubstrateLib from '../../../TestingSubstrateLib';
-import * as palletTaskingFunctions from '../../../palletTaskingFunctions';
+import * as palletTaskingFunctions from '../../../palletTaskingFunctions'; // this
 import * as actionCreators from './actionCreators';
 import './Dashboard.css';
-import TaskCard from './TaskCard';
-import TaskFormFormik from './TaskFormFormik';
+import TaskCard from './TaskCard'; // this
+import TaskFormFormik from './TaskFormFormik'; // this
 import * as constants from './constants';
 import staticData from '../../../assets/staticData/staticData.json';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -23,6 +24,7 @@ toast.configure();
 const DashBoard = (props) => {
   const { api, keyring } = useSubstrateState();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const tasks = useSelector((state) => state.dashBoardReducer.tasks);
 
@@ -47,7 +49,8 @@ const DashBoard = (props) => {
     const init = async () => {
       try {
         // palletTaskingFunctions.handleOnChainEvents(api, toast);
-        const getTasksResult = await palletTaskingFunctions.getAllTasks(api);
+        const getTasksResult = await palletTaskingFunctions.getAllTasks(api); // async function 
+
         if (getTasksResult) {
           console.log(`All Tasks From Chain: ${getTasksResult.length}`);
           console.log(getTasksResult);
@@ -119,7 +122,7 @@ const DashBoard = (props) => {
       <Row className="p-4">
         <div className="d-flex justify-content-between align-items-center">
           <h2 style={{ margin: '0' }}>Marketplace</h2>
-          <Button
+          {/* <Button
             name={constants.FORM_TYPES.CREATE_TASK.type}
             onClick={(e) => {
               if (!isWalletConnected) {
@@ -133,6 +136,20 @@ const DashBoard = (props) => {
             }}
           >
             Create New Task
+          </Button> */}
+          <Button
+            onClick={(e) => {
+              if(!isWalletConnected) {
+                toast.error(`Connect crypto wallet`, {
+                  position: toast.POSITION.TOP_RIGHT,
+                  autoClose: 2000,
+                });
+              } else {
+                history.push('/create-project');
+              }
+            }}
+          >
+            Create New Project
           </Button>
         </div>
         <CardForAirDrop />

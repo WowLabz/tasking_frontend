@@ -1,3 +1,3 @@
 {
-  "PROVIDER_SOCKET": "wss://social_li_n1.wowlabz.com/"
+  "PROVIDER_SOCKET": "ws://127.0.0.1:9944"
 }

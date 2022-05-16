@@ -6,6 +6,7 @@ import TaskDetails from "./View/Modules/TaskDetails/TaskDetails";
 import "./View/Modules/DashBoard/Dashboard.css";
 import ProtectedRoute from "./ProtectedRoutes";
 import Court from "./View/Modules/Court/Court";
+import CreateProject from "./View/Modules/CreateProject/CreateProject";
 
 const Routes = ({ match }) => {
     return (
@@ -21,6 +22,10 @@ const Routes = ({ match }) => {
                     <ProtectedRoute
                         path="/court/:id"
                         component={Court}
+                    />
+                    <ProtectedRoute
+                        path="/create-project"
+                        component={CreateProject}
                     />
                 </Switch>
             </Router>

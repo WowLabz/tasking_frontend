@@ -10,3 +10,4 @@ build
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+.env

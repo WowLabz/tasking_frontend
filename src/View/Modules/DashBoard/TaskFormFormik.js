@@ -462,6 +462,7 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
                     isDisabled={values.isFieldDisabled}
                   />
                 )}
+                
                 <FormLabelAndInput
                   placeholder={
                     !values.isFieldDisabled ? `TaskDuration (in Days)` : ''
