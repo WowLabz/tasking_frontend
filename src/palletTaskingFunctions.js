@@ -205,7 +205,12 @@ export const createTaskTx = async (
   }
 };
 
-// create project transaction
+/**
+ * createTask function from the palletTasking
+ * @param {*} api
+ * @param {AccountId} accountIdFromKeyRing
+ * @param {Project} project
+ */
 export const createProjectTx = async (
   api,
   accountId,
@@ -432,6 +437,17 @@ export const taskCountQuery = async (api) => {
 };
 
 /**
+ * ProjectCount Storage value
+ * from pallet tasking
+ * @returns projectCount
+ */
+export const projectCountQuery = async (api) => {
+  if ( api === null ) return;
+  const projectCount = await api.query.palletTasking.projectCount();
+  return projectCount;
+}
+
+/**
  * TaskStorage Storage value
  * from pallet tasking
  * @param {Number} taskId
@@ -442,6 +458,19 @@ export const taskStorageQuery = async (api, taskId) => {
   let task = await api.query.palletTasking.taskStorage(taskId);
   return task.toHuman();
 };
+
+/**
+ * ProjectStorage Storage value
+ * from pallet tasking
+ * @param {Number} projectId
+ * @returns {Project}
+ */
+export const projectStorageQuery = async ( api, projectId ) => {
+  if ( api === null ) return;
+  
+  const project = await api.query.palletTasking.projectStorage(projectId);
+  return project.toHuman();
+}
 
 /**
  * Function to get all the tasks
@@ -466,6 +495,32 @@ export const getAllTasks = async (api) => {
   console.log(`Getting All Tasks, Total Tasks from Chain: ${taskArr.length}`);
   return taskArr;
 };
+
+/**
+ * Function to get all the projects
+ * from the chain storage
+ * @param {*} api
+ * @returns allProjects array
+ */
+export const getAllProjects = async (api) => {
+  if( api === null ) return;
+
+  const projectCountFromBackend = await projectCountQuery(api);
+  
+  console.log(`Getting All Projects, ProjectCount at Chain: ${projectCountFromBackend}`);
+
+  const projectArr = [];
+  
+  for( let index = 0; index < projectCountFromBackend; index++ ) {
+    let singleProject = await projectStorageQuery(api, index);
+    projectArr.push(singleProject);
+  }
+
+  console.log(`Getting All Projects, Total Projects from Chain: ${projectArr.length}`);
+  
+  return projectArr
+  
+}
 
 // Testing counter functions in pallet tasking
 
