@@ -68,20 +68,16 @@ export const getAccountsFromKeyRing = () => {
  * @param {events} param
  */
 export const transactionEventHandler = (events, status) => {
-  console.log('Transaction status:', status.type);
-  // toast.info(`Transaction status: ${status.type}`, {
-  //     position: toast.POSITION.TOP_RIGHT,
-  //     autoClose: 5000,
-  // });
+  // console.log('Transaction status:', status.type);
   const toastArr = [];
 
   if (status.isInBlock) {
-    console.log('Included at block hash', status.asInBlock.toHex());
-    console.log('Events:');
-    // toast.info(`Included at block hash ${status.asInBlock.toHex()}`, {
-    //     position: toast.POSITION.TOP_RIGHT,
-    //     autoClose: 3000,
-    // });
+    // console.log('Included at block hash', status.asInBlock.toHex());
+    // console.log('Events:');
+    toast.info(`Included at block hash ${status.asInBlock.toHex()}`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+    });
 
     events.forEach(({ event: { data, method, section }, phase }) => {
       if (method === 'ExtrinsicFailed') {
@@ -99,12 +95,12 @@ export const transactionEventHandler = (events, status) => {
         // });
       }
 
-      console.log(
-        '\t',
-        phase.toString(),
-        `: ${section}.${method}`,
-        data.toString()
-      );
+      // console.log(
+      //   '\t',
+      //   phase.toString(),
+      //   `: ${section}.${method}`,
+      //   data.toString()
+      // );
       toastArr.push(`\n${section}.${method}`);
     });
   } else if (status.isFinalized) {
@@ -219,12 +215,11 @@ export const createProjectTx = async (
   try {
     if(api == null) return;
     const publisherName = project.publisherName;
-    const projectName = project.name;
+    const projectName = project.projectName;
     const tags = project.tags;
     const milestoneOne = project.milestones[0];
     const restMilestones = [...project.milestones];
     restMilestones.shift();
-    console.log(project.publisherName);
     let transaction = await api.tx.palletTasking.createProject(
       publisherName, 
       projectName, 
@@ -238,6 +233,60 @@ export const createProjectTx = async (
     transactionErrorHandler(error);
   }
 };
+
+/**
+ * Add milestone to the project
+ * @param {*} api 
+ * @param {*} accountId 
+ * @param {*} projectId
+ * @param {*} milestone
+ */
+
+export const addMilestoneToProjectTx = async ( api, accountId, projectId, milestone ) => {
+  try{
+    if(api === null) return;
+    const transaction = api.tx.palletTasking.addMilestonesToProject(projectId, milestone);
+    await handleSignedTransactions(transaction, accountId);
+  }catch(error) {
+    transactionErrorHandler(error);
+  }
+}
+
+
+/**
+ * 
+ * @param {*} api 
+ * @param {*} accountId 
+ * @param {*} projectId 
+ */
+
+export const addProjectToMarketplaceTx = async ( api, accountId, projectId ) => {
+  try {
+    if ( api == null ) return;
+    const transaction = api.tx.palletTasking.addProjectToMarketplace(projectId);
+    await handleSignedTransactions(transaction, accountId);
+  }catch( error ) {
+    transactionErrorHandler(error);
+  }
+};
+
+
+/**
+ * 
+ * @param {*} api 
+ * @param {*} accountId 
+ * @param {*} projectId
+ */
+
+export const closeProjectTx = async ( api, accountId, projectId ) => {
+  try{
+    if( api === null ) return;
+    const transaction = api.tx.palletTasking.closeProject(projectId);
+    await handleSignedTransactions(transaction, accountId);
+  } catch(error ) {
+    transactionErrorHandler(error);
+  }
+}
 
 /**
  * bidForTask function from palletTasking
@@ -500,7 +549,7 @@ export const getAllTasks = async (api) => {
  * Function to get all the projects
  * from the chain storage
  * @param {*} api
- * @returns allProjects array
+ * @returns allProjects
  */
 export const getAllProjects = async (api) => {
   if( api === null ) return;
@@ -511,7 +560,7 @@ export const getAllProjects = async (api) => {
 
   const projectArr = [];
   
-  for( let index = 0; index < projectCountFromBackend; index++ ) {
+  for( let index = 1; index <= projectCountFromBackend; index++ ) {
     let singleProject = await projectStorageQuery(api, index);
     projectArr.push(singleProject);
   }

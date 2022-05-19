@@ -26,7 +26,24 @@ const DashBoard = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const filterProjects = (projects) => {
+    const milestones = [];
+    for(let index = 0; index < projects.length; index++ ){
+      const project = projects[index];
+
+      if(project.status === 'Open') {
+
+        project.milestones.map((milestone) => {
+          milestones.push(milestone);
+        });
+
+      }
+    }
+    return milestones;
+  }
+
   const tasks = useSelector((state) => state.dashBoardReducer.tasks);
+  const milestones = filterProjects(tasks);
 
   const currentUserTags = useSelector(
     (state) => state.authenticationReducer.currentUserName.user_tags
@@ -49,31 +66,32 @@ const DashBoard = (props) => {
     const init = async () => {
       try {
         // palletTaskingFunctions.handleOnChainEvents(api, toast);
-        const getTasksResult = await palletTaskingFunctions.getAllTasks(api); // async function 
+        // const getTasksResult = await palletTaskingFunctions.getAllTasks(api); // async function 
+        const getProjectResult = await palletTaskingFunctions.getAllProjects(api);
 
-        if (getTasksResult) {
-          console.log(`All Tasks From Chain: ${getTasksResult.length}`);
-          console.log(getTasksResult);
+        if (getProjectResult) {
+          console.log(`All Tasks From Chain: ${getProjectResult.length}`);
+          console.log(getProjectResult);
 
-          let sortedArr = [];
-          console.log(sortByOption);
-          switch (sortByOption) {
-            case constants.SORT_BY.userTags:
-              sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
-              break;
-            case constants.SORT_BY.statusOpen:
-            case constants.SORT_BY.statusInProgress:
-            case constants.SORT_BY.statusPendingApproval:
-            case constants.SORT_BY.statusPendingRatings:
-            case constants.SORT_BY.statusPendingRatings:
-            case constants.SORT_BY.statusCompleted:
-            case constants.SORT_BY.recent:
-            default:
-              sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
-              break;
-          }
+          // let sortedArr = [];
+          // console.log(sortByOption);
+          // switch (sortByOption) {
+          //   case constants.SORT_BY.userTags:
+          //     sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
+          //     break;
+          //   case constants.SORT_BY.statusOpen:
+          //   case constants.SORT_BY.statusInProgress:
+          //   case constants.SORT_BY.statusPendingApproval:
+          //   case constants.SORT_BY.statusPendingRatings:
+          //   case constants.SORT_BY.statusPendingRatings:
+          //   case constants.SORT_BY.statusCompleted:
+          //   case constants.SORT_BY.recent:
+          //   default:
+          //     sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
+          //     break;
+          // }
 
-          dispatch(actionCreators.setTasksFromBackEnd(sortedArr));
+          dispatch(actionCreators.setTasksFromBackEnd(getProjectResult));
         }
       } catch (error) {
         console.log(`catchError at useEffect : ${error.stack}`);
@@ -162,8 +180,12 @@ const DashBoard = (props) => {
           // </span>
           <Empty description={<span>Create new tasks</span>} />
         )}
-        {tasks.length > 0 &&
+        {/* {tasks.length > 0 &&
           tasks.map((task, index) => (
+            <TaskCard data={task} showFormModal={showFormModal} key={index} />
+          ))} */}
+          {milestones.length > 0 &&
+          milestones.map((task, index) => (
             <TaskCard data={task} showFormModal={showFormModal} key={index} />
           ))}
       </Row>

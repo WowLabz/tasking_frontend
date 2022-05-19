@@ -13,18 +13,18 @@ const TaskCard = ({ data, showFormModal }) => {
   const history = useHistory();
   const [attributesForCard, setAttributesForCard] = useState({});
   const [cardDetails, setCardDetails] = useState({
-    taskId: null,
+    milestoneId: null,
     client: null,
     workerId: null,
-    taskDeadline: null,
+    deadline: null,
     cost: null,
     status: null,
-    taskDescription: null,
+    milestoneName: null,
     publisherName: null,
     workerName: null,
     startDate: null,
     endDate: null,
-    taskTags: [],
+    tags: [],
     workerAttachments: [],
     publisherAttachments: [],
   });
@@ -174,7 +174,7 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.taskId}`)}
+              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -187,7 +187,7 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.taskId}`)}
+              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -200,7 +200,7 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.taskId}`)}
+              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -267,7 +267,7 @@ const TaskCard = ({ data, showFormModal }) => {
       let today = new Date();
       let startDate = today.toLocaleDateString();
       let endDate = today
-        .addDays(parseInt(data.taskDeadline))
+        .addDays(parseInt(data.deadline))
         .toLocaleDateString();
       handleAttachments(data.workerAttachments, data.publisherAttachments);
       setCardDetails({
@@ -297,13 +297,13 @@ const TaskCard = ({ data, showFormModal }) => {
         <Card.Body
           onClick={() =>
             history.push({
-              pathname: `/taskdetails/${cardDetails.taskId}`,
+              pathname: `/taskdetails/${cardDetails.milestoneId}`,
             })
           }
         >
           <Card.Text className="d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center">
-              <b>{_.capitalize(cardDetails.taskDescription)}</b>
+              <b>{_.capitalize(cardDetails.milestoneName)}</b>
               {data.dispute !== null && (
                 <img
                   src={BalanceImg}
@@ -352,20 +352,20 @@ const TaskCard = ({ data, showFormModal }) => {
             )}
           </div>
           <Card.Text>
-            <b>TaskId:</b> {cardDetails.taskId}
+            <b>milestoneId:</b> {cardDetails.milestoneId}
           </Card.Text>
           <Card.Text>
-            <b>TaskDeadline: </b>
-            {cardDetails.taskDeadline} days
+            <b>deadline: </b>
+            {cardDetails.deadline} days
           </Card.Text>
           <Card.Text>
             <b>TaskCost:</b> {cardDetails.cost}
           </Card.Text>
           <div>
-            <b>TaskTags:</b>
+            <b>tags:</b>
           </div>
           <div>
-            {cardDetails.taskTags.map((tag, idx) => (
+            {cardDetails.tags.map((tag, idx) => (
               <Badge
                 variant={`secondary`}
                 className={`px-2 m-1`}

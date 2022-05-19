@@ -3,25 +3,23 @@ import {
     Card,
     Form,
     FormControl,
-    Button
+    Button,
+    Spinner
 } from 'react-bootstrap';
 import Select from 'react-select';
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import axios from 'axios';
+
 
 import apiHelpers from '../../../Utilities/axiosHelpers';
-import { mergeScan } from "rxjs";
 
 toast.configure();
 
 const MilestoneForm = (props) => {
     const tags = props.tags;
     const title = props.title;
-    const setShowModel = props.setShowModel;
+    
     const index = props.showModel.index;
     const project = props.project;
-    const setProject = props.setProject;
 
     const [milestone, setMilestone] = useState({
         name: '',
@@ -39,6 +37,9 @@ const MilestoneForm = (props) => {
 
     //for file 
     const [file, setFile] = useState(null);
+
+    // to show the upload spinner
+    const [ showSpinner, setShowSpinner ] = useState(false);
     
 
     // If the user is trying to edit the milestone then this will initialize the values
@@ -101,59 +102,30 @@ const MilestoneForm = (props) => {
         }
     }
 
-    const onFormSubmit = (event) => {
-        event.preventDefault();
-        const tempErrors = validateForm();
-        if(Object.keys(tempErrors).length > 0 ) {
-            setErrors(tempErrors);
-        }else{
-            if(index === -1) {
-                const tempProject = {...project};
-                tempProject.milestones.push(milestone);
-                setProject(tempProject);
-            }else{
-                const tempProject = {...project};
-                tempProject.milestones[index] = milestone;
-                setProject(tempProject);
-            }
-            setShowModel({
-                show:false,
-                index: -1
-            });
-        }
-    }
-
-    const onFormDelete = () => {
-        const tempProject = {...project};
-        const milestoneLength = tempProject.milestones.length;
-        for(let i=index; i<milestoneLength - 1; i++){
-            tempProject.milestones[i] = tempProject.milestones[i+1];
-        }
-        tempProject.milestones.pop();
-        setProject(tempProject);
-        setShowModel({
-            show: false,
-            index: -1
-        });
-    }
-
     const onFileUpload = async (event) => {
         event.preventDefault();
+        if(file === null){
+            setErrors({
+                ...errors,
+                ['publisherAttachments']: 'Please provide a file'
+            })
+            return;
+        }
         let headerObj = {
             headers:  {
                 "Content-Type": "multipart/form-data"
             }
         }
-        const url = 'http://localhost:8001/upload-file/'
-        let res = await apiHelpers.postWithHeaders(url, file, headerObj);
-        console.log(res);
+        const url = 'http://localhost:8001/upload-file/';
+        let res;
         try{
+            setShowSpinner(true);
+            res = await apiHelpers.postWithHeaders(url, file, headerObj);
+            setShowSpinner(false);
             if(res.status === 202 || res.status === 200) {
-                console.log('result is accepted');
                 const tempMilestone = {...milestone};
                 tempMilestone.publisherAttachments[0] = res.data.message;
                 setMilestone(tempMilestone);
-                console.log(milestone);
             }else {
                 setErrors({
                     ...errors,
@@ -163,7 +135,7 @@ const MilestoneForm = (props) => {
         }catch(e) {
             setErrors({
                 ...errors,
-                ['publisherAttachments']: 'Please provide a file'
+                ['publisherAttachments']: 'Something went wrong'
             });
         }
         
@@ -236,6 +208,9 @@ const MilestoneForm = (props) => {
                         <div>
                             <Form.Group className="mb-3">
                                 <Form.Label>Upload File</Form.Label>
+                                { showSpinner && (
+                                    <Spinner animation="border" size="sm" />
+                                )}
                                 <br />
                                 <FormControl 
                                     type="file" 
@@ -277,7 +252,7 @@ const MilestoneForm = (props) => {
                         <Button
                             variant="dark"
                             type="submit"
-                            onClick={onFormSubmit}
+                            onClick={(event) => props.onFormSubmit(event,milestone,validateForm,setErrors,index)}
                             disabled={!valid}
                         >
                             {title}
@@ -286,7 +261,7 @@ const MilestoneForm = (props) => {
                             index !== -1 && 
                             <Button
                                 variant="danger"
-                                onClick={onFormDelete}
+                                onClick={(event) => props.onFormDelete(index)}
                             >
                                 Delete Milestone
                             </Button>

@@ -7,6 +7,7 @@ import "./View/Modules/DashBoard/Dashboard.css";
 import ProtectedRoute from "./ProtectedRoutes";
 import Court from "./View/Modules/Court/Court";
 import CreateProject from "./View/Modules/CreateProject/CreateProject";
+import UserDashboard from "./View/Modules/UserDashboard/UserDashboard";
 
 const Routes = ({ match }) => {
     return (
@@ -26,6 +27,10 @@ const Routes = ({ match }) => {
                     <ProtectedRoute
                         path="/create-project"
                         component={CreateProject}
+                    />
+                    <ProtectedRoute 
+                        path="/user"
+                        component={UserDashboard}
                     />
                 </Switch>
             </Router>

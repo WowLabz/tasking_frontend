@@ -11,6 +11,17 @@ import * as CONSTANTS from './constants';
 }
 
 /**
+ * Get available projects
+ */
+
+export const setProjects = (data) => {
+    return {
+        type: CONSTANTS.GET_PROJECTS,
+        payload: data,
+    }
+}
+
+/**
  * Set the attributes for tasks required for the cards
  */
 export const setAttributiesForTaskCard = (data) => {

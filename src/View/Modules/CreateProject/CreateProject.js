@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {  Row, Col, Button, Modal, Card, InputGroup, FormControl, Image, Form} from 'react-bootstrap';
+import {  Row, Button, InputGroup, FormControl, Form} from 'react-bootstrap';
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Select from 'react-select'
+import { useHistory } from "react-router-dom";
 
 import { useSubstrateState } from "../../../substrate-lib";
 import CardForAirDrop from "../DashBoard/CardForAirDrop";
@@ -16,9 +17,10 @@ import * as palletTaskingFunctions from '../../../palletTaskingFunctions'
 
 toast.configure();
 
-const CreateProject = (props) => {
+const CreateProject = () => {
 
     const { api } = useSubstrateState();
+    const history = useHistory();
 
     const [project, setProject] = useState({
         publisherName: '',
@@ -32,7 +34,6 @@ const CreateProject = (props) => {
         show: false,
         index: -1
     });
- 
 
     const [valid, setValid] = useState(false)
 
@@ -80,6 +81,41 @@ const CreateProject = (props) => {
         );
     };
     
+    const onMilestoneCreate = (event,milestone,validateForm,setErrors,index) => {
+        event.preventDefault();
+        const tempErrors = validateForm();
+        if(Object.keys(tempErrors).length > 0 ) {
+            setErrors(tempErrors);
+        }else{
+            if(index === -1) {
+                const tempProject = {...project};
+                tempProject.milestones.push(milestone);
+                setProject(tempProject);
+            }else{
+                const tempProject = {...project};
+                tempProject.milestones[index] = milestone;
+                setProject(tempProject);
+            }
+            setShowModel({
+                show:false,
+                index: -1
+            });
+        }
+    };
+
+    const onMilestoneDelete = (index) => {
+        const tempProject = {...project};
+        const milestoneLength = tempProject.milestones.length;
+        for(let i=index; i<milestoneLength - 1; i++){
+            tempProject.milestones[i] = tempProject.milestones[i+1];
+        }
+        tempProject.milestones.pop();
+        setProject(tempProject);
+        setShowModel({
+            show: false,
+            index: -1
+        });
+    };
 
     return (
         <>
@@ -190,6 +226,8 @@ const CreateProject = (props) => {
                 filteredTags={filteredTags} 
                 project={project}
                 setProject={setProject}
+                onMilestoneCreate={onMilestoneCreate}
+                onMilestoneDelete={onMilestoneDelete}
             />
         </>
     );
