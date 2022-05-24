@@ -4,6 +4,7 @@ import { Badge, Card, Button, Col, NavLink } from 'react-bootstrap';
 
 import MilestoneModal from "../CreateProject/MilestoneModal";
 import { addMilestoneToProjectTx, addProjectToMarketplaceTx, closeProjectTx } from "../../../palletTaskingFunctions";
+import { ProjectDetailCard } from "../ProjectDetails/ProjectDetailCard";
 
 const ProjectCard = (props) => {
 
@@ -46,57 +47,57 @@ const ProjectCard = (props) => {
         await closeProjectTx(props.api, props.user.address, project.projectId );
     };
 
-    const getAttributesForCard = (project) => {
-        const attribute = {};
+    // const getAttributesForCard = (project) => {
+    //     const attribute = {};
 
-        const addMilestoneButton = (
-            <Button
-                onClick={ (e) => setShowModel({show: true, index: -1}) }
-            >
-                Add Milestone
-            </Button>
-            );
+    //     const addMilestoneButton = (
+    //         <Button
+    //             onClick={ (e) => setShowModel({show: true, index: -1}) }
+    //         >
+    //             Add Milestone
+    //         </Button>
+    //         );
         
-        const addToMarketplaceButton = (
-            <Button
-                onClick={ (e) => onAddProjectToMarketplace(e) }
-            >
-                Add to marketplace
-            </Button>
-            );
+    //     const addToMarketplaceButton = (
+    //         <Button
+    //             onClick={ (e) => onAddProjectToMarketplace(e) }
+    //         >
+    //             Add to marketplace
+    //         </Button>
+    //         );
 
-        const closeProjectButton = (
-            <Button
-                variant="danger"
-                onClick={ (e) => onCloseProject(e) }
-            >
-                Close Project
-            </Button>
-        );
-        attribute.button = [];
-        switch (project.status) {
-            case 'Ready':
-                attribute.badgeColor = 'yellow';
-                attribute.button.push(
-                    addToMarketplaceButton
-                );
-                if(project.milestones.length < 5) {
-                    attribute.button.push(
-                        addMilestoneButton
-                    );
-                }
-                break;
-            case 'Open':
-                attribute.badgeColor = 'green';
-                attribute.button.push(closeProjectButton);
-                break;
-            case 'Closed':
-                attribute.badgeColor = 'grey';
-                break;
-        }
-        return attribute;
-    }
-    const attributes = getAttributesForCard(project);
+    //     const closeProjectButton = (
+    //         <Button
+    //             variant="danger"
+    //             onClick={ (e) => onCloseProject(e) }
+    //         >
+    //             Close Project
+    //         </Button>
+    //     );
+    //     attribute.button = [];
+    //     switch (project.status) {
+    //         case 'Ready':
+    //             attribute.badgeColor = 'yellow';
+    //             attribute.button.push(
+    //                 addToMarketplaceButton
+    //             );
+    //             if(project.milestones.length < 5) {
+    //                 attribute.button.push(
+    //                     addMilestoneButton
+    //                 );
+    //             }
+    //             break;
+    //         case 'Open':
+    //             attribute.badgeColor = 'green';
+    //             attribute.button.push(closeProjectButton);
+    //             break;
+    //         case 'Closed':
+    //             attribute.badgeColor = 'grey';
+    //             break;
+    //     }
+    //     return attribute;
+    // }
+    // const attributes = getAttributesForCard(project);
 
     const taskTagsForForm = useSelector(
         (state) => state.authenticationReducer.userTags
@@ -106,7 +107,7 @@ const ProjectCard = (props) => {
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center">
-                <Card 
+                {/* <Card 
                     className="text-left p-1 d-flex justify-content-between" 
                     style={{width: '300px', height: '400px' }}
                 >
@@ -174,7 +175,13 @@ const ProjectCard = (props) => {
                             {attributes.button}
                         </div>
                     </Card.Footer>
-                </Card>
+                </Card> */}
+                <ProjectDetailCard 
+                    onAddProjectToMarketplace={onAddProjectToMarketplace}
+                    setShowModel={setShowModel}
+                    onCloseProject={onCloseProject}
+                    project={project}
+                />
             </div>
             <MilestoneModal
                 showModel={showModel}

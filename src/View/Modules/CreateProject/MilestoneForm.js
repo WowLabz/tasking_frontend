@@ -8,6 +8,7 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { toast } from "react-toastify";
+import { Segment, Icon, Header } from "semantic-ui-react";
 
 
 import apiHelpers from '../../../Utilities/axiosHelpers';
@@ -208,24 +209,37 @@ const MilestoneForm = (props) => {
                         <div>
                             <Form.Group className="mb-3">
                                 <Form.Label>Upload File</Form.Label>
-                                { showSpinner && (
-                                    <Spinner animation="border" size="sm" />
-                                )}
                                 <br />
-                                <FormControl 
-                                    type="file" 
-                                    size="sm"
-                                    name="filesent"
-                                    isInvalid={!!errors.publisherAttachments}
-                                    onChange={(event) => {
-                                        const formFile = new FormData();
-                                        formFile.append('filesent', event.target.files[0]);
-                                        setFile(formFile);
-                                    }}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.publisherAttachments}
-                                </Form.Control.Feedback>
+                                <Segment placeholder loading={showSpinner}>
+                                    {/* { showSpinner && (
+                                        <Spinner animation="border" size="sm" />
+                                    )} */}
+                                    <Header icon>
+                                        <Icon name="file pdf outline" />
+                                        Add a file
+                                    </Header>
+                                    <Button onClick={e => {
+                                        {document.getElementById('imgupload').click()}
+                                    }}>
+                                        Add File
+                                    </Button>
+                                    <FormControl 
+                                        type="file" 
+                                        size="sm"
+                                        name="filesent"
+                                        id="imgupload"
+                                        isInvalid={!!errors.publisherAttachments}
+                                        onChange={(event) => {
+                                            const formFile = new FormData();
+                                            formFile.append('filesent', event.target.files[0]);
+                                            setFile(formFile);
+                                        }}
+                                        style={{display:'none'}}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.publisherAttachments}
+                                    </Form.Control.Feedback>
+                                </Segment>
                                 <Button
                                     variant="warning"
                                     onClick={onFileUpload}

@@ -97,10 +97,12 @@ const DashBoard = (props) => {
         console.log(`catchError at useEffect : ${error.stack}`);
       }
     };
+    init();
     setInterval(() => {
       init();
     }, 5000);
-  }, [api?.query.palletTasking]);
+  }, [api]);
+  // }, [api?.query.palletTasking]);
 
   const showFormModal = (e, data) => {
     const formTypeOnClick = e.target.innerText;
@@ -163,11 +165,11 @@ const DashBoard = (props) => {
                   autoClose: 2000,
                 });
               } else {
-                history.push('/create-project');
+                history.push('/user');
               }
             }}
           >
-            Create New Project
+            User Dashboard
           </Button>
         </div>
         <CardForAirDrop />

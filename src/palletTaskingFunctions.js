@@ -305,6 +305,24 @@ export const bidForTaskTx = async (api, accountId, taskId, workerName) => {
 };
 
 /**
+ * 
+ * @param {*} api 
+ * @param {AccountId} accountId 
+ * @param {String} milestoneId
+ * @param {String} workerName
+ */
+
+export const bidForMilestoneTx = async (api, accountId, milestoneId, workerName) => {
+  try{
+    if (api === null) return;
+    let transaction = api.tx.palletTasking.bidForMilestone(milestoneId,workerName);
+    await handleSignedTransactions(transaction, accountId);
+  }catch(error) {
+    transactionErrorHandler(error);
+  }
+}
+
+/**
  * aprrove function from palletTasking
  * @param {*} api
  * @param {AccountId} accountIdFromKeyRing

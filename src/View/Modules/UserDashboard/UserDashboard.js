@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {  Row, Col, Button, Modal, Card, CardGroup, InputGroup, FormControl, Image, Form} from 'react-bootstrap';
+import { Segment, Container, Icon, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Select from 'react-select';
@@ -63,6 +64,51 @@ const UserDashboard = () => {
 
     },[projects, walletUser]);
 
+    if(userProjects.length === 0) {
+        return (
+            <div>
+                 <Row className="p-4">
+                    <div className="d-flex justify-content-between align-items-center">
+                    <h2 style={{ margin: '0' }}>User Dashboard</h2>
+                    <Button
+                        onClick={(e) => {
+                        if(!isWalletConnected) {
+                            toast.error(`Connect crypto wallet`, {
+                            position: toast.POSITION.TOP_RIGHT,
+                            autoClose: 2000,
+                            });
+                        } else {
+                            history.push('/create-project');
+                        }
+                        }}
+                    >
+                        Create New Project
+                    </Button>
+                    </div>
+                    <CardForAirDrop />
+                </Row>
+                <Container>
+                    <Segment placeholder onClick={(e) => {
+                        if(!isWalletConnected) {
+                            toast.error(`Connect crypto wallet`, {
+                                position: toast.POSITION.TOP_RIGHT,
+                                autoClose:2000,
+                            });
+                        }else{
+                            history.push('/create-project');
+                        }
+                        
+                    }}>
+                        <Header icon>
+                            <Icon name='add' />
+                            You do not have any projects. Click to create a new project.
+                        </Header>
+                    </Segment>
+                </Container>
+            </div>
+        );
+    }
+
     return (
         <>
             <Row className="p-4">
@@ -92,12 +138,13 @@ const UserDashboard = () => {
                         userProjects.length !== 0 && (
                             userProjects.map((project, idx) => {
                                 return(
-                                    <div key={idx}>
+                                    <div key={idx} onClick={(event) => history.push(`/projectdetails/${project.projectId}`) }>
                                         <ProjectCard 
                                             project = {project} 
                                             user={walletUser} 
                                             api = {api} 
                                             init = {init}
+                                            key={idx}
                                         />
                                     </div>
                                 );

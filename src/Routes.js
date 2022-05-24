@@ -8,6 +8,7 @@ import ProtectedRoute from "./ProtectedRoutes";
 import Court from "./View/Modules/Court/Court";
 import CreateProject from "./View/Modules/CreateProject/CreateProject";
 import UserDashboard from "./View/Modules/UserDashboard/UserDashboard";
+import ProjectDetails from "./View/Modules/ProjectDetails/ProjectDetails";
 
 const Routes = ({ match }) => {
     return (
@@ -31,6 +32,10 @@ const Routes = ({ match }) => {
                     <ProtectedRoute 
                         path="/user"
                         component={UserDashboard}
+                    />
+                    <ProtectedRoute 
+                        path="/projectdetails/:id"
+                        component={ProjectDetails}
                     />
                 </Switch>
             </Router>
