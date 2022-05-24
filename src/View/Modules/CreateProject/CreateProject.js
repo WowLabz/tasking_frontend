@@ -11,6 +11,7 @@ import MilestoneCard from './MilestoneCard';
 import MilestoneModal from './MilestoneModal';
 import addImg from './static/plus.png';
 import * as palletTaskingFunctions from '../../../palletTaskingFunctions'
+import ConfirmModal from '../../../Utilities/ConfirmModal';
 
 
 
@@ -33,6 +34,9 @@ const CreateProject = () => {
         show: false,
         index: -1
     });
+
+    // to show or hide the confirm modal
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const [valid, setValid] = useState(false)
 
@@ -199,7 +203,8 @@ const CreateProject = () => {
                 <Button
                     variant="dark"
                     disabled={!valid}
-                    onClick={handleCreateProject}
+                    // onClick={handleCreateProject}
+                    onClick={(e) => setShowConfirmModal(true)}
                 >
                     Create Project
                 </Button>
@@ -212,6 +217,11 @@ const CreateProject = () => {
                 setProject={setProject}
                 onMilestoneCreate={onMilestoneCreate}
                 onMilestoneDelete={onMilestoneDelete}
+            />
+            <ConfirmModal
+                onClickHandler = {handleCreateProject}
+                show = {showConfirmModal}
+                setShow = {setShowConfirmModal} 
             />
         </>
     );

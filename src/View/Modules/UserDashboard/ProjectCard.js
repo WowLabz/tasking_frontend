@@ -6,6 +6,7 @@ import MilestoneModal from "../CreateProject/MilestoneModal";
 import { addMilestoneToProjectTx, addProjectToMarketplaceTx, closeProjectTx } from "../../../palletTaskingFunctions";
 import { ProjectDetailCard } from "../ProjectDetails/ProjectDetailCard";
 
+
 const ProjectCard = (props) => {
 
     
@@ -35,14 +36,12 @@ const ProjectCard = (props) => {
         await addMilestoneToProjectTx(api,user.address,projectId,[milestone]);
     };
 
-    const onAddProjectToMarketplace = async (event) => {
-        event.preventDefault();
+    const onAddProjectToMarketplace = async () => {
         callInit();
         await addProjectToMarketplaceTx(props.api,props.user.address, project.projectId);
     };
 
-    const onCloseProject = async (event) => {
-        event.preventDefault();
+    const onCloseProject = async () => {
         callInit();
         await closeProjectTx(props.api, props.user.address, project.projectId );
     };
