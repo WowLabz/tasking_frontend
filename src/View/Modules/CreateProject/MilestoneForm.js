@@ -4,7 +4,6 @@ import {
     Form,
     FormControl,
     Button,
-    Spinner
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { toast } from "react-toastify";
@@ -211,9 +210,6 @@ const MilestoneForm = (props) => {
                                 <Form.Label>Upload File</Form.Label>
                                 <br />
                                 <Segment placeholder loading={showSpinner}>
-                                    {/* { showSpinner && (
-                                        <Spinner animation="border" size="sm" />
-                                    )} */}
                                     <Header icon>
                                         <Icon name="file pdf outline" />
                                         Add a file

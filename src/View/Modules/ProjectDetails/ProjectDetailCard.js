@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, Badge, Breadcrumb, Button, Card, Row, Spinner } from 'react-bootstrap';
+import { Badge, Button, Card } from 'react-bootstrap';
 
 
 export const getAttributesForCard = (project,props) => {

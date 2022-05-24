@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Spinner, Badge } from 'react-bootstrap';
+import { Row, Badge } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dimmer, Loader, Image, Segment, Accordion, Icon, Header, Container, List, Grid, Button} from 'semantic-ui-react'
+import {  Segment, Accordion, Icon, Header, List, Grid, Button} from 'semantic-ui-react'
 
 import MilestoneModal from '../CreateProject/MilestoneModal';
 import { getAttributesForCard } from './ProjectDetailCard';

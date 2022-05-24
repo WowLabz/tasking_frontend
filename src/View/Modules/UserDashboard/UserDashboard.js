@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {  Row, Col, Button, Modal, Card, CardGroup, InputGroup, FormControl, Image, Form} from 'react-bootstrap';
+import {  Row, Button, CardGroup } from 'react-bootstrap';
 import { Segment, Container, Icon, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import Select from 'react-select';
 import { useHistory } from 'react-router-dom';
 
 import * as palletTaskingFunctions from '../../../palletTaskingFunctions';

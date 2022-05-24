@@ -3,7 +3,7 @@ import {  Row, Button, InputGroup, FormControl, Form} from 'react-bootstrap';
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Select from 'react-select'
-import { useHistory } from "react-router-dom";
+
 
 import { useSubstrateState } from "../../../substrate-lib";
 import CardForAirDrop from "../DashBoard/CardForAirDrop";
@@ -20,7 +20,6 @@ toast.configure();
 const CreateProject = () => {
 
     const { api } = useSubstrateState();
-    const history = useHistory();
 
     const [project, setProject] = useState({
         publisherName: '',
@@ -165,7 +164,6 @@ const CreateProject = () => {
 
             <br />
 
-            {/* <Form.Label>Milestones</Form.Label> */}
             <Row>
             <div className="d-flex align-items-center">
                 { project.milestones.length > 0 && (
@@ -181,22 +179,8 @@ const CreateProject = () => {
                             /> 
                         );
                     })
-                    // project.milestones.map(((milestone,index) => {
-                    //     <MilestoneCard milestone={milestone} key={index} project={project} setProject={setProject} setShowModel={setShowModel}/> 
-                    // }))
                 )}
-                
-                {/* <div className="d-flex justify-content-between align-items-center"> */}
                     { project.milestones.length < 5 && (
-                        // <Card 
-                        //     onClick={() => setShowModel({show:true, index: -1})}
-                        //     style={{ width: '18rem' }}
-                        // >
-                        //     <Card.Img src={addImg}  />
-                        //     <Card.Body>
-                        //         <Card.Title>Add Milestone</Card.Title>
-                        //     </Card.Body>
-                        // </Card>
                         <div className="d-flex flex-column justify-content-between align-items-center"
                         >
                             <img src={addImg} 
