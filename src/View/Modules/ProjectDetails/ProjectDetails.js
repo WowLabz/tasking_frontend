@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Badge } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import {  Segment, Accordion, Icon, Header, List, Grid, Button} from 'semantic-ui-react'
+import {  Segment, Accordion, Icon, Header, List, Grid} from 'semantic-ui-react'
 
 import MilestoneModal from '../CreateProject/MilestoneModal';
+import MilestoneDetails from './MilestoneDetails';
 import { getAttributesForCard } from './ProjectDetailCard';
 import { useSubstrateState } from '../../../substrate-lib';
 import { addMilestoneToProjectTx, addProjectToMarketplaceTx, getAllProjects, closeProjectTx, bidForMilestoneTx  } from '../../../palletTaskingFunctions';
 import * as dashboardActionCreators from '../DashBoard/actionCreators';
+import ConfirmModal from '../../../Utilities/ConfirmModal';
 
 
 const ProjectDetails = (props) => {
@@ -20,6 +22,21 @@ const ProjectDetails = (props) => {
     const walletUser = useSelector(state => state.headerReducer.currentWalletDetails.meta);
     walletUser.address = useSelector(state => state.headerReducer.currentWalletDetails.address);
     
+
+
+
+    // // add project to marketplace modal show
+    // const [ showConfirmModalMarketplace, setShowConfirmModalMarketplace ] = useState(false);
+    // // close project modal show
+    // const [ showConfirmModalCloseProject, setShowConfirmModalCloseProject ] = useState(false);
+
+    const [ showConfirmModal, setShowConfirmModal ] = useState({
+        show: false,
+        onClickHandler: null
+    });
+
+
+
 
     const taskTagsForForm = useSelector(
         (state) => state.authenticationReducer.userTags
@@ -79,16 +96,16 @@ const ProjectDetails = (props) => {
         );
     }
 
-    const onAddProjectToMarketplace = async (event) => {
-        event.preventDefault();
+    const onAddProjectToMarketplace = async () => {
+        // event.preventDefault();
         setTimeout(()=> {
             init();
         }, 6000);
         await addProjectToMarketplaceTx(api,walletUser.address,projectId);
     }
 
-    const onCloseProject = async (event) => {
-        event.preventDefault();
+    const onCloseProject = async () => {
+        // event.preventDefault();
         setTimeout(() => {
             init();
         },6000);
@@ -107,14 +124,13 @@ const ProjectDetails = (props) => {
         await addMilestoneToProjectTx(api,walletUser.address,projectId,[milestone])
     };
 
-    const onBidForMilestone = async (milestoneId) => {
-        await bidForMilestoneTx(api,walletUser.address,milestoneId,walletUser.name);
-    }
+    
 
     const tempProps = {
         setShowModel,
-        onAddProjectToMarketplace,
-        onCloseProject
+        setShowConfirmModal,
+        onCloseProject,
+        onAddProjectToMarketplace
     }
     
     const attributes = getAttributesForCard(userProject,tempProps);
@@ -209,107 +225,18 @@ const ProjectDetails = (props) => {
                         </div>
                     </Segment>
                 </Accordion.Content>
-
                 {
                     userProject.milestones.map((milestone, index ) => {
                         return(
-                            <div key={index}>
-                                <Accordion.Title
-                                    active={activeIndex===index+1}
-                                    index={index+1}
-                                    onClick={handleAccordionClick}
-                                >
-                                    <Icon name='dropdown' />
-                                    {`Milestone ${index+1}`}
-                                </Accordion.Title>
-                                <Accordion.Content
-                                    active={activeIndex===index+1}
-                                >
-                                    <Segment>
-                                        <Header>
-                                            {milestone.milestoneName}
-                                        </Header>
-                                        <List bulleted>
-                                            <List.Item>
-                                                Milestone Id: {milestone.milestoneId}
-                                            </List.Item>
-                                            <List.Item>
-                                                Milestone Cost: {milestone.cost}
-                                            </List.Item>
-                                            <List.Item>
-                                                Milestone Deadline: {milestone.deadline}
-                                            </List.Item>
-                                            <List.Item>
-                                                Publisher Attachment Link: <a href={milestone.publisherAttachments[0]} target="_blank">IPFS Link</a>
-                                            </List.Item>
-                                            { milestone.workerId !== null ? (
-                                                <List.Item>
-                                                    Worker Id: {milestone.workerId}
-                                                </List.Item>
-                                            ) : null }
-                                            { milestone.workerName !== null ? (
-                                                <List.Item>
-                                                    Worker Id: {milestone.workerName}
-                                                </List.Item>
-                                            ) : null }
-                                            { milestone.workerAttachments !== null ? (
-                                                <List.Item>
-                                                    Worker Id: {milestone.workerAttachments}
-                                                </List.Item>
-                                            ) : null }
-                                            { milestone.finalWorkerRating !== null ? (
-                                                <List.Item>
-                                                    Worker Id: {milestone.finalWorkerRating}
-                                                </List.Item>
-                                            ) : null }
-                                            { milestone.finalCustomerRating !== null ? (
-                                                <List.Item>
-                                                    Worker Id: {milestone.finalCustomerRating}
-                                                </List.Item>
-                                            ) : null }
-                                        </List>
-                                        <div>
-                                            <b>Tags:</b>
-                                        </div>
-                                        <div>
-                                            {milestone.tags.map((tag, idx) => (
-                                            <Badge
-                                                variant={`secondary`}
-                                                className={`px-2 m-1`}
-                                                style={{
-                                                color: `${'white'}`,
-                                                backgroundColor: `${'#272b41'}`,
-                                                borderRadius: '10px',
-                                                padding: '0.4rem',
-                                                fontSize: '10px',
-                                                }}
-                                                key={idx}
-                                            >
-                                                {tag}
-                                            </Badge>
-                                            ))}
-                                        </div>
-                                        { userProject.status === 'Open' && milestone.status === 'Open' ? (
-                                            <div>
-                                                <Button 
-                                                    basic 
-                                                    color='yellow' 
-                                                    floated='right'
-                                                    onClick={e => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        onBidForMilestone(milestone.milestoneId)
-                                                    }}
-                                                >
-                                                    Bid
-                                                </Button>
-                                                <br />
-                                            </div>
-                                        ) : null }
-                                        <br />
-                                    </Segment>
-                                </Accordion.Content>
-                            </div>
+                            <MilestoneDetails 
+                                key={index}
+                                project={userProject}
+                                milestone={milestone}
+                                index={index}
+                                handleAccordionClick={handleAccordionClick}
+                                activeIndex={activeIndex}
+                                walletUser={walletUser}
+                            />
                         );
                     })
                 }
@@ -338,6 +265,25 @@ const ProjectDetails = (props) => {
                 project={userProject}
                 onMilestoneCreate={onMilestoneCreate} 
             />
+            {/* These modals are for user confirmation 
+                First one when user clicks the button add to marketplace
+                Second one is when user clicks the button close project
+            */}
+            <ConfirmModal 
+                show={showConfirmModal.show}
+                onClickHandler={showConfirmModal.onClickHandler}
+                handleClose={() => {
+                    setShowConfirmModal({
+                        show: false,
+                        onClickHandler: null
+                    })
+                }}
+            />
+            {/* <ConfirmModal 
+                show={showConfirmModalCloseProject}
+                setShow={setShowConfirmModalCloseProject}
+                onClickHandler={onCloseProject}
+            /> */}
         </>
     );
 };

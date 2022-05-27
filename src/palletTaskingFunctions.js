@@ -323,6 +323,40 @@ export const bidForMilestoneTx = async (api, accountId, milestoneId, workerName)
 }
 
 /**
+ * 
+ * @param {*} api 
+ * @param {*} accountId 
+ * @param {*} milestoneId
+ * @param {*} bidNumber 
+ */
+export const acceptBidTx = async (api, accountId, milestoneId, bidNumber) => {
+  try {
+    if (api === null) return;
+    let transaction = api.tx.palletTasking.acceptBid(milestoneId,bidNumber);
+    await handleSignedTransactions(transaction, accountId);
+  }catch(error) {
+    transactionErrorHandler(error);
+  }
+}
+
+/**
+ * 
+ * @param {*} api 
+ * @param {*} accountId 
+ * @param {*} milestoneId
+ * @param {*} workerAttachments
+ */
+export const milestoneCompletedTx = async (api, accountId, milestoneId, workerAttachments ) => {
+  try{
+    if ( api === null ) return;
+    const transaction = api.tx.palletTasking.milestoneCompleted(milestoneId,workerAttachments);
+    await handleSignedTransactions(transaction,accountId);
+  }catch(error){
+    transactionErrorHandler(error);
+  }
+}
+
+/**
  * aprrove function from palletTasking
  * @param {*} api
  * @param {AccountId} accountIdFromKeyRing
@@ -346,6 +380,48 @@ export const approveTaskTx = async (
     transactionErrorHandler(error);
   }
 };
+
+/**
+ * 
+ * @param {*} api 
+ * @param {*} accountId 
+ * @param {*} milestoneId
+ * @param {*} ratingsForWorker 
+ */
+
+export const approveMilestoneTx = async (
+  api,
+  accountId,
+  milestoneId,
+  ratingsForWorker
+) => {
+  try {
+    if (api === null) return;
+    let transaction = api.tx.palletTasking.approveMilestone(milestoneId,ratingsForWorker);
+    await handleSignedTransactions(transaction, accountId);
+  }catch(error) {
+    transactionErrorHandler(error);
+  }
+}
+
+/**
+ * 
+ * @param {*} api 
+ * @param {*} accountId 
+ * @param {*} milestoneId
+ */
+
+export const disapproveMilestoneTx = async (api, accountId, milestoneId) => {
+  try{
+    if(api === null) return;
+    let transaction = api.tx.palletTasking.disapproveMilestone(milestoneId);
+    await handleSignedTransactions(transaction,accountId);
+  }catch(error) {
+    transactionErrorHandler(error);
+  }
+}
+
+
 
 /**
  * taskCompleted function from palletTasking
@@ -374,20 +450,20 @@ export const taskCompletedTx = async (
 /**
  * provideCustomerRatings function from palletTasking
  * @param {*} api
- * @param {AccountId} accountIdFromKeyRing
- * @param {Number} taskId
+ * @param {AccountId} accountId
+ * @param {String} milestoneId
  * @param {Number} ratingsForCustomer
  */
 export const provideCustomerRatingsTx = async (
   api,
   accountId,
-  taskId,
+  milestoneId,
   ratingsForCustomer
 ) => {
   try {
     if (api === null) return;
     let transaction = api.tx.palletTasking.provideCustomerRating(
-      taskId,
+      milestoneId,
       ratingsForCustomer
     );
     await handleSignedTransactions(transaction, accountId);
@@ -490,6 +566,23 @@ export const disapproveRatingTx = async (api, accountId, taskId, userType) => {
   }
 };
 
+/**
+ * 
+ * @param {*} api 
+ * @param {Any} accountId
+ * @param {Any} milestoneId
+ */
+
+export const closeMilestoneTx = async (api,accountId,milestoneId) => {
+  try{
+    if(api === null) return;
+    const transaction = api.tx.palletTasking.closeMilestone(milestoneId);
+    await handleSignedTransactions(transaction,accountId);
+  }catch(error){
+    transactionErrorHandler(error);
+  }
+}
+
 // Accessing chain storage
 
 /**
@@ -540,6 +633,21 @@ export const projectStorageQuery = async ( api, projectId ) => {
 }
 
 /**
+ * 
+ * @param {*} api 
+ * @param {String} milestoneIdHash
+ * @returns bidderList
+ */
+export const bidderStorageQuery = async ( api, milestoneId ) => {
+  if ( api === null ) return;
+
+  const bidderList = await api.query.palletTasking.bidderList(milestoneId);
+  
+  return bidderList.toHuman();
+}
+
+
+/**
  * Function to get all the tasks
  * from the chain storage
  * @param {*} api
@@ -587,6 +695,22 @@ export const getAllProjects = async (api) => {
   
   return projectArr
   
+}
+
+
+// Bidder list query
+/**
+ * 
+ * @param {*} api 
+ * @param {String} milestoneId 
+ * @returns bidderList
+ */
+
+export const getBidderList = async (api, milestoneId) => {
+  if ( api === null ) return;
+
+  const bidderList = await bidderStorageQuery(api, milestoneId);
+  return bidderList;
 }
 
 // Testing counter functions in pallet tasking

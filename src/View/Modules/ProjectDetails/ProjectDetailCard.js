@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Badge, Button, Card } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 
 import ConfirmModal from "../../../Utilities/ConfirmModal";
 
@@ -11,6 +12,7 @@ export const getAttributesForCard = (project,props) => {
         <Button
             onClick={ (e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 props.setShowModel({show: true, index: -1}
             )} 
         }
@@ -24,7 +26,11 @@ export const getAttributesForCard = (project,props) => {
         <Button
             onClick={ (e) => {
                 e.stopPropagation();
-                props.setShowConfirmModalMarketplace(true);
+                // props.setShowConfirmModalMarketplace(true);
+                props.setShowConfirmModal({
+                    show: true,
+                    onClickHandler: props.onAddProjectToMarketplace
+                });
                 // props.onAddProjectToMarketplace(e)
                 } 
             }
@@ -39,7 +45,10 @@ export const getAttributesForCard = (project,props) => {
             variant="danger"
             onClick={(e) => {
                 e.stopPropagation();
-                props.setShowConfirmModalCloseProject(true);
+                props.setShowConfirmModal({
+                    show: true,
+                    onClickHandler: props.onCloseProject
+                });
             }}
             // onClick={ (e) => props.onCloseProject(e) }
             key={'close'}
@@ -75,15 +84,21 @@ export const getAttributesForCard = (project,props) => {
 export const ProjectDetailCard = (props) => {
     const project = props.project;
     
-    
+    const history = useHistory();
 
     // add project to marketplace modal show
-    const [ showConfirmModalMarketplace, setShowConfirmModalMarketplace ] = useState(false);
-    // close project modal show
-    const [ showConfirmModalCloseProject, setShowConfirmModalCloseProject ] = useState(false);
+    // const [ showConfirmModalMarketplace, setShowConfirmModalMarketplace ] = useState(false);
+    // // close project modal show
+    // const [ showConfirmModalCloseProject, setShowConfirmModalCloseProject ] = useState(false);
 
-    const attributes = getAttributesForCard(project,{...props,setShowConfirmModalCloseProject,setShowConfirmModalMarketplace});
-
+    
+    const [ showConfirmModal, setShowConfirmModal ] = useState({
+        show: false,
+        onClickHandler: null
+    });
+    
+    const attributes = getAttributesForCard(project,{...props,setShowConfirmModal});
+    
     return (
         <>
             <Card 
@@ -114,7 +129,9 @@ export const ProjectDetailCard = (props) => {
                         </div>
                     </div>
                 </Card.Header>
-                <Card.Body>
+                <Card.Body
+                    onClick={(event) => history.push(`/projectdetails/${project.projectId}`)}
+                >
                     <div className="d-flex justify-content-between align-items-center my-1">
                         <Card.Text>
                             <b>Project Id:</b> {project.projectId}
@@ -150,21 +167,34 @@ export const ProjectDetailCard = (props) => {
                     </Card.Text>
                 </Card.Body>
                 <Card.Footer className="card-footer">
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center"
+                    style={{margin:'10px'}}
+                    >
                         {attributes.button}
                     </div>
                 </Card.Footer>
             </Card>
+
+            {/* These modals are for user confirmation 
+                First one when user clicks the button add to marketplace
+                Second one is when user clicks the button close project
+            */}
             <ConfirmModal 
-                show={showConfirmModalMarketplace}
-                setShow={setShowConfirmModalMarketplace}
-                onClickHandler={props.onAddProjectToMarketplace}
+                show={showConfirmModal.show}
+                handleClose = {() => {
+                    setShowConfirmModal({
+                        show: false,
+                        onClickHandler: null
+                    })
+                }}
+                // onClickHandler={props.onAddProjectToMarketplace}
+                onClickHandler={showConfirmModal.onClickHandler}
             />
-            <ConfirmModal 
+            {/* <ConfirmModal 
                 show={showConfirmModalCloseProject}
                 setShow={setShowConfirmModalCloseProject}
                 onClickHandler={props.onCloseProject}
-            />
+            /> */}
         </>
     );
 };

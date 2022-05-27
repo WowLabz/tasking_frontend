@@ -3,6 +3,7 @@ import {  Row, Button, InputGroup, FormControl, Form} from 'react-bootstrap';
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Select from 'react-select'
+import { useHistory } from "react-router-dom";
 
 
 import { useSubstrateState } from "../../../substrate-lib";
@@ -21,6 +22,7 @@ toast.configure();
 const CreateProject = () => {
 
     const { api } = useSubstrateState();
+    const history = useHistory();
 
     const [project, setProject] = useState({
         publisherName: '',
@@ -36,7 +38,10 @@ const CreateProject = () => {
     });
 
     // to show or hide the confirm modal
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState({
+        show: false,
+        onClickHandler: null
+    });
 
     const [valid, setValid] = useState(false)
 
@@ -77,6 +82,9 @@ const CreateProject = () => {
     }
 
     const handleCreateProject = async () => {
+        setTimeout(() => {
+            history.push('/user');
+        },3000);
         return await palletTaskingFunctions.createProjectTx(
             api,
             walletUser.address,
@@ -204,7 +212,10 @@ const CreateProject = () => {
                     variant="dark"
                     disabled={!valid}
                     // onClick={handleCreateProject}
-                    onClick={(e) => setShowConfirmModal(true)}
+                    onClick={(e) => setShowConfirmModal({
+                        show: true,
+                        onClickHandler: handleCreateProject
+                    })}
                 >
                     Create Project
                 </Button>
@@ -219,9 +230,14 @@ const CreateProject = () => {
                 onMilestoneDelete={onMilestoneDelete}
             />
             <ConfirmModal
-                onClickHandler = {handleCreateProject}
-                show = {showConfirmModal}
-                setShow = {setShowConfirmModal} 
+                onClickHandler = {showConfirmModal.onClickHandler}
+                show = {showConfirmModal.show}
+                handleClose = {() => {
+                    setShowConfirmModal({
+                        show:false,
+                        onClickHandler: null
+                    })
+                }}
             />
         </>
     );

@@ -16,7 +16,11 @@ const MilestoneModal = (props) => {
 
 
     return (
-        <Modal show={showModel.show}  onHide={()=>setShowModel({show:false, index: -1})}>
+        <Modal 
+            show={showModel.show}  
+            onHide={()=>setShowModel({show:false, index: -1})}
+            onClick={(e) => e.stopPropagation()}
+        >
                 <Modal.Header>
                     <Modal.Title>
                         {title}

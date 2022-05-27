@@ -55,8 +55,6 @@ const UserDashboard = () => {
 
     // Everytime project or wallet user changes
     useEffect(() => {
-        console.log('project render');
-        console.log(projects);
         const tempUserProjects = projects.filter(project => project.publisher === walletUser.address);
 
         setUserProjects(tempUserProjects);
@@ -137,7 +135,7 @@ const UserDashboard = () => {
                         userProjects.length !== 0 && (
                             userProjects.map((project, idx) => {
                                 return(
-                                    <div key={idx} onClick={(event) => history.push(`/projectdetails/${project.projectId}`) }>
+                                    <div key={idx}>
                                         <ProjectCard 
                                             project = {project} 
                                             user={walletUser} 

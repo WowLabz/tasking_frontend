@@ -24,6 +24,7 @@ const ProjectCard = (props) => {
     };
 
     const onMilestoneCreate = async (event,milestone) => {
+        event.stopPropagation();
         event.preventDefault();
         const user = props.user;
         const projectId = project.projectId;

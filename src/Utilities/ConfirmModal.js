@@ -6,9 +6,11 @@ const ConfirmModal = (props) => {
     const setShow = props.setShow;
     const onClickHandler = props.onClickHandler;
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => props.handleClose();
     return (
-        <Modal show={show}>
+        <Modal show={show}
+            onClick={(e) => e.stopPropagation()}
+        >
             <Modal.Header>
                 <Modal.Title>Confirm</Modal.Title>
             </Modal.Header>

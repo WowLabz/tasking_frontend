@@ -65,6 +65,7 @@ const DashBoard = (props) => {
   useEffect(() => {
     const init = async () => {
       try {
+        console.log("Init called");
         // palletTaskingFunctions.handleOnChainEvents(api, toast);
         // const getTasksResult = await palletTaskingFunctions.getAllTasks(api); // async function 
         const getProjectResult = await palletTaskingFunctions.getAllProjects(api);
@@ -101,8 +102,7 @@ const DashBoard = (props) => {
     setInterval(() => {
       init();
     }, 5000);
-  }, [api]);
-  // }, [api?.query.palletTasking]);
+  }, [api?.query.palletTasking]);
 
   const showFormModal = (e, data) => {
     const formTypeOnClick = e.target.innerText;
