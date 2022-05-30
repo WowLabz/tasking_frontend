@@ -10,6 +10,7 @@ import { useSubstrateState } from '../../../substrate-lib';
 import { addMilestoneToProjectTx, addProjectToMarketplaceTx, getAllProjects, closeProjectTx, bidForMilestoneTx  } from '../../../palletTaskingFunctions';
 import * as dashboardActionCreators from '../DashBoard/actionCreators';
 import ConfirmModal from '../../../Utilities/ConfirmModal';
+import CustomBreadcrumb from '../UserDashboard/CustomBreadCrumb';
 
 
 const ProjectDetails = (props) => {
@@ -153,6 +154,11 @@ const ProjectDetails = (props) => {
                     <h2>Project Details</h2>
                 </div>
             </Row>
+            <CustomBreadcrumb
+                home={1}
+                link={`/project/${userProject.projectId}`}
+                name={"User Dashboard"} 
+            />
             <Accordion fluid styled>
                 <Accordion.Title
                     active={activeIndex===0}

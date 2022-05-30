@@ -12,6 +12,7 @@ import SudoJuror from './SudoJuror';
 import VoteModal from './VoteModal';
 import CourtSummary from './CourtSummary';
 import { toast } from 'react-toastify';
+import CustomBreadcrumb from '../UserDashboard/CustomBreadCrumb';
 
 toast.configure();
 
@@ -87,6 +88,11 @@ const Court = ({ match }) => {
                 <h2>Dispute Details</h2>
             </div>
         </Row>
+        <CustomBreadcrumb
+          home={1}
+          link={`/court/${milestone.milestoneId}`}
+          name={"Dispute Details"} 
+        />
         <CourtDetails
           milestone={milestone} 
         />

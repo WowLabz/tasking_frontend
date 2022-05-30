@@ -94,7 +94,7 @@ const MilestoneDetails = (props) => {
     const handleCloseMilestone = async () => {
         await closeMilestoneTx(api,props.walletUser.address,milestone.milestoneId);
     }
-
+    
     return (
         <div>
             <Accordion.Title
@@ -349,7 +349,7 @@ const MilestoneDetails = (props) => {
                         ) : null}
 
                         {/** Show Dispute button (Visible to all ?) */}
-                        { project.status === 'Open' && milestone.status === MILESTONE_STATUS.DisputeRaised ? (
+                        { milestone.dispute ? (
                             <div>
                                 <Button
                                     basic

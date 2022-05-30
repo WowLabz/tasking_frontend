@@ -13,6 +13,7 @@ import MilestoneModal from './MilestoneModal';
 import addImg from './static/plus.png';
 import * as palletTaskingFunctions from '../../../palletTaskingFunctions'
 import ConfirmModal from '../../../Utilities/ConfirmModal';
+import CustomBreadcrumb from "../UserDashboard/CustomBreadCrumb";
 
 
 
@@ -136,6 +137,11 @@ const CreateProject = () => {
                 </div>
                 <CardForAirDrop />
             </Row>
+            <CustomBreadcrumb
+                home={1}
+                link={'/create-project'}
+                name={"Create Project"} 
+            />
 
             <Form.Label>Publisher Name</Form.Label>
             <InputGroup className="mb-3">

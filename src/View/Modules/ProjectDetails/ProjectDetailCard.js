@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Badge, Button, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
+import { MILESTONE_STATUS } from "./constants";
 import ConfirmModal from "../../../Utilities/ConfirmModal";
 
 
@@ -72,7 +73,15 @@ export const getAttributesForCard = (project,props) => {
             break;
         case 'Open':
             attribute.badgeColor = 'green';
-            attribute.button.push(closeProjectButton);
+            let flag = true;
+            for(let i=0; i<project.milestones.length; i++) {
+                const milestone = project.milestones[i];
+                if(milestone.status != MILESTONE_STATUS.Open && milestone.status != MILESTONE_STATUS.Completed ){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag) attribute.button.push(closeProjectButton);
             break;
         case 'Closed':
             attribute.badgeColor = 'grey';

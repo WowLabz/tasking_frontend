@@ -10,7 +10,7 @@ import * as dashboardActionCreators from '../DashBoard/actionCreators';
 import { useSubstrateState } from "../../../substrate-lib";
 import CardForAirDrop from "../DashBoard/CardForAirDrop";
 import ProjectCard from './ProjectCard';
-
+import CustomBreadcrumb from "./CustomBreadCrumb";
 
 toast.configure();
 
@@ -128,6 +128,11 @@ const UserDashboard = () => {
                 </div>
                 <CardForAirDrop />
             </Row>
+            <CustomBreadcrumb
+                home={0}
+                link={'/user'}
+                name={"User Dashboard"} 
+            />
             <Row>
                 {/* <div className='d-flex align-items-center'> */}
                 <CardGroup>

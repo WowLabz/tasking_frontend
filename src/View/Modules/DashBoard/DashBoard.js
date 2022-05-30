@@ -28,6 +28,7 @@ const DashBoard = (props) => {
 
   const filterProjects = (projects) => {
     const milestones = [];
+    if(!projects) return milestones;
     for(let index = 0; index < projects.length; index++ ){
       const project = projects[index];
 
@@ -62,47 +63,6 @@ const DashBoard = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        console.log("Init called");
-        // palletTaskingFunctions.handleOnChainEvents(api, toast);
-        // const getTasksResult = await palletTaskingFunctions.getAllTasks(api); // async function 
-        const getProjectResult = await palletTaskingFunctions.getAllProjects(api);
-
-        if (getProjectResult) {
-          console.log(`All Tasks From Chain: ${getProjectResult.length}`);
-          console.log(getProjectResult);
-
-          // let sortedArr = [];
-          // console.log(sortByOption);
-          // switch (sortByOption) {
-          //   case constants.SORT_BY.userTags:
-          //     sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
-          //     break;
-          //   case constants.SORT_BY.statusOpen:
-          //   case constants.SORT_BY.statusInProgress:
-          //   case constants.SORT_BY.statusPendingApproval:
-          //   case constants.SORT_BY.statusPendingRatings:
-          //   case constants.SORT_BY.statusPendingRatings:
-          //   case constants.SORT_BY.statusCompleted:
-          //   case constants.SORT_BY.recent:
-          //   default:
-          //     sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
-          //     break;
-          // }
-
-          dispatch(actionCreators.setTasksFromBackEnd(getProjectResult));
-        }
-      } catch (error) {
-        console.log(`catchError at useEffect : ${error.stack}`);
-      }
-    };
-    init();
-    setInterval(() => {
-      init();
-    }, 5000);
-  }, [api?.query.palletTasking]);
 
   const showFormModal = (e, data) => {
     const formTypeOnClick = e.target.innerText;
@@ -142,21 +102,7 @@ const DashBoard = (props) => {
       <Row className="p-4">
         <div className="d-flex justify-content-between align-items-center">
           <h2 style={{ margin: '0' }}>Marketplace</h2>
-          {/* <Button
-            name={constants.FORM_TYPES.CREATE_TASK.type}
-            onClick={(e) => {
-              if (!isWalletConnected) {
-                toast.error(`Connect crypto wallet`, {
-                  position: toast.POSITION.TOP_RIGHT,
-                  autoClose: 2000,
-                });
-              } else {
-                showFormModal(e, null);
-              }
-            }}
-          >
-            Create New Task
-          </Button> */}
+          
           <Button
             onClick={(e) => {
               if(!isWalletConnected) {
