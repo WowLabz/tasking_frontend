@@ -55,6 +55,8 @@ const ProvideRatingModal = (props) => {
 
                 <Modal.Footer>
                     <Button
+                        basic
+                        color="blue"
                         disabled={!valid}
                         onClick={event => {
                             event.preventDefault();

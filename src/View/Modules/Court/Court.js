@@ -1,330 +1,137 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Accordion, Badge, Breadcrumb, Button, Card } from 'react-bootstrap';
-import { COURT_TAB_TYPE, TabDetails, TASK_STATUS } from './constants';
-import './TaskDetails.css';
+// import { Accordion, Badge, Breadcrumb, Button, Card } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
+
+import { acceptJuryDutyAndCastVoteTx, sudoJurorCastVoteTx } from '../../../palletTaskingFunctions';
+import { useSubstrateState } from '../../../substrate-lib';
 import PotentialJurors from './PotentialJurors';
-import BidForTaskCard from './BidForTaskCard';
-import CompleteTaskCard from './CompleteTaskCard';
-import ApproveTaskCard from './ApproveTaskCard';
-import RatingsForTaskTask from './RatingsForTaskCard';
-import { LinkContainer } from 'react-router-bootstrap';
-import { useLocation } from 'react-router';
-import { getAttributesForCard } from '../DashBoard/helpers';
 import CourtDetails from './CourtDetails';
 import FinalJurors from './FinalJurors';
+import SudoJuror from './SudoJuror';
+import VoteModal from './VoteModal';
 import CourtSummary from './CourtSummary';
+import { toast } from 'react-toastify';
+
+toast.configure();
 
 const Court = ({ match }) => {
-  const [tabs, setTabs] = useState([]);
-  const [breadCrumbsArr, setBreadCrumbArr] = useState([]);
-  const tasks = useSelector((state) => state.dashBoardReducer.tasks);
-  const [attributesForCard, setAttributesForCard] = useState({});
+
+  const { api } = useSubstrateState();
+
+  const isWalletConnected = useSelector(
+    (state) => state.headerReducer.isWalletConnected
+  );
+
+  const walletUser = useSelector(state => state.headerReducer.currentWalletDetails.meta);
+  walletUser.address = useSelector(state => state.headerReducer.currentWalletDetails.address);
+
+  const projects = useSelector((state) => state.dashBoardReducer.tasks);
+
+  const [ milestone, setMilestone ] = useState(null);
+  const [ showVoteModal, setShowVoteModal ] = useState({
+    show: false,
+    onClickHandler: null
+  })
+
+  const getMilestone = (milestoneId) => {
+    try{
+      if(milestoneId === null) return;
+      const projectId = milestoneId.slice(0,-1);
+      const milestoneNumber = milestoneId.slice( milestoneId.length - 1, milestoneId.length ).charCodeAt(0) - 97;
+      const project = projects[projectId - 1];
+      const milestoneRequired = project.milestones[milestoneNumber];
+      milestoneRequired.publisher = project.publisher;
+      milestoneRequired.publisherName = project.publisherName;
+      return milestoneRequired;
+    }catch(error){
+      return;
+    }
+  }
 
   const init = () => {
-    const taskId = match.params.id;
-
-    let tempTabs;
-    tasks.forEach((task) => {
-      if (task.taskId === taskId) {
-        console.log(task);
-        setBreadCrumbArr([
-          {
-            link: '/',
-            active: false,
-            name: 'Dashboard',
-          },
-          {
-            link: `/court/${task.taskId}`,
-            active: true,
-            name: task?.taskDescription,
-          },
-        ]);
-
-        setAttributesForCard(getAttributesForCard(task.status));
-
-        switch (task.status) {
-          case TASK_STATUS.Open:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-            ];
-            break;
-          case TASK_STATUS.InProgress:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-              {
-                tabId: 3,
-                tabType: COURT_TAB_TYPE.FINAL_JURORS,
-                task,
-              },
-            ];
-            break;
-          case TASK_STATUS.PendingApproval:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-              {
-                tabId: 3,
-                tabType: COURT_TAB_TYPE.FINAL_JURORS,
-                task,
-              },
-              {
-                tabId: 4,
-                tabType: COURT_TAB_TYPE.COMPLETE_TASK,
-                task,
-              },
-            ];
-            break;
-          case TASK_STATUS.PendingRatings:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-              {
-                tabId: 3,
-                tabType: COURT_TAB_TYPE.FINAL_JURORS,
-                task,
-              },
-              {
-                tabId: 4,
-                tabType: COURT_TAB_TYPE.APPROVE_TASK,
-                task,
-              },
-            ];
-            break;
-          case TASK_STATUS.Completed:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-              {
-                tabId: 3,
-                tabType: COURT_TAB_TYPE.FINAL_JURORS,
-                task,
-              },
-              {
-                tabId: 4,
-                tabType: COURT_TAB_TYPE.COURT_SUMMARY,
-                task,
-              },
-            ];
-            break;
-          case TASK_STATUS.DisputeRaised:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-              {
-                tabId: 3,
-                tabType: COURT_TAB_TYPE.FINAL_JURORS,
-                task,
-              },
-              {
-                tabId: 4,
-                tabType: COURT_TAB_TYPE.COURT_SUMMARY,
-                task,
-              },
-            ];
-            break;
-          case TASK_STATUS.VotingPeriod:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-              {
-                tabId: 3,
-                tabType: COURT_TAB_TYPE.FINAL_JURORS,
-                task,
-              },
-              {
-                tabId: 4,
-                tabType: COURT_TAB_TYPE.COURT_SUMMARY,
-                task,
-              },
-            ];
-            break;
-          case TASK_STATUS.JuryDecisionReached:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-              {
-                tabId: 3,
-                tabType: COURT_TAB_TYPE.FINAL_JURORS,
-                task,
-              },
-              {
-                tabId: 4,
-                tabType: COURT_TAB_TYPE.COURT_SUMMARY,
-                task,
-              },
-            ];
-            break;
-          default:
-            tempTabs = [
-              {
-                tabId: 1,
-                tabType: COURT_TAB_TYPE.COURT_DETAILS,
-                task,
-              },
-              {
-                tabId: 2,
-                tabType: COURT_TAB_TYPE.POTENTIAL_JURORS,
-                task,
-              },
-            ];
-            break;
-        }
-        setTabs(tempTabs);
-      }
-    });
-  };
+    const milestoneId = match.params.id;
+    const tempMilestone = getMilestone(milestoneId);
+    // console.log('temp milestone = ',tempMilestone);
+    setMilestone(tempMilestone);
+  }
 
   useEffect(() => {
     init();
-    return () => {};
-  }, []);
+  }, [projects])
 
-  const getCard = (currTab) => {
-    switch (currTab.tabType) {
-      case COURT_TAB_TYPE.COURT_DETAILS:
-        return <CourtDetails tab={currTab} />;
-      case COURT_TAB_TYPE.POTENTIAL_JURORS:
-        return <PotentialJurors tab={currTab} />;
-      case COURT_TAB_TYPE.FINAL_JURORS:
-        return <FinalJurors tab={currTab} />;
-      case COURT_TAB_TYPE.COMPLETE_TASK:
-        return <CompleteTaskCard tab={currTab} />;
-      case COURT_TAB_TYPE.APPROVE_TASK:
-        return <ApproveTaskCard tab={currTab} />;
-      case COURT_TAB_TYPE.RATINGS_FOR_TASK:
-        return <RatingsForTaskTask tab={currTab} />;
-      case COURT_TAB_TYPE.COURT_SUMMARY:
-        return <CourtSummary tab={currTab} />;
-      default:
-        return;
-    }
-  };
+  if(!milestone) {
+    return null;
+  }
+
+  if(!milestone.dispute) {
+    return null;
+  }
+
+
+  const handleCastVote = async (voteDetails) => {
+    // console.log('account Id = ',accountId);
+    const { accountId, milestoneId, votedFor, customerRating, workerRating} = voteDetails;
+    await acceptJuryDutyAndCastVoteTx(api,accountId,milestoneId,votedFor,customerRating,workerRating);
+  }
+
+  const handleSudoJurorCastVote = async ({accountId, milestoneId, votedFor, customerRating, workerRating}) => {
+    await sudoJurorCastVoteTx(api,accountId,milestoneId,votedFor,customerRating,workerRating);
+  }
+
 
   return (
-    <div className="task-details-container">
-      {console.log('tasks in Court', tasks)}
-      <Breadcrumb>
-        {breadCrumbsArr.map((item, idx) => (
-          <LinkContainer to={item.link} key={idx}>
-            <Breadcrumb.Item active={item.active}>{item.name}</Breadcrumb.Item>
-          </LinkContainer>
-        ))}
-      </Breadcrumb>
-      {tabs.map((tab) => (
-        <Accordion
-          key={tab.tabId}
-          defaultActiveKey={tab.tabId}
-          className="p-1 m-1"
-        >
-          <Card>
-            {tab.tabType === COURT_TAB_TYPE.TASK_DETAILS ? (
-              <Accordion.Toggle
-                as={Card.Header}
-                eventKey={tab.tabId}
-                className="accordion-header d-flex justify-content-start"
-              >
-                {tab.tabType}
-                <Badge
-                  variant={attributesForCard.badgeColor}
-                  className={`px-2 mx-2`}
-                  style={{
-                    display: 'table',
-                    color: `${
-                      attributesForCard.badgeColor === 'yellow'
-                        ? 'black'
-                        : 'white'
-                    }`,
-                    backgroundColor: `${attributesForCard.badgeColor}`,
-                    borderRadius: '10px',
-                    padding: '0.4rem',
-                  }}
-                >
-                  {tab.task.status}
-                </Badge>
-              </Accordion.Toggle>
-            ) : (
-              <Accordion.Toggle
-                as={Card.Header}
-                eventKey={tab.tabId}
-                className="accordion-header"
-              >
-                {tab.tabType}
-              </Accordion.Toggle>
-            )}
-            <Accordion.Collapse eventKey={tab.tabId}>
-              {getCard(tab)}
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
-      ))}
-    </div>
+    <>
+       <Row className="p-4">
+            <div className="d-flex justify-content-between align-items-center">
+                <h2>Dispute Details</h2>
+            </div>
+        </Row>
+        <CourtDetails
+          milestone={milestone} 
+        />
+        <br />
+        <PotentialJurors 
+          dispute={milestone.dispute} 
+          user={walletUser}
+          setShowVoteModal={setShowVoteModal}
+          onClickHandler={handleCastVote}
+        />
+        <br />
+        {milestone.dispute.finalJurors && Object.keys(milestone.dispute.finalJurors).length !== 0 ? (
+          <>
+            <FinalJurors 
+              dispute={milestone.dispute}
+            />
+            <br />
+          </>
+        ) : null }
+
+        {milestone.dispute.sudoJuror !== null ? (
+          <>
+            <SudoJuror 
+              dispute={milestone.dispute}
+              user={walletUser}
+              setShowVoteModal={setShowVoteModal}
+              onClickHandler={handleSudoJurorCastVote}
+            />
+            <br />
+          </>
+        ) : null }
+
+      <CourtSummary 
+        dispute={milestone.dispute}
+      />
+
+      <VoteModal 
+        milestone={milestone}
+        user={walletUser}
+        show={showVoteModal.show}
+        setShowVoteModal={setShowVoteModal}
+        onClickHandler={showVoteModal.onClickHandler}
+        handleClose={() => {setShowVoteModal({show:false, onClickHandler:null})}}
+      />
+    </>
   );
 };
 

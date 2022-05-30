@@ -23,7 +23,7 @@ const UserDashboard = () => {
 
     const isWalletConnected = useSelector(
         (state) => state.headerReducer.isWalletConnected
-      );
+    );
     
     const walletUser = useSelector(state => state.headerReducer.currentWalletDetails.meta);
     walletUser.address = useSelector(state => state.headerReducer.currentWalletDetails.address);

@@ -512,6 +512,27 @@ export const acceptJuryDutyTx = async (api, accountId, taskId) => {
   }
 };
 
+/**
+ * 
+ * @param {*} api 
+ * @param {*} accountId 
+ * @param {*} milestoneId 
+ * @param {*} votedFor 
+ * @param {*} customerRating 
+ * @param {*} workerRating 
+ */
+
+export const acceptJuryDutyAndCastVoteTx = async (api, accountId, milestoneId, votedFor, customerRating, workerRating) => {
+  try{
+    if(api === null) return;
+    console.log('all the values are : milestone Id = ',milestoneId, ' voted for = ',votedFor,' customer rating = ',customerRating, ' worker rating = ',workerRating);
+    let transaction = api.tx.palletTasking.acceptJuryDuty(milestoneId,votedFor,customerRating,workerRating);
+    await handleSignedTransactions(transaction,accountId);
+  }catch(error) {
+    transactionErrorHandler(error);
+  }
+};
+
 export const castVoteTx = async (
   api,
   accountId,
@@ -552,6 +573,7 @@ export const sudoJurorCastVoteTx = async (
     );
     await handleSignedTransactions(transaction, accountId);
   } catch (error) {
+    console.log("The error while voting is = ",error);
     transactionErrorHandler(error);
   }
 };
