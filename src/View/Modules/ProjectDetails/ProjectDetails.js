@@ -157,7 +157,7 @@ const ProjectDetails = (props) => {
             <CustomBreadcrumb
                 home={1}
                 link={`/project/${userProject.projectId}`}
-                name={"User Dashboard"} 
+                name={"Project Details"} 
             />
             <Accordion fluid styled>
                 <Accordion.Title

@@ -29,12 +29,13 @@ const DashBoard = (props) => {
   const filterProjects = (projects) => {
     const milestones = [];
     if(!projects) return milestones;
-    for(let index = 0; index < projects.length; index++ ){
+    for(let index = projects.length - 1; index > 0; index-- ){
       const project = projects[index];
 
       if(project.status === 'Open') {
 
         project.milestones.map((milestone) => {
+          milestone.publisherName = project.publisherName;
           milestones.push(milestone);
         });
 
@@ -102,7 +103,7 @@ const DashBoard = (props) => {
       <Row className="p-4">
         <div className="d-flex justify-content-between align-items-center">
           <h2 style={{ margin: '0' }}>Marketplace</h2>
-          
+
           <Button
             onClick={(e) => {
               if(!isWalletConnected) {
@@ -137,46 +138,9 @@ const DashBoard = (props) => {
             <TaskCard data={task} showFormModal={showFormModal} key={index} />
           ))}
       </Row>
-      <TaskModal
-        show={show}
-        handleClose={handleClose}
-        configForBackEnd={{ api, keyring }}
-        formTypeAndData={currentFormTypeAndData}
-      />
     </>
   );
 };
 
-const TaskModal = ({
-  show,
-  handleClose,
-  configForBackEnd,
-  formTypeAndData,
-}) => {
-  const { formType } = formTypeAndData;
-  const { type, title } = formType;
-
-  return (
-    <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title>
-            <b>{title}</b>
-          </Modal.Title>
-          <Modal.Title onClick={handleClose} style={{ cursor: 'pointer' }}>
-            &#10005;
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <TaskFormFormik
-            configForBackEnd={configForBackEnd}
-            formTypeAndData={formTypeAndData}
-            handleClose={handleClose}
-          />
-        </Modal.Body>
-      </Modal>
-    </>
-  );
-};
 
 export default DashBoard;

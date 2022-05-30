@@ -27,6 +27,8 @@ const TaskCard = ({ data, showFormModal }) => {
     tags: [],
     workerAttachments: [],
     publisherAttachments: [],
+    projectId: null,
+    milestoneNumber: null
   });
 
   const [attachments, setAttachments] = useState({
@@ -75,7 +77,9 @@ const TaskCard = ({ data, showFormModal }) => {
               key={0}
               variant="primary"
               name={constants.FORM_TYPES.COMPLETE_TASK.type}
-              onClick={(e) => showFormModal(e, data)}
+              onClick={(e) => history.push({
+                pathname: `/projectdetails/${cardDetails.projectId}`,
+              })}
             >
               <b>Complete</b>
             </Button>,
@@ -89,25 +93,21 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.APPROVE_TASK.type}
-              onClick={(e) => showFormModal(e, data)}
+              onClick={(e) => history.push({
+                pathname: `/projectdetails/${cardDetails.projectId}`,
+              })}
             >
               <b>Approve</b>
             </Button>,
             <Button
               variant="danger"
               name={constants.FORM_TYPES.APPROVE_TASK.type}
-              onClick={(e) => showFormModal(e, data)}
+              onClick={(e) => history.push({
+                pathname: `/projectdetails/${cardDetails.projectId}`,
+              })}
             >
               <b>Disapprove</b>
-            </Button>,
-            <Button
-              key={1}
-              variant="warning"
-              name={constants.FORM_TYPES.RAISE_DISPUTE.type}
-              onClick={(e) => showFormModal(e, data)}
-            >
-              <b>Raise Dispute</b>
-            </Button>,
+            </Button>
           ],
         };
 
@@ -118,24 +118,20 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => showFormModal(e, data)}
+              onClick={(e) => history.push({
+                pathname: `/projectdetails/${cardDetails.projectId}`,
+              })}
             >
               <b>Provide Customer Ratings</b>
             </Button>,
             <Button
               variant="danger"
               name={constants.FORM_TYPES.DISAPPROVE_WORKER_RATINGS.type}
-              onClick={(e) => showFormModal(e, data)}
+              onClick={(e) => history.push({
+                pathname: `/projectdetails/${cardDetails.projectId}`,
+              })}
             >
               <b>Disapprove Worker Ratings</b>
-            </Button>,
-            <Button
-              key={1}
-              variant="warning"
-              name={constants.FORM_TYPES.RAISE_DISPUTE.type}
-              onClick={(e) => showFormModal(e, data)}
-            >
-              <b>Raise Dispute</b>
             </Button>,
           ],
         };
@@ -146,24 +142,20 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.CLOSE_TASK.type}
-              onClick={(e) => showFormModal(e, data)}
+              onClick={(e) => history.push({
+                pathname: `/projectdetails/${cardDetails.projectId}`,
+              })}
             >
               <b>Close</b>
             </Button>,
             <Button
               variant="danger"
               name={constants.FORM_TYPES.DISAPPROVE_CUSTOMER_RATINGS.type}
-              onClick={(e) => showFormModal(e, data)}
+              onClick={(e) => history.push({
+                pathname: `/projectdetails/${cardDetails.projectId}`,
+              })}
             >
               <b>Disapprove Customer Ratings</b>
-            </Button>,
-            <Button
-              key={1}
-              variant="warning"
-              name={constants.FORM_TYPES.RAISE_DISPUTE.type}
-              onClick={(e) => showFormModal(e, data)}
-            >
-              <b>Raise Dispute</b>
             </Button>,
           ],
         };
@@ -213,7 +205,9 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="warning"
               name={constants.FORM_TYPES.BID_FOR_TASK.type}
-              onClick={(e) => showFormModal(e, data)}
+              onClick={(e) => history.push({
+                pathname: `/projectdetails/${cardDetails.projectId}`,
+              })}
             >
               <b>Bid</b>
             </Button>
@@ -235,6 +229,12 @@ const TaskCard = ({ data, showFormModal }) => {
         };
     }
   };
+
+  const getProjectIdAndMilestoneNumber = ({milestoneId}) => {
+    const projectId = milestoneId.slice(0,-1);
+    const milestoneNumber = milestoneId.slice(milestoneId.length - 1, milestoneId.length).charCodeAt(0) - 97;
+    return [projectId,milestoneNumber];
+  }
 
   const handleAttachments = (workerAttachments, publisherAttachments) => {
     let tempAttachments = [];
@@ -263,17 +263,12 @@ const TaskCard = ({ data, showFormModal }) => {
     try {
       // const publisher_name = getAccountName(client);
       // const worker_name = getAccountName(worker_id);
-
-      let today = new Date();
-      let startDate = today.toLocaleDateString();
-      let endDate = today
-        .addDays(parseInt(data.deadline))
-        .toLocaleDateString();
       handleAttachments(data.workerAttachments, data.publisherAttachments);
+      const [projectId,milestoneNumber] = getProjectIdAndMilestoneNumber(data);
       setCardDetails({
         ...data,
-        startDate,
-        endDate,
+        projectId,
+        milestoneNumber
       });
       setAttributesForCard(getAttributesForCard(data.status));
     } catch (error) {
@@ -293,11 +288,11 @@ const TaskCard = ({ data, showFormModal }) => {
       lg={4}
       className="d-flex justify-content-center align-items-center"
     >
-      <Card className="task-card  p-4">
+      <Card className="task-card  p-4" style={{width:'fit-content'}}>
         <Card.Body
           onClick={() =>
             history.push({
-              pathname: `/taskdetails/${cardDetails.milestoneId}`,
+              pathname: `/projectdetails/${cardDetails.projectId}`,
             })
           }
         >
@@ -382,28 +377,15 @@ const TaskCard = ({ data, showFormModal }) => {
               </Badge>
             ))}
           </div>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <div>
-                <b>Start Date</b>
-              </div>
-              <small>{cardDetails.startDate}</small>
-            </div>
-            <div>
-              <div>
-                <b>End Date</b>
-              </div>
-              <small>{cardDetails.endDate}</small>
-            </div>
-          </div>
         </Card.Body>
         <Card.Footer className="card-footer">
-          {attachments.showAttachments && (
-            <Attachments
-              attachments={attachments.attachments}
-              name="Attachments"
-            />
-          )}
+          { cardDetails.publisherAttachments && cardDetails.publisherAttachments.length !== 0 ? (
+            <a href={cardDetails.publisherAttachments[0]} target="_blank">Publisher Attachments</a>
+          ) : null}
+          { cardDetails.workerAttachments && cardDetails.workerAttachments.length !== 0 ? (
+            <a href={cardDetails.workerAttachments[0]} target="_blank">Worker Attachments</a>
+          ) : null}
+          <br />
           {attributesForCard.button}
         </Card.Footer>
       </Card>
@@ -411,10 +393,6 @@ const TaskCard = ({ data, showFormModal }) => {
   );
 };
 
-Date.prototype.addDays = function (days) {
-  var date = new Date(this.valueOf());
-  date.setDate(date.getDate() + days);
-  return date;
-};
+
 
 export default TaskCard;
