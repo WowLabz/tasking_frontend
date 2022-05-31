@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Accordion, Header, Icon, Segment, Button } from "semantic-ui-react";
 import { Form, FormControl, } from "react-bootstrap";
 import Select from "react-select"
@@ -7,8 +7,10 @@ import { useSelector } from "react-redux";
 import { useSubstrateState } from "../../../substrate-lib";
 import { MILESTONE_STATUS } from "../ProjectDetails/constants";
 import { searchMilestonesTx, searchesQuery } from "../../../palletTaskingFunctions";
+import ConfirmModal from "../../../Utilities/ConfirmModal";
 
 const AdvanceSearch = (props) => {
+
     const { api } = useSubstrateState();
     const [ activeIndex, setActiveIndex ] = useState(-1);
     const [ searchCriteria, setSearchCriteria ] = useState({
@@ -18,6 +20,11 @@ const AdvanceSearch = (props) => {
         maximumCost: null,
         minimumDeadline: null,
         maximumDeadline: null,
+    });
+
+    const [ showConfirmModal, setShowConfirmModal ] = useState({
+        show: false,
+        onClickHandler: null
     })
 
     const taskTagsForForm = useSelector(
@@ -26,6 +33,10 @@ const AdvanceSearch = (props) => {
     const walletUser = useSelector(state => state.headerReducer.currentWalletDetails.meta);
     walletUser.address = useSelector(state => state.headerReducer.currentWalletDetails.address);
     
+
+    // for the select options
+    const tagsRef = useRef();
+    const statusRef = useRef();
     
 
     const handleAccordionClick = (event, titleProps ) => {
@@ -40,6 +51,8 @@ const AdvanceSearch = (props) => {
             minimumDeadline: null,
             maximumDeadline: null,
         });
+        tagsRef.current.clearValue();
+        statusRef.current.clearValue();
     }
 
     const handleSearch = async () => {
@@ -75,24 +88,31 @@ const AdvanceSearch = (props) => {
                         <Segment>
                             <Form.Label>Tags:</Form.Label>
                             <Select
+                                ref={tagsRef}
                                 options={filteredTags}
                                 isMulti
                                 placeholder="Select Tags"
                                 onChange={event => {
-                                    const tempSearch = {...searchCriteria}
-                                    tempSearch.tags = event.map(obj => obj.value);
-                                    setSearchCriteria(tempSearch);
+                                    if(event){
+                                        const tempSearch = {...searchCriteria}
+                                        tempSearch.tags = event.map(obj => obj.value);
+                                        setSearchCriteria(tempSearch);
+                                    }
                                 }}
+                                defaultValue={searchCriteria.tags}
                             ></Select>
                             <br />
                             <Form.Label>Status:</Form.Label>
                             <Select
+                                ref={statusRef}
                                 options={filteredStatus}
                                 placeholder="Select Status"
                                 onChange={event => {
-                                    const tempSearch = {...searchCriteria}
-                                    tempSearch.status = event.value;
-                                    setSearchCriteria(tempSearch);
+                                    if(event){
+                                        const tempSearch = {...searchCriteria}
+                                        tempSearch.status = event.value;
+                                        setSearchCriteria(tempSearch);
+                                    }
                                 }}
                             >
                             </Select>
@@ -149,7 +169,10 @@ const AdvanceSearch = (props) => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                handleSearch();
+                                setShowConfirmModal({
+                                    show: true,
+                                    onClickHandler: handleSearch
+                                })
                             }}
                         >
                             Search
@@ -158,6 +181,16 @@ const AdvanceSearch = (props) => {
                     </Form>
                 </Accordion.Content>
             </Accordion>
+            <ConfirmModal 
+                show={showConfirmModal.show}
+                onClickHandler={showConfirmModal.onClickHandler}
+                handleClose={() => {
+                    setShowConfirmModal({
+                        show: false,
+                        onClickHandler: null
+                    });
+                }}
+            />
         </>
     );
 }
