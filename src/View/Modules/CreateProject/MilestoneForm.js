@@ -20,7 +20,7 @@ const MilestoneForm = (props) => {
     
     const index = props.showModel.index;
     const project = props.project;
-
+    const unit = 1000000000000;
     const [milestone, setMilestone] = useState({
         name: '',
         cost: 0,
@@ -262,7 +262,11 @@ const MilestoneForm = (props) => {
                         <Button
                             variant="dark"
                             type="submit"
-                            onClick={(event) => props.onFormSubmit(event,milestone,validateForm,setErrors,index)}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                milestone.cost = milestone.cost * unit;
+                                props.onFormSubmit(event,milestone,validateForm,setErrors,index)
+                            }}
                             disabled={!valid}
                         >
                             {title}

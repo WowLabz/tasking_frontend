@@ -605,7 +605,34 @@ export const closeMilestoneTx = async (api,accountId,milestoneId) => {
   }
 }
 
+/**
+ * 
+ * @param {*} api 
+ * @param {Any} accountId
+ * @param {SearchCriteria} searchCriteria
+ */
+export const searchMilestonesTx = async (api,accountId, searchCriteria) => {
+  try{
+    if(api === null ) return;
+    const transaction = api.tx.palletTasking.searchMilestones(searchCriteria);
+    await handleSignedTransactions(transaction,accountId);
+  }catch(error){
+    transactionErrorHandler(error);
+  }
+}
 // Accessing chain storage
+
+/**
+ * 
+ * @param {*} api 
+ * @param {Any} accountId
+ * @returns milestoneList
+ */
+export const searchesQuery = async (api,accountId) => {
+  if(api === null) return;
+  const milestoneList = await api.query.palletTasking.searches(accountId);
+  return milestoneList.toHuman();
+}
 
 /**
  * TaskCount Storage value

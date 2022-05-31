@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import CardForAirDrop from './CardForAirDrop';
 import { Empty } from 'antd';
 import { sortTasksByUserTags } from './helpers';
+import AdvanceSearch from "./AdvanceSearch";
 
 toast.configure();
 
@@ -25,11 +26,13 @@ const DashBoard = (props) => {
   const { api, keyring } = useSubstrateState();
   const dispatch = useDispatch();
   const history = useHistory();
+  const [milestones,setMilestones] = useState([]);
+  const [searchActive, setSearchActive] = useState(false);
 
   const filterProjects = (projects) => {
     const milestones = [];
     if(!projects) return milestones;
-    for(let index = projects.length - 1; index > 0; index-- ){
+    for(let index = projects.length - 1; index >= 0; index-- ){
       const project = projects[index];
 
       if(project.status === 'Open') {
@@ -45,7 +48,12 @@ const DashBoard = (props) => {
   }
 
   const tasks = useSelector((state) => state.dashBoardReducer.tasks);
-  const milestones = filterProjects(tasks);
+  useEffect(() => {
+    const tmpMilestones = filterProjects(tasks);
+    if(tmpMilestones && tmpMilestones.length !== 0 && !searchActive ) {
+      setMilestones(tmpMilestones);
+    } 
+  }, [tasks])
 
   const currentUserTags = useSelector(
     (state) => state.authenticationReducer.currentUserName.user_tags
@@ -121,7 +129,11 @@ const DashBoard = (props) => {
         </div>
         <CardForAirDrop />
       </Row>
-
+      <AdvanceSearch 
+        setMilestones={setMilestones}
+        setSearchActive={setSearchActive}
+      />
+      <br />
       <Row>
         {!tasks.length && (
           // <span style={{ marginLeft: "45px" }} className="p-2">
