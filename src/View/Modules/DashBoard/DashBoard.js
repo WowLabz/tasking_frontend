@@ -30,8 +30,8 @@ const DashBoard = (props) => {
   const [searchActive, setSearchActive] = useState(false);
 
   const filterProjects = (projects) => {
-    const milestones = [];
-    if(!projects) return milestones;
+    const milestoneList = [];
+    if(!projects) return milestoneList;
     for(let index = projects.length - 1; index >= 0; index-- ){
       const project = projects[index];
 
@@ -39,15 +39,23 @@ const DashBoard = (props) => {
 
         project.milestones.map((milestone) => {
           milestone.publisherName = project.publisherName;
-          milestones.push(milestone);
+          milestoneList.push(milestone);
         });
 
       }
     }
-    return milestones;
+    return milestoneList;
   }
 
+  // initial render
   const tasks = useSelector((state) => state.dashBoardReducer.tasks);
+  useEffect(() => {
+    const tmpMilestones = filterProjects(tasks);
+    setMilestones(tmpMilestones);
+  }, [])
+
+
+  // re-render each time if tasks changes
   useEffect(() => {
     const tmpMilestones = filterProjects(tasks);
     if(tmpMilestones && tmpMilestones.length !== 0 && !searchActive ) {
