@@ -59,8 +59,7 @@ const AdvanceSearch = (props) => {
         await searchMilestonesTx(api,walletUser.address,searchCriteria);
         setTimeout(async () => {
             const searchResults = await searchesQuery(api,walletUser.address);
-            console.log("search result = ",searchResults);
-            if(searchResults && searchResults.length !== 0) {
+            if(searchResults ) {
                 props.setMilestones(searchResults);
             }
             props.setSearchActive(true);

@@ -35,7 +35,6 @@ const UserDashboard = () => {
     const init = async () => {
         try {
             const getProjectResult = await palletTaskingFunctions.getAllProjects(api);
-            console.log('get project result = ',getProjectResult, 'and api = ',api);
             if (getProjectResult) {
                 dispatch(dashboardActionCreators.setTasksFromBackEnd(getProjectResult));
             }
