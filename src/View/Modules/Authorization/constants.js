@@ -12,9 +12,7 @@ export const API_CALL_SUCCESS = "API_CALL_SUCCESS"
 export const USER_TAGS = "USER_TAGS"
 
 // export const AUTH_BASE_URL = "http://localhost:3001"
-console.log(process.env);
 export const AUTH_BASE_URL = process.env.REACT_APP_AUTH_SERVER;
-console.log(AUTH_BASE_URL);
 export const AUTH_END_POINTS = {
     signUp: "/auth/sign-up",
     signIn: "/auth/sign-in",

@@ -46,7 +46,6 @@ export const userSignUp = (data) => {
             dispatch(initiatingApiCall());
             let signUpUrl = AUTH_BASE_URL + AUTH_END_POINTS.signUp;
             let res = await apiHelpers.post(signUpUrl, data);
-            console.log(res);
             if (res.status === 200) {
                 window.location.reload();
                 dispatch(apiCallSuccess());
@@ -59,14 +58,12 @@ export const userSignUp = (data) => {
                     autoClose: 5000,
                 });
             } else {
-                console.log("------------1-----------");
                 toast.error(`Registration Failed! ${res}`, {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 3000,
                 });
             }
         } catch (error) {
-            console.log("------------2-----------");
             dispatch(apiCallError());
             toast.error(error.message, {
                 position: toast.POSITION.TOP_CENTER,
@@ -82,7 +79,6 @@ export const getUserTags = () => {
             dispatch(initiatingApiCall());
             let url = AUTH_BASE_URL + AUTH_END_POINTS.getUserTags;
             let res = await apiHelpers.get(url);
-            console.log(res);
             if (res.status === 200) {
                 dispatch(setUserTags(res.data.data));
                 dispatch(apiCallSuccess());
@@ -93,7 +89,6 @@ export const getUserTags = () => {
                 });
             }
         } catch (error) {
-            console.log("------------2-----------");
             dispatch(apiCallError());
             toast.error(error.message, {
                 position: toast.POSITION.TOP_CENTER,
@@ -112,7 +107,6 @@ export const uploadFileToServer = async (file) => {
             }
         }
         let res = await apiHelpers.postWithHeaders(url, file);
-        console.log(res);
         if (res.status === 200) {
             // toast.success(`One file uploaded successfully`, {
             //     position: toast.POSITION.TOP_CENTER,
@@ -126,7 +120,6 @@ export const uploadFileToServer = async (file) => {
             });
         }
     } catch (error) {
-        console.log(`err from actionCreator ${error}`);
         toast.error(error.message, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 3000,

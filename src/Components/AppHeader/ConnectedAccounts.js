@@ -46,7 +46,6 @@ const ConnectedAccounts = () => {
 
       await getAndSetBalanceField(currAcc);
     } catch (error) {
-      console.log(error);
       toast.error(`Error: ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -66,11 +65,7 @@ const ConnectedAccounts = () => {
       } = await api.query.system.account(currAcc.address);
       balanceRef.current.value = previousFree.toHuman();
 
-      console.log(
-        `${currAcc.meta.name} has a balance of ${previousFree}, nonce ${previousNonce}`
-      );
     } catch (error) {
-      console.log(error);
       toast.error(`Error: ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -91,7 +86,6 @@ const ConnectedAccounts = () => {
   return (
     <>
       <Form className="d-flex">
-        {console.log('defaultAccounts', defaultAccounts)}
         <FormControl
           as="select"
           size="md"

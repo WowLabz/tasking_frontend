@@ -98,14 +98,12 @@ const FinalJurors = ({ tab }) => {
 
   const handleFinalJurorFormSubmit = async (data) => {
     try {
-      console.log('Form data:', data);
       finalJurorCastVote(
         data.votedFor,
         data.ratingsForCustomer,
         data.ratingsForWorker
       );
     } catch (error) {
-      console.log(error);
       toast.error(`Use Default Accounts Alice or Bob, Error: ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 5000,
@@ -115,14 +113,12 @@ const FinalJurors = ({ tab }) => {
 
   const handleSudoJurorFormSubmit = async (data) => {
     try {
-      console.log('Form data:', data);
       sudoJurorCastVote(
         data.votedFor,
         data.ratingsForCustomer,
         data.ratingsForWorker
       );
     } catch (error) {
-      console.log(error);
       toast.error(`Use Default Accounts Alice or Bob, Error: ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 5000,
@@ -201,7 +197,6 @@ const FinalJurors = ({ tab }) => {
                       // validationSchema={validationSchema}
                       enableReinitialize
                       onSubmit={async (data, { setSubmitting, resetForm }) => {
-                        console.log('form data', data);
                         setSubmitting(true);
                         await handleSudoJurorFormSubmit(data);
                         setSubmitting(false);
@@ -365,7 +360,6 @@ const FinalJurors = ({ tab }) => {
                           data,
                           { setSubmitting, resetForm }
                         ) => {
-                          console.log('form data', data);
                           setSubmitting(true);
                           await handleFinalJurorFormSubmit(data);
                           setSubmitting(false);

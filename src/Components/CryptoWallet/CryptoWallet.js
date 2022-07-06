@@ -54,9 +54,7 @@ const CryptoWallet = () => {
 
       setAccounts([...allAccounts]);
 
-      console.log('allAccounts', allAccounts);
     } catch (error) {
-      console.log(`CryproWallet Error`, error);
       dispatch(cryptoWalletError(error));
       toast.error(`Connect to Polkadot-js Extension`, {
         position: toast.POSITION.TOP_RIGHT,
@@ -75,8 +73,6 @@ const CryptoWallet = () => {
   };
 
   const onPolkaWalletClick = async () => {
-    console.log('polka Wallet');
-    console.log('------------2-------------');
     try {
       if (accounts.length == 0) {
         throw Error('No wallets connected');
@@ -85,7 +81,6 @@ const CryptoWallet = () => {
       let polkaAccounts = accounts?.filter(
         (acc) => acc.meta.source === WALLET_NAME.polkadotjs
       );
-      console.log('polkaAccounts', polkaAccounts);
       dispatch(cryptoWalletConnection(polkaAccounts));
 
       toast.info(`Polkadot Wallet Connected`, {
@@ -94,7 +89,6 @@ const CryptoWallet = () => {
       });
     } catch (error) {
       dispatch(cryptoWalletDisconnect());
-      console.log('error with polkaWallet', error);
       let errorToast;
       if (error.message === 'No wallets connected') {
         errorToast = `Connect to Polkadot-js Extension`;
@@ -109,7 +103,6 @@ const CryptoWallet = () => {
   };
 
   const onMathWalletClick = async () => {
-    console.log('math wallet');
     toast.warn(`Feature Coming Soon`, {
       position: toast.POSITION.TOP_RIGHT,
       autoClose: 2000,
@@ -119,7 +112,6 @@ const CryptoWallet = () => {
   };
 
   const onGuardaWalletClick = async () => {
-    console.log('gurada wallet');
     toast.warn(`Feature Coming Soon`, {
       position: toast.POSITION.TOP_RIGHT,
       autoClose: 2000,
@@ -132,7 +124,6 @@ const CryptoWallet = () => {
     let matchedAccount;
     accounts?.forEach((acc) => {
       if (acc.meta.source === walletName) {
-        console.log(acc);
         matchedAccount = acc;
       }
     });
@@ -151,7 +142,6 @@ const CryptoWallet = () => {
     let balRes = api.query.system.account(address, (balance) => {
       accBal = balance.data.free.toHuman();
       //   setAccBalances({ ...accBalances, polka: accBal });
-      console.log('balance2', balance.data.free.toHuman());
       return accBal;
     });
     return balRes;

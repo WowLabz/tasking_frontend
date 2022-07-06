@@ -74,10 +74,8 @@ const PotentialJurors = ({ tab }) => {
 
   const handleFormSubmit = async (data) => {
     try {
-      console.log('Form data:', data);
       acceptJuryDuty();
     } catch (error) {
-      console.log(error);
       toast.error(`Use Default Accounts Alice or Bob, Error: ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 5000,
@@ -159,7 +157,6 @@ const PotentialJurors = ({ tab }) => {
                     // validationSchema={validationSchema}
                     enableReinitialize
                     onSubmit={async (data, { setSubmitting, resetForm }) => {
-                      console.log('form data', data);
                       setSubmitting(true);
                       await handleFormSubmit(data);
                       setSubmitting(false);

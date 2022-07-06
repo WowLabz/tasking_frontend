@@ -142,7 +142,6 @@ export const getAttributesForCard = (status, data, showFormModal) => {
                 ),
             };
         default:
-            console.log(`----------status: ${status}-------------`);
             return {
                 badgeColor: "blue",
                 button: (

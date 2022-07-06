@@ -20,7 +20,6 @@ const WalletLogin = () => {
 		}
 		// meta.source contains the name of the extension that provides this account
 		const allAccounts = await web3Accounts();
-        console.log(`allAccounts : ${JSON.stringify(allAccounts)}`);
 
        // Initialise the provider to connect to the local node
 		const provider = new WsProvider("wss://marketplace.wowlabz.com");
@@ -29,7 +28,6 @@ const WalletLogin = () => {
  
         const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
         api.query.system.account(ALICE, balance => {
-            console.log(balance.data.free.toHuman());
         });
 
 		return allAccounts; 
@@ -41,8 +39,6 @@ const WalletLogin = () => {
             let wallets = window.guarda.wallets;
             let dotWallet = wallets.filter(wallet => wallet.currency === "dot");
             let walletBalance = dotWallet[0].balance;
-            console.log(dotWallet[0]);
-            console.log(walletBalance);
         } else {
             alert("Install Guarda Wallet Extension");
         }

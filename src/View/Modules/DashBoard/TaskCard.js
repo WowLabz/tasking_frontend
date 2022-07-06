@@ -220,7 +220,6 @@ const TaskCard = ({ data, showFormModal }) => {
           ),
         };
       default:
-        console.log(`----------status: ${status}-------------`);
         return {
           badgeColor: 'blue',
           button: (
@@ -277,7 +276,6 @@ const TaskCard = ({ data, showFormModal }) => {
       });
       setAttributesForCard(getAttributesForCard(data.status));
     } catch (error) {
-      console.log(error);
     }
   };
 

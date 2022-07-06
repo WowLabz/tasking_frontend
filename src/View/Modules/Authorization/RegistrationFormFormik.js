@@ -74,7 +74,6 @@ const RegistrationFormFormik = () => {
     const userTags = useSelector(
         (state) => state.authenticationReducer.userTags
     );
-    console.log(userTags);
 
     const handleFormSubmit = async (data) => {
         let signUpFormData = new FormData();
@@ -99,7 +98,6 @@ const RegistrationFormFormik = () => {
                 validationSchema={validationSchema}
                 onSubmit={async (data, { setSubmitting, resetForm }) => {
                     setSubmitting(true);
-                    console.log(data);
                     handleFormSubmit(data);
                     setSubmitting(false);
                     resetForm();

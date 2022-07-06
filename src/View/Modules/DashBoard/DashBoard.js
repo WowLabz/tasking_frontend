@@ -49,11 +49,8 @@ const DashBoard = (props) => {
         // palletTaskingFunctions.handleOnChainEvents(api, toast);
         const getTasksResult = await palletTaskingFunctions.getAllTasks(api);
         if (getTasksResult) {
-          console.log(`All Tasks From Chain: ${getTasksResult.length}`);
-          console.log(getTasksResult);
 
           let sortedArr = [];
-          console.log(sortByOption);
           switch (sortByOption) {
             case constants.SORT_BY.userTags:
               sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
@@ -73,7 +70,6 @@ const DashBoard = (props) => {
           dispatch(actionCreators.setTasksFromBackEnd(sortedArr));
         }
       } catch (error) {
-        console.log(`catchError at useEffect : ${error.stack}`);
       }
     };
     setInterval(() => {

@@ -27,7 +27,6 @@ const Court = ({ match }) => {
     let tempTabs;
     tasks.forEach((task) => {
       if (task.taskId === taskId) {
-        console.log(task);
         setBreadCrumbArr([
           {
             link: '/',
@@ -269,7 +268,6 @@ const Court = ({ match }) => {
 
   return (
     <div className="task-details-container">
-      {console.log('tasks in Court', tasks)}
       <Breadcrumb>
         {breadCrumbsArr.map((item, idx) => (
           <LinkContainer to={item.link} key={idx}>

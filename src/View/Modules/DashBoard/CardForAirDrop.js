@@ -63,7 +63,6 @@ const CardForAirDrop = () => {
                 500 * 1000000000000
             );
         } catch (error) {
-            console.log(error);
             toast.error(`Error: ${error}`, {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000,

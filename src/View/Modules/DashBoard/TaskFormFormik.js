@@ -198,11 +198,9 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
 
   const handleFormSubmit = async (data) => {
     try {
-      console.log(`data: ${JSON.stringify(data)}`);
 
       switch (formType.type) {
         case constants.FORM_TYPES.CREATE_TASK.type:
-          console.log(`create`);
           const unit = 1000000000000;
           return await palletTaskingFunctions.createTaskTx(
             api,
@@ -322,7 +320,6 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
           break;
       }
     } catch (error) {
-      console.log(error);
       toast.error(`Use Default Accounts Alice or Bob, Error: ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 5000,
@@ -360,7 +357,6 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
       });
       return attachments;
     } catch (error) {
-      console.log(error);
       toast.error(`File Upload Error: ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -379,7 +375,6 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
         // validationSchema={validationSchema}
         enableReinitialize
         onSubmit={async (data, { setSubmitting, resetForm }) => {
-          console.log(`form ${JSON.stringify(data)}`);
           setSubmitting(true);
           let currTasksTags = data.taskTags;
           let newTaskTagsArr = [];
@@ -388,7 +383,6 @@ const TaskFormFormik = ({ configForBackEnd, formTypeAndData, handleClose }) => {
 
           if (data.files.length !== 0) {
             let attachments = await handleFileUpload(data.files);
-            console.log(attachments.length);
             data.attachments = attachments;
           } else {
             data.attachments = [];
@@ -704,10 +698,8 @@ const FormFile = ({ helperText, label, ...props }) => {
     // onChange: `${props.onChange}`,
     // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     // onChange: (info) => {
-    //     console.log(info.file);
     //     const { status } = info.file;
     //     if (status !== "uploading") {
-    //         console.log(info.file, info.fileList);
     //     }
     //     if (status === "done") {
     //         message.success(
@@ -718,7 +710,6 @@ const FormFile = ({ helperText, label, ...props }) => {
     //     }
     // },
     // onDrop: (e) => {
-    //     console.log("Dropped files", e.dataTransfer.files);
     // },
   };
   return (

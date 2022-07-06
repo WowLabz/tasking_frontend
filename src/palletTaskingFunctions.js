@@ -67,7 +67,6 @@ export const getAccountsFromKeyRing = () => {
  * @param {events} param
  */
 export const transactionEventHandler = (events, status) => {
-  console.log('Transaction status:', status.type);
   // toast.info(`Transaction status: ${status.type}`, {
   //     position: toast.POSITION.TOP_RIGHT,
   //     autoClose: 5000,
@@ -75,8 +74,6 @@ export const transactionEventHandler = (events, status) => {
   const toastArr = [];
 
   if (status.isInBlock) {
-    console.log('Included at block hash', status.asInBlock.toHex());
-    console.log('Events:');
     // toast.info(`Included at block hash ${status.asInBlock.toHex()}`, {
     //     position: toast.POSITION.TOP_RIGHT,
     //     autoClose: 3000,
@@ -89,25 +86,15 @@ export const transactionEventHandler = (events, status) => {
           position: 'bottom-right',
         });
       } else if (method === 'ExtrinsicSuccess') {
-        console.log(`data: ${data}`);
-        console.log(`method: ${method}`);
-        console.log(`section: ${section}`);
       } else {
         // toast.success(`Success: \t\t${section}:${method}: ${data.toString()}`, {
         //   autoClose: 5000,
         // });
       }
 
-      console.log(
-        '\t',
-        phase.toString(),
-        `: ${section}.${method}`,
-        data.toString()
-      );
       toastArr.push(`\n${section}.${method}`);
     });
   } else if (status.isFinalized) {
-    console.log('Finalized block hash', status.asFinalized.toHex());
     // toast.success(`Finalized block hash ${status.asFinalized.toHex()}`, {
     //     position: toast.POSITION.TOP_RIGHT,
     //     autoClose: 5000,
@@ -121,7 +108,6 @@ export const transactionEventHandler = (events, status) => {
  * @param {error} err
  */
 export const transactionErrorHandler = (err) => {
-  console.log(`Transaction Error: ${err}`);
   toast.error(`Transaction Error: ${err}`, {
     position: toast.POSITION.TOP_RIGHT,
     autoClose: 5000,
@@ -162,7 +148,6 @@ export const getAccountBalance = async (api, accountId) => {
     data: { free: previousFree },
     nonce: previousNonce,
   } = await api.query.system.account(accountId);
-  console.log(`Account Balance: ${previousFree}, Nonce: ${previousNonce}`);
   let balanceInfo = await api.query.system.account(accountId);
   return balanceInfo;
 };
@@ -423,7 +408,6 @@ export const getAllTasks = async (api) => {
   if (api === null) return;
   let taskCountFromBackEnd = await taskCountQuery(api);
 
-  console.log(`Getting All Tasks, TaskCount at Chain: ${taskCountFromBackEnd}`);
 
   let taskArr = [];
   let index;
@@ -433,7 +417,6 @@ export const getAllTasks = async (api) => {
     taskArr.push(singleTask);
   }
 
-  console.log(`Getting All Tasks, Total Tasks from Chain: ${taskArr.length}`);
   return taskArr;
 };
 
@@ -524,7 +507,6 @@ export const transferUsingPalletBalances = async (
 export const handleOnChainEvents = async (api, toast) => {
   if (api === null) return;
   api.query.system.events((events) => {
-    console.log(`\nReceived ${events.length} events:`);
 
     // Loop through the Vec<EventRecord>
     events.forEach((record) => {
@@ -533,11 +515,6 @@ export const handleOnChainEvents = async (api, toast) => {
       const types = event.typeDef;
 
       // Show what we are busy with
-      console.log(
-        `EventName \t\t${event.section}:${
-          event.method
-        }:: (phase=${phase.toString()})`
-      );
       // toast.success(
       //     `\t\t${event.section}:${
       //         event.method
@@ -547,11 +524,9 @@ export const handleOnChainEvents = async (api, toast) => {
       //         autoClose: 9000,
       //     }
       // );
-      console.log(`MetaData \t\t${event.meta.documentation.toString()}`);
 
       // Loop through each of the parameters, displaying the type and data
       event.data.forEach((data, index) => {
-        console.log(`Data \t\t\t${types[index].type}: ${data.toString()}`);
       });
     });
   });
@@ -564,7 +539,6 @@ export const handleOnChainEvents = async (api, toast) => {
 export const getRunTimeMetaData = (api) => {
   if (api === null) return;
   let result = api.runtimeMetadata;
-  console.log(`MetaData Using Api: ${result}`);
 };
 
 /**
@@ -574,7 +548,6 @@ export const getRunTimeMetaData = (api) => {
 export const getRunTimeVersion = (api) => {
   if (api === null) return;
   let result = api.runtimeVersion;
-  console.log(`RuntimeVersion: ${result}`);
 };
 
 const handleSignedTransactions = async (transaction, accountId) => {
@@ -583,39 +556,30 @@ const handleSignedTransactions = async (transaction, accountId) => {
     let signedAccount;
     let signer;
     if (accountId === DEFAULT_ACCOUNT_IDS.ALICE) {
-      console.log('---1---');
       signedAccount = keyring.addFromUri('//Alice');
       signer = signedAccount.sign;
     } else if (accountId === DEFAULT_ACCOUNT_IDS.BOB) {
-      console.log('---2---');
       signedAccount = keyring.addFromUri('//Bob');
       signer = signedAccount.sign;
     } else if (accountId === DEFAULT_ACCOUNT_IDS.CHARLIE) {
-      console.log('---2---');
       signedAccount = keyring.addFromUri('//Charlie');
       signer = signedAccount.sign;
     } else if (accountId === DEFAULT_ACCOUNT_IDS.DAVE) {
-      console.log('---2---');
       signedAccount = keyring.addFromUri('//Dave');
       signer = signedAccount.sign;
     } else if (accountId === DEFAULT_ACCOUNT_IDS.EVE) {
-      console.log('---2---');
       signedAccount = keyring.addFromUri('//Eve');
       signer = signedAccount.sign;
     } else if (accountId === DEFAULT_ACCOUNT_IDS.FERDIE) {
-      console.log('---2---');
       signedAccount = keyring.addFromUri('//Ferdie');
       signer = signedAccount.sign;
     } else if (accountId === DEFAULT_ACCOUNT_IDS.ALICE_STASH) {
-      console.log('---2---');
       signedAccount = keyring.addFromUri('//Alice//stash');
       signer = signedAccount.sign;
     } else if (accountId === DEFAULT_ACCOUNT_IDS.BOB_STASH) {
-      console.log('---2---');
       signedAccount = keyring.addFromUri('//Bob//stash');
       signer = signedAccount.sign;
     } else {
-      console.log('---3---');
       signedAccount = accountId;
       const injectedAccount = await web3FromAddress(accountId);
       signer = injectedAccount.signer;
@@ -634,7 +598,6 @@ const handleSignedTransactions = async (transaction, accountId) => {
       }
     );
   } catch (error) {
-    console.log(error);
     transactionErrorHandler(error);
   }
 };

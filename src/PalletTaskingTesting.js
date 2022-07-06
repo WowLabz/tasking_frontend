@@ -27,9 +27,7 @@ const PalletTaskingTesting = () => {
      */
     const countFromBackEnd = async () => {
         const count = await palletTaskingFunctions.getCountFromStorage(api);
-        console.log(`count from backend: ${count}`);
         // setState({ ...state, count: count });
-        // console.log(`Count: ${state.count}`);
         return count;
     };
 
@@ -38,7 +36,6 @@ const PalletTaskingTesting = () => {
      * with pallet tasking
      */
     const increaseCounterAtBackEnd = async () => {
-        console.log(`alice ${JSON.stringify(state.keyRingAccounts)}`);
         palletTaskingFunctions.increaseCounterTx(
             api,
             state.keyRingAccounts.alice
@@ -53,10 +50,8 @@ const PalletTaskingTesting = () => {
      */
     const getTaskCountAndTaskDetailsFromBackEnd = async (taskId) => {
         let taskCount = await palletTaskingFunctions.taskCountQuery(api);
-        console.log(`taskCount ${taskCount} `);
 
         let task = await palletTaskingFunctions.taskStorageQuery(api, taskId);
-        console.log(`task ${JSON.stringify(task)}`);
     };
 
     /**
@@ -149,7 +144,6 @@ const PalletTaskingTesting = () => {
             state.keyRingAccounts.alice,
             12345
         );
-        console.log(`PalletBalances Transfer Result}`);
     };
 
     /**
@@ -180,10 +174,8 @@ const PalletTaskingTesting = () => {
     const getAllTasksFromChain = async () => {
         let result = await palletTaskingFunctions.getAllTasks(api);
         if (result) {
-            console.log(`All Tasks From Chain: ${result.length}`);
             setState({ ...state, tasks: [...result] });
         }
-        console.log(result);
         dispatch(ActionCreators.setTasksFromBackEnd([...result]));
     };
 
@@ -225,15 +217,11 @@ const PalletTaskingTesting = () => {
                 // transferUsingCustomPallet();
                 // transferUsingPalletBalances();
             } catch (error) {
-                console.log(`Error From Pall`);
             }
         };
         init();
     }, [api?.query.palletTasking]);
 
-    console.log(
-        `All Tasks From ComponentState: ${JSON.stringify(state.tasks)}`
-    );
     return <div>PalletTaskingTesting</div>;
 };
 
