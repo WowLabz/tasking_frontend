@@ -87,7 +87,7 @@ const MilestoneForm = (props) => {
             return;
         }
         if( value === 'publisherAttachments') {
-            tempMilestone.publisherAttachments[0] = event.target.value;
+            tempMilestone.publisherAttachments = event.target.value;
             setMilestone(tempMilestone);
             return;
         }
@@ -124,7 +124,7 @@ const MilestoneForm = (props) => {
             setShowSpinner(false);
             if(res.status === 202 || res.status === 200) {
                 const tempMilestone = {...milestone};
-                tempMilestone.publisherAttachments[0] = res.data.message;
+                tempMilestone.publisherAttachments = res.data.message;
                 setMilestone(tempMilestone);
             }else {
                 setErrors({
@@ -252,7 +252,7 @@ const MilestoneForm = (props) => {
                         <FormControl 
                             type="text"
                             placeholder="Attachment Link"
-                            value={milestone.publisherAttachments[0]}
+                            value={milestone.publisherAttachments}
                             disabled={true}
                             
                         />

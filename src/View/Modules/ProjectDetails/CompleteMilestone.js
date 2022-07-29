@@ -20,7 +20,7 @@ const CompleteMilestone = (props) => {
     const [ valid, setValid ] = useState(false);
 
     useEffect( () => {
-        if(workerAttachments.length === 1 && workerAttachments[0].length > 0) {
+        if(workerAttachments.length === 1 && workerAttachments.length > 0) {
             setValid(true);
         }
     }, [workerAttachments]);
@@ -112,7 +112,7 @@ const CompleteMilestone = (props) => {
                             <FormControl 
                                 type="text"
                                 placeholder="Attachment Link"
-                                value={workerAttachments[0] ? workerAttachments[0] : ''}
+                                value={workerAttachments ? workerAttachments : ''}
                                 disabled={true}
                             />
                         </Card.Body>

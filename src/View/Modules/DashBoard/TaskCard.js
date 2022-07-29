@@ -380,10 +380,10 @@ const TaskCard = ({ data, showFormModal }) => {
         </Card.Body>
         <Card.Footer className="card-footer">
           { cardDetails.publisherAttachments && cardDetails.publisherAttachments.length !== 0 ? (
-            <a href={cardDetails.publisherAttachments[0]} target="_blank">Publisher Attachments</a>
+            <a href={cardDetails.publisherAttachments} target="_blank">Publisher Attachments</a>
           ) : null}
           { cardDetails.workerAttachments && cardDetails.workerAttachments.length !== 0 ? (
-            <a href={cardDetails.workerAttachments[0]} target="_blank">Worker Attachments</a>
+            <a href={cardDetails.workerAttachments} target="_blank">Worker Attachments</a>
           ) : null}
           <br />
           {attributesForCard.button}

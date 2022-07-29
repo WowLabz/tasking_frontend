@@ -140,7 +140,7 @@ const MilestoneDetails = (props) => {
                             Milestone Deadline: {milestone.deadline}
                         </List.Item>
                         <List.Item>
-                            Publisher Attachment Link: <a href={milestone.publisherAttachments[0]} target="_blank">IPFS Link</a>
+                            Publisher Attachment Link: <a href={milestone.publisherAttachments} target="_blank">IPFS Link</a>
                         </List.Item>
 
                         {/* Show bidder List button (Only visible to the publisher) */}
@@ -172,7 +172,7 @@ const MilestoneDetails = (props) => {
 
                         { milestone.workerAttachments !== null ? (
                             <List.Item>
-                                Worker Attachments Link: {milestone.workerAttachments[0] ? (<a href={milestone.workerAttachments[0]} target="_blank"> IPFS Link</a>) : ("N/A") }
+                                Worker Attachments Link: {milestone.workerAttachments ? (<a href={milestone.workerAttachments} target="_blank"> IPFS Link</a>) : ("N/A") }
                             </List.Item>
                         ) : null }
 
