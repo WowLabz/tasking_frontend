@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 
-import { useSubstrateState } from '../../../substrate-lib';
+
 import './Dashboard.css';
 import TaskCard from './TaskCard'; // this
 import * as constants from './constants';
@@ -41,6 +41,7 @@ const DashBoard = (props) => {
   // initial render
   const tasks = useSelector((state) => state.dashBoardReducer.tasks);
   useEffect(() => {
+    console.log("The tasks are = ", tasks);
     const tmpMilestones = filterProjects(tasks);
     setMilestones(tmpMilestones);
   }, [])
@@ -48,6 +49,7 @@ const DashBoard = (props) => {
 
   // re-render each time if tasks changes
   useEffect(() => {
+    console.log('tasks has changed = ',tasks);
     const tmpMilestones = filterProjects(tasks);
     if(tmpMilestones && tmpMilestones.length !== 0 && !searchActive ) {
       setMilestones(tmpMilestones);

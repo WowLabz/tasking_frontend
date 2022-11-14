@@ -24,7 +24,7 @@ export const dashBoardReducer = (state = initialState, action) => {
         case GET_PROJECTS:
             return {
                 ...state,
-                tasks: action.payload,
+                tasks: [...action.payload],
             }
         case ATTRIBUTES_FOR_TASK_CARD:
             return {
