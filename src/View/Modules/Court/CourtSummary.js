@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Accordion, List, Icon, Button, Segment } from "semantic-ui-react";
+import { Accordion, List, Icon  } from "semantic-ui-react";
 
 
 const CourtSummary = (props) => {

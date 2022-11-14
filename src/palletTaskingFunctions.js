@@ -349,7 +349,7 @@ export const acceptBidTx = async (api, accountId, milestoneId, bidNumber) => {
 export const milestoneCompletedTx = async (api, accountId, milestoneId, workerAttachments ) => {
   try{
     if ( api === null ) return;
-    const transaction = api.tx.palletTasking.milestoneCompleted(milestoneId,workerAttachments);
+    const transaction = api.tx.palletTasking.completeMilestone(milestoneId,workerAttachments);
     await handleSignedTransactions(transaction,accountId);
   }catch(error){
     transactionErrorHandler(error);

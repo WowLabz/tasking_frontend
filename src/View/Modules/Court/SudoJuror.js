@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Accordion, List, Icon, Button, Segment } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Accordion, List, Icon, Button } from "semantic-ui-react";
 
 import { getJuror } from "./helpers";
 

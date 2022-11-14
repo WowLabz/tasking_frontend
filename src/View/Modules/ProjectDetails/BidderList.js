@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Badge } from "react-bootstrap";
-import {  Segment, Card, Accordion, Icon, Header, List, Grid, Button} from 'semantic-ui-react'
+import {  Segment, Card, List, Button} from 'semantic-ui-react'
 
 
 

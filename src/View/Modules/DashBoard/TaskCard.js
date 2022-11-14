@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Card, Button, Col, NavLink } from 'react-bootstrap';
+import { Badge, Card, Button, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import _ from 'lodash';
 import * as constants from './constants';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { TASK_STATUS } from '../TaskDetails/constants';
-import axios from 'axios';
-import Attachments from './Attachments';
 import BalanceImg from '../../../assets/images/balance.png';
 
 const TaskCard = ({ data, showFormModal }) => {
@@ -42,21 +40,6 @@ const TaskCard = ({ data, showFormModal }) => {
   const defaultAccounts = useSelector(
     (state) => state.headerReducer.defaultAccounts
   );
-
-  // const getAccountName = (address) => {
-  //     try {
-  //         let res;
-  //         if (address === null) return null;
-  //         [...connectedAccounts, ...defaultAccounts].forEach((acc, idx) => {
-  //             if (address === acc.address) {
-  //                 res = acc.meta.name;
-  //             }
-  //         });
-  //         return res;
-  //     } catch (error) {
-  //         return "Alice";
-  //     }
-  // };
 
   const getAttributesForCard = (status) => {
     switch (status) {

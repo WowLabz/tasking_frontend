@@ -1,30 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Modal, Card } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { useDispatch, useSelector } from 'react-redux';
+import { Row, Button} from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 
 import { useSubstrateState } from '../../../substrate-lib';
-import TestingSubstrateLib from '../../../TestingSubstrateLib';
-import * as palletTaskingFunctions from '../../../palletTaskingFunctions'; // this
-import * as actionCreators from './actionCreators';
 import './Dashboard.css';
 import TaskCard from './TaskCard'; // this
-import TaskFormFormik from './TaskFormFormik'; // this
 import * as constants from './constants';
-import staticData from '../../../assets/staticData/staticData.json';
 import 'react-toastify/dist/ReactToastify.min.css';
 import CardForAirDrop from './CardForAirDrop';
 import { Empty } from 'antd';
-import { sortTasksByUserTags } from './helpers';
 import AdvanceSearch from "./AdvanceSearch";
 
 toast.configure();
 
 const DashBoard = (props) => {
-  const { api, keyring } = useSubstrateState();
-  const dispatch = useDispatch();
   const history = useHistory();
   const [milestones,setMilestones] = useState([]);
   const [searchActive, setSearchActive] = useState(false);

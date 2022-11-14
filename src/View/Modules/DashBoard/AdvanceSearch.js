@@ -30,8 +30,9 @@ const AdvanceSearch = (props) => {
     const taskTagsForForm = useSelector(
         (state) => state.authenticationReducer.userTags
     );
-    const walletUser = useSelector(state => state.headerReducer.currentWalletDetails.meta);
-    walletUser.address = useSelector(state => state.headerReducer.currentWalletDetails.address);
+    const walletUser = useSelector(state => state.headerReducer?.currentWalletDetails);
+    // const walletUser = useSelector(state => state.headerReducer?.currentWalletDetails?.meta);
+    // walletUser.address = useSelector(state => state.headerReducer?.currentWalletDetails?.address);
     
 
     // for the select options
@@ -56,6 +57,12 @@ const AdvanceSearch = (props) => {
     }
 
     const handleSearch = async () => {
+        if(!walletUser) {
+            alert("Select wallet!");
+        }
+        if(!walletUser.address){
+            alert("Select wallet");
+        }
         await searchMilestonesTx(api,walletUser.address,searchCriteria);
         setTimeout(async () => {
             const searchResults = await searchesQuery(api,walletUser.address);

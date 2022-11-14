@@ -1,5 +1,4 @@
 import * as Actions from "./actions";
-import * as palletTaskingFunctions from "../../../palletTaskingFunctions";
 
 export const setTasksFromBackEnd = (data) => {
     console.log('set task from backend is called dispatching.......',data);
