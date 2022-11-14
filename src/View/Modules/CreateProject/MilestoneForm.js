@@ -40,6 +40,9 @@ const MilestoneForm = (props) => {
 
     // to show the upload spinner
     const [ showSpinner, setShowSpinner ] = useState(false);
+
+    // to show the file name 
+    const [ fileHeader, setFileHeader ] = useState("Add a file")
     
 
     // If the user is trying to edit the milestone then this will initialize the values
@@ -212,7 +215,7 @@ const MilestoneForm = (props) => {
                                 <Segment placeholder loading={showSpinner}>
                                     <Header icon>
                                         <Icon name="file pdf outline" />
-                                        Add a file
+                                        {fileHeader}
                                     </Header>
                                     <Button onClick={e => {
                                         {document.getElementById('imgupload').click()}
@@ -229,6 +232,7 @@ const MilestoneForm = (props) => {
                                             const formFile = new FormData();
                                             formFile.append('filesent', event.target.files[0]);
                                             setFile(formFile);
+                                            setFileHeader(event.target.files[0].name)
                                         }}
                                         style={{display:'none'}}
                                     />
