@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { Segment, Icon, Header } from "semantic-ui-react";
 
 
-import apiHelpers from '../../../Utilities/axiosHelpers';
+import { uploadFileToServer } from "../Authorization/actionCreators";
 
 toast.configure();
 
@@ -120,18 +120,23 @@ const MilestoneForm = (props) => {
         let res;
         try{
             setShowSpinner(true);
-            res = await apiHelpers.postWithHeaders(url, file, headerObj);
+            // res = await apiHelpers.postWithHeaders(url, file, headerObj);
+            // setShowSpinner(false);
+            // if(res.status === 202 || res.status === 200) {
+            //     const tempMilestone = {...milestone};
+            //     tempMilestone.publisherAttachments = res.data.message;
+            //     setMilestone(tempMilestone);
+            // }else {
+            //     setErrors({
+            //         ...errors,
+            //         ['publisherAttachments']: res.data.message
+            //     });
+            // }
+            res = await uploadFileToServer(file);
             setShowSpinner(false);
-            if(res.status === 202 || res.status === 200) {
-                const tempMilestone = {...milestone};
-                tempMilestone.publisherAttachments = res.data.message;
-                setMilestone(tempMilestone);
-            }else {
-                setErrors({
-                    ...errors,
-                    ['publisherAttachments']: res.data.message
-                });
-            }
+            const tempMilestone = {...milestone};
+            tempMilestone.publisherAttachments = res.url;
+            setMilestone(tempMilestone);
         }catch(e) {
             setErrors({
                 ...errors,
@@ -227,7 +232,7 @@ const MilestoneForm = (props) => {
                                         isInvalid={!!errors.publisherAttachments}
                                         onChange={(event) => {
                                             const formFile = new FormData();
-                                            formFile.append('filesent', event.target.files[0]);
+                                            formFile.append('somefile', event.target.files[0]);
                                             setFile(formFile);
                                         }}
                                         style={{display:'none'}}

@@ -83,6 +83,7 @@ const CreateProject = () => {
     }
 
     const handleCreateProject = async () => {
+        console.log('project = ', project);
         setTimeout(() => {
             history.push('/user');
         },3000);

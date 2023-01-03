@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal, Card, Form, FormControl, Button } from "react-bootstrap";
 import { Segment, Icon, Header } from "semantic-ui-react";
 
-import apiHelpers from "../../../Utilities/axiosHelpers";
 import { milestoneCompletedTx } from "../../../palletTaskingFunctions";
+import { uploadFileToServer } from "../Authorization/actionCreators";
 
 const CompleteMilestone = (props) => {
 
@@ -27,24 +27,28 @@ const CompleteMilestone = (props) => {
 
     const onFileUpload = async (event) => {
         event.preventDefault();
-        let headerObj = {
-            headers:  {
-                "Content-Type": "multipart/form-data"
-            }
-        }
-        const url = 'http://localhost:8001/upload-file/';
+        // let headerObj = {
+        //     headers:  {
+        //         "Content-Type": "multipart/form-data"
+        //     }
+        // }
+        // const url = 'http://localhost:8001/upload-file/';
         let res;
         try{
             setSpinner(true);
-            res = await apiHelpers.postWithHeaders(url, file, headerObj);
+            // res = await apiHelpers.postWithHeaders(url, file, headerObj);
+            res = await uploadFileToServer(file);
             setSpinner(false);
-            if(res.status === 202 || res.status === 200) {
-                const tempAttachment = [...workerAttachments];
-                tempAttachment.push(res.data.message);
-                setWorkerAttachments(tempAttachment);
-            }else {
-                setUploadButton(true);
-            }
+            // if(res.status === 202 || res.status === 200) {
+            //     const tempAttachment = [...workerAttachments];
+            //     tempAttachment.push(res.data.message);
+            //     setWorkerAttachments(tempAttachment);
+            // }else {
+            //     setUploadButton(true);
+            // }
+            const tempAttachment = [...workerAttachments];
+            tempAttachment.push(res.url);
+            setWorkerAttachments(tempAttachment);
         }catch(e) {
             setUploadButton(true);
         }
@@ -88,7 +92,7 @@ const CompleteMilestone = (props) => {
                                             id="imgupload"
                                             onChange={(event) => {
                                                 const formFile = new FormData();
-                                                formFile.append('filesent', event.target.files[0]);
+                                                formFile.append('somefile', event.target.files[0]);
                                                 setFile(formFile);
                                                 setUploadButton(false);
                                             }}

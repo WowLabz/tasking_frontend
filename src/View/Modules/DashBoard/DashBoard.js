@@ -11,7 +11,6 @@ import * as constants from './constants';
 import 'react-toastify/dist/ReactToastify.min.css';
 import CardForAirDrop from './CardForAirDrop';
 import { Empty } from 'antd';
-import AdvanceSearch from "./AdvanceSearch";
 
 toast.configure();
 
@@ -128,10 +127,6 @@ const DashBoard = (props) => {
         </div>
         <CardForAirDrop />
       </Row>
-      <AdvanceSearch 
-        setMilestones={setMilestones}
-        setSearchActive={setSearchActive}
-      />
       <br />
       <Row>
         {!tasks.length && (
