@@ -14,13 +14,16 @@ const CompleteMilestone = (props) => {
     const walletUser = props.walletUser;
 
     const [ file, setFile ] = useState(null);
-    const [ workerAttachments, setWorkerAttachments ] = useState([]);
+    const [ workerAttachments, setWorkerAttachments ] = useState('');
     const [ spinner, setSpinner ] = useState(false);
     const [ uploadButton, setUploadButton ] = useState(true);
     const [ valid, setValid ] = useState(false);
 
+    // to show the file name 
+    const [ fileHeader, setFileHeader ] = useState("Add a file")
+
     useEffect( () => {
-        if(workerAttachments.length === 1 && workerAttachments.length > 0) {
+        if(workerAttachments.length > 0) {
             setValid(true);
         }
     }, [workerAttachments]);
@@ -39,9 +42,7 @@ const CompleteMilestone = (props) => {
             res = await apiHelpers.postWithHeaders(url, file, headerObj);
             setSpinner(false);
             if(res.status === 202 || res.status === 200) {
-                const tempAttachment = [...workerAttachments];
-                tempAttachment.push(res.data.message);
-                setWorkerAttachments(tempAttachment);
+                setWorkerAttachments(res.data.message);
             }else {
                 setUploadButton(true);
             }
@@ -74,7 +75,7 @@ const CompleteMilestone = (props) => {
                                     <Segment placeholder loading={spinner}>
                                         <Header icon>
                                             <Icon name="file pdf outline" />
-                                            Add a file
+                                            {fileHeader}
                                         </Header>
                                         <Button onClick={e => {
                                             {document.getElementById('imgupload').click()}
@@ -87,6 +88,7 @@ const CompleteMilestone = (props) => {
                                             name="filesent"
                                             id="imgupload"
                                             onChange={(event) => {
+                                                setFileHeader(event.target.files[0].name)
                                                 const formFile = new FormData();
                                                 formFile.append('filesent', event.target.files[0]);
                                                 setFile(formFile);

@@ -31,6 +31,7 @@ const ConnectedAccounts = () => {
   const [accountName, setAccountName] = useState('Select Account');
 
   const handleAccountSelect = async (e) => {
+    console.log('the value right now is = ', e.target.value);
     try {
       let currAccountName = e.target.value;
       let currAcc;
@@ -99,6 +100,7 @@ const ConnectedAccounts = () => {
           className="me-2"
           onClick={(e) => handleAccountSelect(e)}
           onLoadStart={(e) => handleAccountSelect(e)}
+          onChange={(e) => handleAccountSelect(e)}
           ref={accountNameRef}
         >
           {[...connectedAccounts, ...defaultAccounts]?.map((acc, index) => (
