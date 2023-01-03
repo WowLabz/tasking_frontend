@@ -32,7 +32,7 @@ const CompleteMilestone = (props) => {
                 "Content-Type": "multipart/form-data"
             }
         }
-        const url = 'http://localhost:8001/upload-file/';
+        const url = process.env.REACT_APP_FILE_SERVER + '/upload-file/';
         let res;
         try{
             setSpinner(true);

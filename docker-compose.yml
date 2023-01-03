@@ -12,4 +12,5 @@ services:
         environment: 
             - REACT_APP_AUTH_SERVER=http://localhost:7001
             - REACT_APP_BLOCKCHAIN_NODE=ws://127.0.0.1:9944
+            - REACT_APP_FILE_SERVER=http://localhost:8001
         restart: always
