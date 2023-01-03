@@ -5,3 +5,5 @@ RUN yarn install
 RUN yarn add jquery 
 RUN yarn add popper.js
 EXPOSE 9001
+
+CMD [ "yarn", "start" ]
