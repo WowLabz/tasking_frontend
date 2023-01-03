@@ -3,6 +3,7 @@ import {
     GET_TASKS,
     SORTING_OPTIONS,
     SORT_BY,
+    GET_PROJECTS,
 } from "./constants";
 
 const initialState = {
@@ -18,8 +19,13 @@ export const dashBoardReducer = (state = initialState, action) => {
             console.log(`action.payload ${action.payload}`);
             return {
                 ...state,
-                tasks: action.payload,
+                tasks: [...action.payload],
             };
+        case GET_PROJECTS:
+            return {
+                ...state,
+                tasks: action.payload,
+            }
         case ATTRIBUTES_FOR_TASK_CARD:
             return {
                 ...state,

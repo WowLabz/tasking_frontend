@@ -16,7 +16,6 @@ const MilestoneCard = (props) => {
                 style={{marginRight: '10px'}}
             >
                 <Card className="text-left p-1" 
-                    onClick={props.onClickHandle}
                     style={{width: '220px', height: '350px' }}
                 >
                     <Card.Header>

@@ -99,6 +99,7 @@ const ConnectedAccounts = () => {
           className="me-2"
           onClick={(e) => handleAccountSelect(e)}
           onLoadStart={(e) => handleAccountSelect(e)}
+          onChange={(e) => handleAccountSelect(e)}
           ref={accountNameRef}
         >
           {[...connectedAccounts, ...defaultAccounts]?.map((acc, index) => (

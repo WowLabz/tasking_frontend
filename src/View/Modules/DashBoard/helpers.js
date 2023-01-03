@@ -1,4 +1,5 @@
-import { Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
+import { Button } from "semantic-ui-react";
 import { TASK_STATUS } from "../TaskDetails/constants";
 import * as constants from "./constants";
 
@@ -28,14 +29,6 @@ export const getAttributesForCard = (status, data, showFormModal) => {
                     >
                         <b>Complete</b>
                     </Button>,
-                    // <Button
-                    //     key={1}
-                    //     variant="success"
-                    //     name={constants.FORM_TYPES.APPROVE_TASK.type}
-                    //     onClick={(e) => showFormModal(e, data)}
-                    // >
-                    //     <b>Approve</b>
-                    // </Button>,
                 ],
             };
 
@@ -157,6 +150,63 @@ export const getAttributesForCard = (status, data, showFormModal) => {
             };
     }
 };
+
+export const getAttributesForMilestone = (milestone) => {
+    switch(milestone.status) {
+        case TASK_STATUS.Completed:
+            return {
+                badgeColor: "green",
+                badgeText: "Completed"
+            };
+        case TASK_STATUS.InProgress:
+            return {
+                badgeColor: "yellow",
+                badgeText: "In Progress"
+            };
+
+        case TASK_STATUS.PendingApproval:
+            return {
+                badgeColor: "red",
+                badgeText: "Pending Approval"
+            };
+
+        case TASK_STATUS.CustomerRatingPending:
+            return {
+                badgeColor: "red",
+                badgeText: "Customer Rating Pending"
+            };
+        case TASK_STATUS.CustomerRatingProvided:
+            return {
+                badgeColor: "red",
+                badgeText: "Customer Rating Provided"
+            };
+        case TASK_STATUS.DisputeRaised:
+            return {
+                badgeColor: "red",
+                badgeText: "Dispute Raised"
+            };
+        case TASK_STATUS.VodingPeriod:
+            return {
+                badgeColor: "red",
+                badgeText: "Voting Period"
+            };
+        case TASK_STATUS.JuryDecisionReached:
+            return {
+                badgeColor: "red",
+                badgeText: "Jury Decision Reached"
+            };
+        case TASK_STATUS.Open:
+            return {
+                badgeColor: "blue",
+                badgeText: "Open"
+            };
+        default:
+            return {
+                badgeColor: "blue",
+                badgeText: ""
+            };
+    }
+}
 
 export const sortTasksByUserTags = (currentUserTags, tasksArr) => {
     tasksArr.sort((a, b) => {

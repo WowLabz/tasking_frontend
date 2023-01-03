@@ -15,16 +15,12 @@ import "./TaskFormFormik.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import {
-    getAccountBalance,
-    getAccountsFromKeyRing,
     transferUsingPalletBalances,
 } from "../../../palletTaskingFunctions";
 import { DEFAULT_ACCOUNT_IDS } from "./constants";
 toast.configure();
 
-const FixedCardHeight = {
-    height: "600px",
-};
+
 
 const DivHeight = {
     height: "100px",

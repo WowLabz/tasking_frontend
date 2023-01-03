@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {  Row, Col, Button, Modal, Card, InputGroup, FormControl, Image, Form} from 'react-bootstrap';
+import {  Row, Button, InputGroup, FormControl, Form} from 'react-bootstrap';
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Select from 'react-select'
+import { useHistory } from "react-router-dom";
+
 
 import { useSubstrateState } from "../../../substrate-lib";
 import CardForAirDrop from "../DashBoard/CardForAirDrop";
@@ -10,15 +12,18 @@ import MilestoneCard from './MilestoneCard';
 import MilestoneModal from './MilestoneModal';
 import addImg from './static/plus.png';
 import * as palletTaskingFunctions from '../../../palletTaskingFunctions'
+import ConfirmModal from '../../../Utilities/ConfirmModal';
+import CustomBreadcrumb from "../UserDashboard/CustomBreadCrumb";
 
 
 
 
 toast.configure();
 
-const CreateProject = (props) => {
+const CreateProject = () => {
 
     const { api } = useSubstrateState();
+    const history = useHistory();
 
     const [project, setProject] = useState({
         publisherName: '',
@@ -32,7 +37,12 @@ const CreateProject = (props) => {
         show: false,
         index: -1
     });
- 
+
+    // to show or hide the confirm modal
+    const [showConfirmModal, setShowConfirmModal] = useState({
+        show: false,
+        onClickHandler: null
+    });
 
     const [valid, setValid] = useState(false)
 
@@ -73,6 +83,10 @@ const CreateProject = (props) => {
     }
 
     const handleCreateProject = async () => {
+        console.log('project = ', project);
+        setTimeout(() => {
+            history.push('/user');
+        },3000);
         return await palletTaskingFunctions.createProjectTx(
             api,
             walletUser.address,
@@ -80,6 +94,41 @@ const CreateProject = (props) => {
         );
     };
     
+    const onMilestoneCreate = (event,milestone,validateForm,setErrors,index) => {
+        event.preventDefault();
+        const tempErrors = validateForm();
+        if(Object.keys(tempErrors).length > 0 ) {
+            setErrors(tempErrors);
+        }else{
+            if(index === -1) {
+                const tempProject = {...project};
+                tempProject.milestones.push(milestone);
+                setProject(tempProject);
+            }else{
+                const tempProject = {...project};
+                tempProject.milestones[index] = milestone;
+                setProject(tempProject);
+            }
+            setShowModel({
+                show:false,
+                index: -1
+            });
+        }
+    };
+
+    const onMilestoneDelete = (index) => {
+        const tempProject = {...project};
+        const milestoneLength = tempProject.milestones.length;
+        for(let i=index; i<milestoneLength - 1; i++){
+            tempProject.milestones[i] = tempProject.milestones[i+1];
+        }
+        tempProject.milestones.pop();
+        setProject(tempProject);
+        setShowModel({
+            show: false,
+            index: -1
+        });
+    };
 
     return (
         <>
@@ -89,6 +138,11 @@ const CreateProject = (props) => {
                 </div>
                 <CardForAirDrop />
             </Row>
+            <CustomBreadcrumb
+                home={1}
+                link={'/create-project'}
+                name={"Create Project"} 
+            />
 
             <Form.Label>Publisher Name</Form.Label>
             <InputGroup className="mb-3">
@@ -129,7 +183,6 @@ const CreateProject = (props) => {
 
             <br />
 
-            {/* <Form.Label>Milestones</Form.Label> */}
             <Row>
             <div className="d-flex align-items-center">
                 { project.milestones.length > 0 && (
@@ -145,22 +198,8 @@ const CreateProject = (props) => {
                             /> 
                         );
                     })
-                    // project.milestones.map(((milestone,index) => {
-                    //     <MilestoneCard milestone={milestone} key={index} project={project} setProject={setProject} setShowModel={setShowModel}/> 
-                    // }))
                 )}
-                
-                {/* <div className="d-flex justify-content-between align-items-center"> */}
                     { project.milestones.length < 5 && (
-                        // <Card 
-                        //     onClick={() => setShowModel({show:true, index: -1})}
-                        //     style={{ width: '18rem' }}
-                        // >
-                        //     <Card.Img src={addImg}  />
-                        //     <Card.Body>
-                        //         <Card.Title>Add Milestone</Card.Title>
-                        //     </Card.Body>
-                        // </Card>
                         <div className="d-flex flex-column justify-content-between align-items-center"
                         >
                             <img src={addImg} 
@@ -179,7 +218,11 @@ const CreateProject = (props) => {
                 <Button
                     variant="dark"
                     disabled={!valid}
-                    onClick={handleCreateProject}
+                    // onClick={handleCreateProject}
+                    onClick={(e) => setShowConfirmModal({
+                        show: true,
+                        onClickHandler: handleCreateProject
+                    })}
                 >
                     Create Project
                 </Button>
@@ -190,6 +233,18 @@ const CreateProject = (props) => {
                 filteredTags={filteredTags} 
                 project={project}
                 setProject={setProject}
+                onMilestoneCreate={onMilestoneCreate}
+                onMilestoneDelete={onMilestoneDelete}
+            />
+            <ConfirmModal
+                onClickHandler = {showConfirmModal.onClickHandler}
+                show = {showConfirmModal.show}
+                handleClose = {() => {
+                    setShowConfirmModal({
+                        show:false,
+                        onClickHandler: null
+                    })
+                }}
             />
         </>
     );

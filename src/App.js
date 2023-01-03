@@ -15,15 +15,6 @@ import { DeveloperConsole } from "./substrate-lib/components";
 import Routes from "./Routes";
 
 import AccountSelector from "./AccountSelector";
-import Balances from "./Balances";
-import BlockNumber from "./BlockNumber";
-import Events from "./Events";
-import Interactor from "./Interactor";
-import Metadata from "./Metadata";
-import NodeInfo from "./NodeInfo";
-import TemplateModule from "./TemplateModule";
-import Transfer from "./Transfer";
-import Upgrade from "./Upgrade";
 import TestingSubstrateLib from "./TestingSubstrateLib";
 import DashBoard from "./View/Modules/DashBoard/DashBoard";
 import { useSelector } from "react-redux";
@@ -68,6 +59,7 @@ function Main() {
     }
 
     const contextRef = createRef();
+
 
     return (
         <div ref={contextRef}>

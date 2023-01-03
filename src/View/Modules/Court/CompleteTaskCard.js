@@ -3,15 +3,8 @@ import { Card, Col, Image, Row } from "react-bootstrap";
 import { TASK_COMPLETED_LOGO } from "../../../constants/constants";
 
 const CompleteTaskCard = ({ tab }) => {
-    const { tabId, tabType, task } = tab;
+    const { task } = tab;
     const {
-        client,
-        cost,
-        status,
-        taskDeadline,
-        taskDescription,
-        taskId,
-        workerId,
     } = task;
     return (
         <Card.Body>

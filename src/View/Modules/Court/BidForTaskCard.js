@@ -2,18 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Badge, Card, Col, Image, Row } from 'react-bootstrap'
 import { TASK_BID_LOGO } from '../../../constants/constants';
 import { getAttributesForCard } from '../DashBoard/helpers';
-import { TASK_STATUS } from './constants';
+
 
 const BidForTaskCard = ({tab}) => {
     const [attributesForCard, setAttributesForCard] = useState({});
-    const { tabId, tabType, task } = tab;
+    const { task } = tab;
     const {
-        client,
         cost,
         status,
-        taskDeadline,
-        taskDescription,
-        taskId,
         workerId,
     } = task;
 

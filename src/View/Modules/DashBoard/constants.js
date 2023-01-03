@@ -1,4 +1,5 @@
 export const GET_TASKS = 'GET_TASKS';
+export const GET_PROJECTS = 'GET_PROJECTS';
 export const ATTRIBUTES_FOR_TASK_CARD = 'ATTRIBUTES_FOR_TASK_CARD';
 
 export const FORM_TYPES = {

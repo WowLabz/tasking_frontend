@@ -1,32 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Modal, Card } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { useDispatch, useSelector } from 'react-redux';
+import { Row, Button} from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 
 import { useSubstrateState } from '../../../substrate-lib';
-import TestingSubstrateLib from '../../../TestingSubstrateLib';
-import * as palletTaskingFunctions from '../../../palletTaskingFunctions'; // this
-import * as actionCreators from './actionCreators';
 import './Dashboard.css';
 import TaskCard from './TaskCard'; // this
-import TaskFormFormik from './TaskFormFormik'; // this
 import * as constants from './constants';
-import staticData from '../../../assets/staticData/staticData.json';
 import 'react-toastify/dist/ReactToastify.min.css';
 import CardForAirDrop from './CardForAirDrop';
 import { Empty } from 'antd';
-import { sortTasksByUserTags } from './helpers';
 
 toast.configure();
 
 const DashBoard = (props) => {
-  const { api, keyring } = useSubstrateState();
-  const dispatch = useDispatch();
   const history = useHistory();
+  const [milestones,setMilestones] = useState([]);
+  const [searchActive, setSearchActive] = useState(false);
 
+  const filterProjects = (projects) => {
+    const milestoneList = [];
+    if(!projects) return milestoneList;
+    for(let index = projects.length - 1; index >= 0; index-- ){
+      const project = projects[index];
+
+      if(project.status === 'Open') {
+
+        project.milestones.map((milestone) => {
+          milestone.publisherName = project.publisherName;
+          milestoneList.push(milestone);
+        });
+
+      }
+    }
+    return milestoneList;
+  }
+
+  // initial render
   const tasks = useSelector((state) => state.dashBoardReducer.tasks);
+  useEffect(() => {
+    const tmpMilestones = filterProjects(tasks);
+    setMilestones(tmpMilestones);
+  }, [])
+
+
+  // re-render each time if tasks changes
+  useEffect(() => {
+    const tmpMilestones = filterProjects(tasks);
+    if(tmpMilestones && tmpMilestones.length !== 0 && !searchActive ) {
+      setMilestones(tmpMilestones);
+    } 
+  }, [tasks])
 
   const currentUserTags = useSelector(
     (state) => state.authenticationReducer.currentUserName.user_tags
@@ -45,44 +70,6 @@ const DashBoard = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        // palletTaskingFunctions.handleOnChainEvents(api, toast);
-        const getTasksResult = await palletTaskingFunctions.getAllTasks(api); // async function 
-
-        if (getTasksResult) {
-          console.log(`All Tasks From Chain: ${getTasksResult.length}`);
-          console.log(getTasksResult);
-
-          let sortedArr = [];
-          console.log(sortByOption);
-          switch (sortByOption) {
-            case constants.SORT_BY.userTags:
-              sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
-              break;
-            case constants.SORT_BY.statusOpen:
-            case constants.SORT_BY.statusInProgress:
-            case constants.SORT_BY.statusPendingApproval:
-            case constants.SORT_BY.statusPendingRatings:
-            case constants.SORT_BY.statusPendingRatings:
-            case constants.SORT_BY.statusCompleted:
-            case constants.SORT_BY.recent:
-            default:
-              sortedArr = sortTasksByUserTags(currentUserTags, getTasksResult);
-              break;
-          }
-
-          dispatch(actionCreators.setTasksFromBackEnd(sortedArr));
-        }
-      } catch (error) {
-        console.log(`catchError at useEffect : ${error.stack}`);
-      }
-    };
-    setInterval(() => {
-      init();
-    }, 5000);
-  }, [api?.query.palletTasking]);
 
   const showFormModal = (e, data) => {
     const formTypeOnClick = e.target.innerText;
@@ -122,21 +109,7 @@ const DashBoard = (props) => {
       <Row className="p-4">
         <div className="d-flex justify-content-between align-items-center">
           <h2 style={{ margin: '0' }}>Marketplace</h2>
-          {/* <Button
-            name={constants.FORM_TYPES.CREATE_TASK.type}
-            onClick={(e) => {
-              if (!isWalletConnected) {
-                toast.error(`Connect crypto wallet`, {
-                  position: toast.POSITION.TOP_RIGHT,
-                  autoClose: 2000,
-                });
-              } else {
-                showFormModal(e, null);
-              }
-            }}
-          >
-            Create New Task
-          </Button> */}
+
           <Button
             onClick={(e) => {
               if(!isWalletConnected) {
@@ -145,16 +118,16 @@ const DashBoard = (props) => {
                   autoClose: 2000,
                 });
               } else {
-                history.push('/create-project');
+                history.push('/user');
               }
             }}
           >
-            Create New Project
+            User Dashboard
           </Button>
         </div>
         <CardForAirDrop />
       </Row>
-
+      <br />
       <Row>
         {!tasks.length && (
           // <span style={{ marginLeft: "45px" }} className="p-2">
@@ -162,51 +135,18 @@ const DashBoard = (props) => {
           // </span>
           <Empty description={<span>Create new tasks</span>} />
         )}
-        {tasks.length > 0 &&
+        {/* {tasks.length > 0 &&
           tasks.map((task, index) => (
+            <TaskCard data={task} showFormModal={showFormModal} key={index} />
+          ))} */}
+          {milestones.length > 0 &&
+          milestones.map((task, index) => (
             <TaskCard data={task} showFormModal={showFormModal} key={index} />
           ))}
       </Row>
-      <TaskModal
-        show={show}
-        handleClose={handleClose}
-        configForBackEnd={{ api, keyring }}
-        formTypeAndData={currentFormTypeAndData}
-      />
     </>
   );
 };
 
-const TaskModal = ({
-  show,
-  handleClose,
-  configForBackEnd,
-  formTypeAndData,
-}) => {
-  const { formType } = formTypeAndData;
-  const { type, title } = formType;
-
-  return (
-    <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title>
-            <b>{title}</b>
-          </Modal.Title>
-          <Modal.Title onClick={handleClose} style={{ cursor: 'pointer' }}>
-            &#10005;
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <TaskFormFormik
-            configForBackEnd={configForBackEnd}
-            formTypeAndData={formTypeAndData}
-            handleClose={handleClose}
-          />
-        </Modal.Body>
-      </Modal>
-    </>
-  );
-};
 
 export default DashBoard;

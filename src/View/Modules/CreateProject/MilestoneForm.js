@@ -3,26 +3,24 @@ import {
     Card,
     Form,
     FormControl,
-    Button
+    Button,
 } from 'react-bootstrap';
 import Select from 'react-select';
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import axios from 'axios';
+import { Segment, Icon, Header } from "semantic-ui-react";
 
-import apiHelpers from '../../../Utilities/axiosHelpers';
-import { mergeScan } from "rxjs";
+
+import { uploadFileToServer } from "../Authorization/actionCreators";
 
 toast.configure();
 
 const MilestoneForm = (props) => {
     const tags = props.tags;
     const title = props.title;
-    const setShowModel = props.setShowModel;
+    
     const index = props.showModel.index;
     const project = props.project;
-    const setProject = props.setProject;
-
+    const unit = 1000000000000;
     const [milestone, setMilestone] = useState({
         name: '',
         cost: 0,
@@ -39,6 +37,9 @@ const MilestoneForm = (props) => {
 
     //for file 
     const [file, setFile] = useState(null);
+
+    // to show the upload spinner
+    const [ showSpinner, setShowSpinner ] = useState(false);
     
 
     // If the user is trying to edit the milestone then this will initialize the values
@@ -86,7 +87,7 @@ const MilestoneForm = (props) => {
             return;
         }
         if( value === 'publisherAttachments') {
-            tempMilestone.publisherAttachments[0] = event.target.value;
+            tempMilestone.publisherAttachments = event.target.value;
             setMilestone(tempMilestone);
             return;
         }
@@ -101,69 +102,45 @@ const MilestoneForm = (props) => {
         }
     }
 
-    const onFormSubmit = (event) => {
-        event.preventDefault();
-        const tempErrors = validateForm();
-        if(Object.keys(tempErrors).length > 0 ) {
-            setErrors(tempErrors);
-        }else{
-            if(index === -1) {
-                const tempProject = {...project};
-                tempProject.milestones.push(milestone);
-                setProject(tempProject);
-            }else{
-                const tempProject = {...project};
-                tempProject.milestones[index] = milestone;
-                setProject(tempProject);
-            }
-            setShowModel({
-                show:false,
-                index: -1
-            });
-        }
-    }
-
-    const onFormDelete = () => {
-        const tempProject = {...project};
-        const milestoneLength = tempProject.milestones.length;
-        for(let i=index; i<milestoneLength - 1; i++){
-            tempProject.milestones[i] = tempProject.milestones[i+1];
-        }
-        tempProject.milestones.pop();
-        setProject(tempProject);
-        setShowModel({
-            show: false,
-            index: -1
-        });
-    }
-
     const onFileUpload = async (event) => {
         event.preventDefault();
+        if(file === null){
+            setErrors({
+                ...errors,
+                ['publisherAttachments']: 'Please provide a file'
+            })
+            return;
+        }
         let headerObj = {
             headers:  {
                 "Content-Type": "multipart/form-data"
             }
         }
-        const url = 'http://localhost:8001/upload-file/'
-        let res = await apiHelpers.postWithHeaders(url, file, headerObj);
-        console.log(res);
+        const url = 'http://localhost:8001/upload-file/';
+        let res;
         try{
-            if(res.status === 202 || res.status === 200) {
-                console.log('result is accepted');
-                const tempMilestone = {...milestone};
-                tempMilestone.publisherAttachments[0] = res.data.message;
-                setMilestone(tempMilestone);
-                console.log(milestone);
-            }else {
-                setErrors({
-                    ...errors,
-                    ['publisherAttachments']: res.data.message
-                });
-            }
+            setShowSpinner(true);
+            // res = await apiHelpers.postWithHeaders(url, file, headerObj);
+            // setShowSpinner(false);
+            // if(res.status === 202 || res.status === 200) {
+            //     const tempMilestone = {...milestone};
+            //     tempMilestone.publisherAttachments = res.data.message;
+            //     setMilestone(tempMilestone);
+            // }else {
+            //     setErrors({
+            //         ...errors,
+            //         ['publisherAttachments']: res.data.message
+            //     });
+            // }
+            res = await uploadFileToServer(file);
+            setShowSpinner(false);
+            const tempMilestone = {...milestone};
+            tempMilestone.publisherAttachments = res.url;
+            setMilestone(tempMilestone);
         }catch(e) {
             setErrors({
                 ...errors,
-                ['publisherAttachments']: 'Please provide a file'
+                ['publisherAttachments']: 'Something went wrong'
             });
         }
         
@@ -237,20 +214,33 @@ const MilestoneForm = (props) => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Upload File</Form.Label>
                                 <br />
-                                <FormControl 
-                                    type="file" 
-                                    size="sm"
-                                    name="filesent"
-                                    isInvalid={!!errors.publisherAttachments}
-                                    onChange={(event) => {
-                                        const formFile = new FormData();
-                                        formFile.append('filesent', event.target.files[0]);
-                                        setFile(formFile);
-                                    }}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.publisherAttachments}
-                                </Form.Control.Feedback>
+                                <Segment placeholder loading={showSpinner}>
+                                    <Header icon>
+                                        <Icon name="file pdf outline" />
+                                        Add a file
+                                    </Header>
+                                    <Button onClick={e => {
+                                        {document.getElementById('imgupload').click()}
+                                    }}>
+                                        Add File
+                                    </Button>
+                                    <FormControl 
+                                        type="file" 
+                                        size="sm"
+                                        name="filesent"
+                                        id="imgupload"
+                                        isInvalid={!!errors.publisherAttachments}
+                                        onChange={(event) => {
+                                            const formFile = new FormData();
+                                            formFile.append('somefile', event.target.files[0]);
+                                            setFile(formFile);
+                                        }}
+                                        style={{display:'none'}}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.publisherAttachments}
+                                    </Form.Control.Feedback>
+                                </Segment>
                                 <Button
                                     variant="warning"
                                     onClick={onFileUpload}
@@ -267,7 +257,7 @@ const MilestoneForm = (props) => {
                         <FormControl 
                             type="text"
                             placeholder="Attachment Link"
-                            value={milestone.publisherAttachments[0]}
+                            value={milestone.publisherAttachments}
                             disabled={true}
                             
                         />
@@ -277,7 +267,11 @@ const MilestoneForm = (props) => {
                         <Button
                             variant="dark"
                             type="submit"
-                            onClick={onFormSubmit}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                milestone.cost = milestone.cost * unit;
+                                props.onFormSubmit(event,milestone,validateForm,setErrors,index)
+                            }}
                             disabled={!valid}
                         >
                             {title}
@@ -286,7 +280,7 @@ const MilestoneForm = (props) => {
                             index !== -1 && 
                             <Button
                                 variant="danger"
-                                onClick={onFormDelete}
+                                onClick={(event) => props.onFormDelete(index)}
                             >
                                 Delete Milestone
                             </Button>

@@ -1,4 +1,3 @@
-import TaskDetails from './Court';
 
 export const COURT_TAB_TYPE = {
   COURT_DETAILS: 'Court Details',

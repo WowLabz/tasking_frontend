@@ -1,10 +1,10 @@
 import * as Actions from "./actions";
-import * as palletTaskingFunctions from "../../../palletTaskingFunctions";
 
 export const setTasksFromBackEnd = (data) => {
+    console.log('set task from backend is called dispatching.......',data);
     return async (dispatch) => {
         try {
-            dispatch(Actions.setTasks(data));
+            dispatch(Actions.setProjects(data));
         } catch (error) {
             console.log(`err from actionCreator ${error}`);
         }

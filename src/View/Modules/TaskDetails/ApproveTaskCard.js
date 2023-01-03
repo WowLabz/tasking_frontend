@@ -2,17 +2,7 @@ import React from "react";
 import { Card, Col, Image, Row } from "react-bootstrap";
 import { TASK_APPROVED_LOGO } from "../../../constants/constants";
 
-const ApproveTaskCard = ({ tab }) => {
-    const { tabId, tabType, task } = tab;
-    const {
-        client,
-        cost,
-        status,
-        taskDeadline,
-        taskDescription,
-        taskId,
-        workerId,
-    } = task;
+const ApproveTaskCard = () => {
     return (
         <Card.Body>
             <Row>
