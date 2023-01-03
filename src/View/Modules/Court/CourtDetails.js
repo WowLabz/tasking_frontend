@@ -26,6 +26,7 @@ const CourtDetails = (props) => {
                 active={activeIndex===0}
                 index={0}
                 onClick={handleAccordionClick}
+                style={{'background-color':'#f2f2f2'}}
             > 
                 <Icon name="dropdown" />
                 <b>Court Details</b>
@@ -42,10 +43,10 @@ const CourtDetails = (props) => {
                             Milestone Id: {milestone.milestoneId}
                         </List.Item>
                         <List.Item>
-                            Publisher Name: {milestone.publisherName}
+                            Publisher: {milestone.publisherName}
                         </List.Item>
                         <List.Item>
-                            Worker Name: {milestone.workerName}
+                            Worker: {milestone.workerName}
                         </List.Item>
                         <List.Item>
                             Deadline: {milestone.deadline} days

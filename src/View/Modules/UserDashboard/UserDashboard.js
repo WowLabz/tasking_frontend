@@ -94,7 +94,7 @@ const UserDashboard = () => {
                             history.push('/create-project');
                         }
                         
-                    }}>
+                    }} style={{'cursor': 'pointer'}}>
                         <Header icon>
                             <Icon name='add' />
                             You do not have any projects. Click to create a new project.

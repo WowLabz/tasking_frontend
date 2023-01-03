@@ -40,6 +40,9 @@ const MilestoneForm = (props) => {
 
     // to show the upload spinner
     const [ showSpinner, setShowSpinner ] = useState(false);
+
+    // to show the file name 
+    const [ fileHeader, setFileHeader ] = useState("Add a file")
     
 
     // If the user is trying to edit the milestone then this will initialize the values
@@ -48,11 +51,11 @@ const MilestoneForm = (props) => {
             const tempMilestone = {...project.milestones[index]};
             setMilestone(tempMilestone);
         }
-    }, [] );
+    },[index, project?.milestones]);
 
     // to validate the form
     useEffect( () => {
-        if(milestone.name !== '' && milestone.cost != 0 && milestone.tags.length !== 0 && milestone.deadline != 0 && milestone.publisherAttachments != ''){
+        if(milestone.name !== '' && milestone.cost !== 0 && milestone.tags.length !== 0 && milestone.deadline !== 0 && milestone.publisherAttachments !== ''){
             setValid(true);
         }
     }, [milestone] );
@@ -73,7 +76,7 @@ const MilestoneForm = (props) => {
         if(!deadline && deadline <= 0) {
             tempErrors.deadline = 'Deadline has to be a non zero value';
         }
-        if(!publisherAttachments || publisherAttachments == '') {
+        if(!publisherAttachments || publisherAttachments === '') {
             tempErrors.publisherAttachments = 'Please provide some attachments';
         }
         return tempErrors;
@@ -105,18 +108,21 @@ const MilestoneForm = (props) => {
     const onFileUpload = async (event) => {
         event.preventDefault();
         if(file === null){
-            setErrors({
-                ...errors,
-                ['publisherAttachments']: 'Please provide a file'
-            })
+            const tempErrors = {...errors};
+            tempErrors.publisherAttachments = 'Please provide a file';
+            // setErrors({
+            //     ...errors,
+            //     ['publisherAttachments']: 'Please provide a file'
+            // })
+            setErrors(tempErrors);
             return;
         }
-        let headerObj = {
-            headers:  {
-                "Content-Type": "multipart/form-data"
-            }
-        }
-        const url = 'http://localhost:8001/upload-file/';
+        // let headerObj = {
+        //     headers:  {
+        //         "Content-Type": "multipart/form-data"
+        //     }
+        // }
+        // const url = 'http://localhost:8001/upload-file/';
         let res;
         try{
             setShowSpinner(true);
@@ -138,10 +144,13 @@ const MilestoneForm = (props) => {
             tempMilestone.publisherAttachments = res.url;
             setMilestone(tempMilestone);
         }catch(e) {
-            setErrors({
-                ...errors,
-                ['publisherAttachments']: 'Something went wrong'
-            });
+            // setErrors({
+            //     ...errors,
+            //     ['publisherAttachments']: 'Something went wrong'
+            // });
+            const tempErrors = {...errors};
+            tempErrors.publisherAttachments = 'Something went wrong';
+            setErrors(tempErrors);
         }
         
     }
@@ -214,13 +223,15 @@ const MilestoneForm = (props) => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Upload File</Form.Label>
                                 <br />
-                                <Segment placeholder loading={showSpinner}>
+                                <Segment placeholder loading={showSpinner}
+                                    style={{'cursor': 'default'}}
+                                >
                                     <Header icon>
                                         <Icon name="file pdf outline" />
-                                        Add a file
+                                        {fileHeader}
                                     </Header>
                                     <Button onClick={e => {
-                                        {document.getElementById('imgupload').click()}
+                                        document.getElementById('imgupload').click()
                                     }}>
                                         Add File
                                     </Button>
@@ -234,6 +245,7 @@ const MilestoneForm = (props) => {
                                             const formFile = new FormData();
                                             formFile.append('somefile', event.target.files[0]);
                                             setFile(formFile);
+                                            setFileHeader(event.target.files[0].name);
                                         }}
                                         style={{display:'none'}}
                                     />

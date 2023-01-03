@@ -199,7 +199,7 @@ const ProjectDetails = (props) => {
                                 Project Id: {userProject.projectId}
                             </List.Item>
                             <List.Item>
-                                Publisher Name : {userProject.publisherName}
+                                Publisher : {userProject.publisherName}
                             </List.Item>
                             <List.Item>
                                 Publisher Address: {userProject.publisher}

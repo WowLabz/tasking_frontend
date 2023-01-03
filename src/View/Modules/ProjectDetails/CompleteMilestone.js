@@ -18,6 +18,8 @@ const CompleteMilestone = (props) => {
     const [ spinner, setSpinner ] = useState(false);
     const [ uploadButton, setUploadButton ] = useState(true);
     const [ valid, setValid ] = useState(false);
+    // to show the file name 
+    const [ fileHeader, setFileHeader ] = useState("Add a file")
 
     useEffect( () => {
         if(workerAttachments.length === 1 && workerAttachments.length > 0) {
@@ -75,10 +77,12 @@ const CompleteMilestone = (props) => {
                                 <Form.Group className="mb-3">
                                     <Form.Label>Upload File</Form.Label>
                                     <br />
-                                    <Segment placeholder loading={spinner}>
+                                    <Segment placeholder loading={spinner}
+                                        style={{'cursor': 'default'}}
+                                    >
                                         <Header icon>
                                             <Icon name="file pdf outline" />
-                                            Add a file
+                                            {fileHeader}
                                         </Header>
                                         <Button onClick={e => {
                                             {document.getElementById('imgupload').click()}
@@ -95,6 +99,7 @@ const CompleteMilestone = (props) => {
                                                 formFile.append('somefile', event.target.files[0]);
                                                 setFile(formFile);
                                                 setUploadButton(false);
+                                                setFileHeader(event.target.files[0].name);
                                             }}
                                             style={{display:'none'}}
                                         />
