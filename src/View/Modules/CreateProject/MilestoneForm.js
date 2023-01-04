@@ -51,11 +51,11 @@ const MilestoneForm = (props) => {
             const tempMilestone = {...project.milestones[index]};
             setMilestone(tempMilestone);
         }
-    }, [] );
+    }, [index, project?.milestones] );
 
     // to validate the form
     useEffect( () => {
-        if(milestone.name !== '' && milestone.cost != 0 && milestone.tags.length !== 0 && milestone.deadline != 0 && milestone.publisherAttachments != ''){
+        if(milestone.name !== '' && milestone.cost !== 0 && milestone.tags.length !== 0 && milestone.deadline !== 0 && milestone.publisherAttachments !== ''){
             setValid(true);
         }
     }, [milestone] );
@@ -76,7 +76,7 @@ const MilestoneForm = (props) => {
         if(!deadline && deadline <= 0) {
             tempErrors.deadline = 'Deadline has to be a non zero value';
         }
-        if(!publisherAttachments || publisherAttachments == '') {
+        if(!publisherAttachments || publisherAttachments === '') {
             tempErrors.publisherAttachments = 'Please provide some attachments';
         }
         return tempErrors;
@@ -212,7 +212,7 @@ const MilestoneForm = (props) => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Upload File</Form.Label>
                                 <br />
-                                <Segment placeholder loading={showSpinner}>
+                                <Segment placeholder style={{'cursor':'default'}} loading={showSpinner}>
                                     <Header icon>
                                         <Icon name="file pdf outline" />
                                         {fileHeader}

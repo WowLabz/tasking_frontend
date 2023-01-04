@@ -166,7 +166,7 @@ const MilestoneDetails = (props) => {
                         ) : null }
                         { milestone.workerName !== null ? (
                             <List.Item>
-                                Worker Name: {milestone.workerName}
+                                Worker: {milestone.workerName}
                             </List.Item>
                         ) : null }
 

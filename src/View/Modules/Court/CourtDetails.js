@@ -42,10 +42,10 @@ const CourtDetails = (props) => {
                             Milestone Id: {milestone.milestoneId}
                         </List.Item>
                         <List.Item>
-                            Publisher Name: {milestone.publisherName}
+                            Publisher: {milestone.publisherName}
                         </List.Item>
                         <List.Item>
-                            Worker Name: {milestone.workerName}
+                            Worker: {milestone.workerName}
                         </List.Item>
                         <List.Item>
                             Deadline: {milestone.deadline} days

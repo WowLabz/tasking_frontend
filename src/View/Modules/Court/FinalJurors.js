@@ -27,6 +27,7 @@ const FinalJurors = (props) => {
           active={activeIndex===0}
           index={0}
           onClick={handleAccordionClick}
+          style={{'background-color':'#f2f2f2'}}
         >
           <Icon name="dropdown" />
           <b>Final Jurors</b>

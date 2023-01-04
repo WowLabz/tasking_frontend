@@ -72,7 +72,7 @@ const CompleteMilestone = (props) => {
                                 <Form.Group className="mb-3">
                                     <Form.Label>Upload File</Form.Label>
                                     <br />
-                                    <Segment placeholder loading={spinner}>
+                                    <Segment placeholder loading={spinner} style={{'cursor':'default'}}>
                                         <Header icon>
                                             <Icon name="file pdf outline" />
                                             {fileHeader}
