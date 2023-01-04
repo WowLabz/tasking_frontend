@@ -6,7 +6,7 @@ import closedImg from './static/closed.png';
 const CourtSummary = (props) => {
 
   const dispute = props.dispute;
-  const [ activeIndex, setActiveIndex ] = useState(-1);
+  const [ activeIndex, setActiveIndex ] = useState(0);
 
   const handleAccordionClick = (event, titleProps) => {
     const { index } = titleProps;
