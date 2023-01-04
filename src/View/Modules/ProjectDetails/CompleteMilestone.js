@@ -14,7 +14,7 @@ const CompleteMilestone = (props) => {
     const walletUser = props.walletUser;
 
     const [ file, setFile ] = useState(null);
-    const [ workerAttachments, setWorkerAttachments ] = useState([]);
+    const [ workerAttachments, setWorkerAttachments ] = useState('');
     const [ spinner, setSpinner ] = useState(false);
     const [ uploadButton, setUploadButton ] = useState(true);
     const [ valid, setValid ] = useState(false);
@@ -22,7 +22,7 @@ const CompleteMilestone = (props) => {
     const [ fileHeader, setFileHeader ] = useState("Add a file")
 
     useEffect( () => {
-        if(workerAttachments.length === 1 && workerAttachments.length > 0) {
+        if(workerAttachments.length > 0) {
             setValid(true);
         }
     }, [workerAttachments]);
@@ -48,9 +48,9 @@ const CompleteMilestone = (props) => {
             // }else {
             //     setUploadButton(true);
             // }
-            const tempAttachment = [...workerAttachments];
-            tempAttachment.push(res.url);
-            setWorkerAttachments(tempAttachment);
+            const urlArr = res.url.split('/');
+            const newUrl = process.env.REACT_APP_AUTH_SERVER+'/files/'+urlArr[urlArr.length - 1];
+            setWorkerAttachments(newUrl);
         }catch(e) {
             setUploadButton(true);
         }

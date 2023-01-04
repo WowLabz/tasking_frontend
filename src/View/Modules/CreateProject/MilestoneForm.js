@@ -141,7 +141,9 @@ const MilestoneForm = (props) => {
             res = await uploadFileToServer(file);
             setShowSpinner(false);
             const tempMilestone = {...milestone};
-            tempMilestone.publisherAttachments = res.url;
+            const urlArr = res.url.split('/');
+            const newUrl = process.env.REACT_APP_AUTH_SERVER+'/files/'+urlArr[urlArr.length - 1];
+            tempMilestone.publisherAttachments = newUrl;
             setMilestone(tempMilestone);
         }catch(e) {
             // setErrors({
