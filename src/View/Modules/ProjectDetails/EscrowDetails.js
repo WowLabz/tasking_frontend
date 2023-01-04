@@ -26,7 +26,7 @@ const EscrowDetails = props => {
     }
     const bidsEscrow = bidderList.map(bid => {
         return (<List.Item>
-            {bid.bidderName} bidded, <i>added</i> {milestoneCost} Units
+            {bid.bidderName} bid, <i>added</i> {milestoneCost} Units
         </List.Item>)
     })
     const getFinalJurorcount = (finalJuror) => {
@@ -48,7 +48,7 @@ const EscrowDetails = props => {
                     Escrow History
                     <List bulleted>
                         <List.Item>
-                            Milestone Created <i>added</i> {milestoneCost} Units
+                            Milestone Created <i>added</i> {milestoneCost} Units by {milestone.publisherName}
                         </List.Item>
                         {bidderList.length > 0 && (
                             bidsEscrow
