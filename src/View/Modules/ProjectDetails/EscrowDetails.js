@@ -41,7 +41,7 @@ const EscrowDetails = props => {
         <Container>
             <Segment>
                 <Header>Escrow Details</Header>
-                <div style={{'background-color':'yellow'}}>
+                <div style={{'background-color':'yellow', 'display':'inline-block', 'border':'2px solid yellow'}}>
                     Outstanding Amount: {escrowAmount()} Units
                 </div>
                 <div>

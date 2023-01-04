@@ -236,10 +236,10 @@ const MilestoneDetails = (props) => {
                         {milestone.status === MILESTONE_STATUS.PendingApproval && props.walletUser.address === project.publisher ? (
                             <div>
                                 <Button.Group floated="right">
-                                    <div>
+                                    <div style={{'padding':'5px'}}>
                                         <Button
                                             basic
-                                            color="olive"
+                                            color="green"
                                             onClick={e => {
                                                 e.stopPropagation();
                                                 setShowProvideRatingModal({
@@ -253,7 +253,7 @@ const MilestoneDetails = (props) => {
                                             Approve
                                         </Button>
                                     </div>
-                                    <div>
+                                    <div style={{'padding':'5px'}}>
                                         <Button
                                             basic
                                             color="red"
@@ -277,7 +277,7 @@ const MilestoneDetails = (props) => {
                         { project.status === 'Open' && milestone.status === MILESTONE_STATUS.CustomerRatingPending && props.walletUser.address === milestone.workerId ? (
                             <div>
                                 <Button.Group floated="right">
-                                    <div>
+                                    <div style={{'padding':'5px'}}>
                                         <Button
                                             basic
                                             color="olive"
@@ -294,7 +294,7 @@ const MilestoneDetails = (props) => {
                                             Provide Customer Rating
                                         </Button>
                                     </div>
-                                    <div>
+                                    <div style={{'padding':'5px'}}>
                                         <Button
                                             basic
                                             color="red"
@@ -318,7 +318,7 @@ const MilestoneDetails = (props) => {
                         { project.status === 'Open' && milestone.status === MILESTONE_STATUS.CustomerRatingProvided && props.walletUser.address === project.publisher ? (
                             <div>
                                 <Button.Group floated="right">
-                                    <div>
+                                    <div style={{'padding':'5px'}}>
                                         <Button
                                             basic
                                             color="olive"
@@ -334,7 +334,7 @@ const MilestoneDetails = (props) => {
                                             Close Milestone
                                         </Button>
                                     </div>
-                                    <div>
+                                    <div style={{'padding':'5px'}}>
                                         <Button
                                             basic
                                             color="red"

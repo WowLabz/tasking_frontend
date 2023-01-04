@@ -56,7 +56,7 @@ const CourtDetails = (props) => {
                             Cost: {convertCost(milestone.cost)} Units
                         </List.Item>
                         { dispute.winner && dispute.winner.length > 0 && (
-                            <List.Item style={{'background-color':'yellow'}}>
+                            <List.Item style={{'background-color':'green', 'display':'inline-block', 'border':'2px solid green', 'color':'white', 'margin':'3px', 'padding':'3px'}}>
                                 Winner: {dispute.winner === 'Worker' ? milestone.workerName : milestone.publisherName}
                             </List.Item>
                         )}

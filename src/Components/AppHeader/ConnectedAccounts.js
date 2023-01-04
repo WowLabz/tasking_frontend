@@ -1,14 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, FormControl, NavDropdown } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  DEFAULT_ACCOUNT_IDS,
-  getAccountsFromKeyRing,
-} from '../../palletTaskingFunctions';
-import { useSubstrateState } from '../../substrate-lib';
 import { cryptoWalletAccountSelect, cryptoWalletDisconnect } from './actions';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { toast } from 'react-toastify';
+import { convertCost } from '../../Utilities/convertCost';
 
 const connectWalletStyle = {
   border: '1px solid #f2f4f6',
@@ -64,7 +60,7 @@ const ConnectedAccounts = () => {
         data: { free: previousFree },
         nonce: previousNonce,
       } = await api.query.system.account(currAcc.address);
-      balanceRef.current.value = previousFree.toHuman();
+      balanceRef.current.value = Math.round(convertCost(previousFree.toHuman()));
 
       console.log(
         `${currAcc.meta.name} has a balance of ${previousFree}, nonce ${previousNonce}`

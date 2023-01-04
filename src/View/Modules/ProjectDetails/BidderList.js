@@ -37,9 +37,9 @@ const BidderList = (props) => {
                                                 <List.Item>
                                                     Average Rating: {bidder.account.avgRating}
                                                 </List.Item>
-                                                <List.Item>
+                                                {/* <List.Item>
                                                     Account Balance: {bidder.account.balance}
-                                                </List.Item>
+                                                </List.Item> */}
                                                 <div>
                                                     <b>Tags:</b>
                                                 </div>
