@@ -7,7 +7,7 @@ import MilestoneModal from '../CreateProject/MilestoneModal';
 import MilestoneDetails from './MilestoneDetails';
 import { getAttributesForCard } from './ProjectDetailCard';
 import { useSubstrateState } from '../../../substrate-lib';
-import { addMilestoneToProjectTx, addProjectToMarketplaceTx, getAllProjects, closeProjectTx, bidForMilestoneTx  } from '../../../palletTaskingFunctions';
+import { addMilestoneToProjectTx, addProjectToMarketplaceTx, getAllProjects, closeProjectTx  } from '../../../palletTaskingFunctions';
 import * as dashboardActionCreators from '../DashBoard/actionCreators';
 import ConfirmModal from '../../../Utilities/ConfirmModal';
 import CustomBreadcrumb from '../UserDashboard/CustomBreadCrumb';
@@ -16,6 +16,7 @@ import CustomBreadcrumb from '../UserDashboard/CustomBreadCrumb';
 const ProjectDetails = (props) => {
     
     const projectId = props.match.params.id;
+    const mid = props.match.params.mid;
     const projects = useSelector((state) => state.dashBoardReducer.tasks);
     const { api } = useSubstrateState();
     const dispatch = useDispatch();
@@ -44,7 +45,8 @@ const ProjectDetails = (props) => {
     );
 
     const [ userProject, setUserProject ] = useState(null);
-    const [ activeIndex, setActiveIndex ] = useState(0);
+    const currIndex = mid ? parseInt(mid) : 0;
+    const [ activeIndex, setActiveIndex ] = useState(currIndex);
     // for milestone modal
     const [showModel, setShowModel] = useState({
         show: false,
@@ -71,13 +73,13 @@ const ProjectDetails = (props) => {
         const tempProject = projects.filter(project => project.projectId === projectId);
         if(tempProject.length !== 0)
             setUserProject(tempProject[0]);
-    }, []);
+    }, [projects, projectId]);
 
     useEffect(() => {
         const tempProject = projects.filter(project => project.projectId === projectId);
         if(tempProject.length !== 0)
             setUserProject(tempProject[0]);
-    }, [projects])
+    }, [projects, projectId])
 
     if(!userProject) {
         return (
@@ -87,7 +89,7 @@ const ProjectDetails = (props) => {
                         <h2>Project Details</h2>
                     </div>
                 </Row>
-                <Segment placeholder>
+                <Segment placeholder style={{'cursor':'default'}}>
                     <Header icon>
                         <Icon name='close' />
                         The project does not exist.
@@ -164,6 +166,7 @@ const ProjectDetails = (props) => {
                     active={activeIndex===0}
                     index={0}
                     onClick={handleAccordionClick}
+                    // style={{'background-color':'#f2f2f2'}}
                 >
                     <div className="d-flex justify-content-between align-items-center">
                         <Icon name='dropdown' />

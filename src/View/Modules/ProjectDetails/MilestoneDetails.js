@@ -20,7 +20,8 @@ import ConfirmModal from "../../../Utilities/ConfirmModal";
 import ProvideRatingModal from "./ProvideRatingModal";
 import CompleteMilestone from "./CompleteMilestone";
 import { MILESTONE_STATUS, USER_TYPE } from "./constants";
-
+import { convertCost } from "../../../Utilities/convertCost";
+import EscrowDetails from "./EscrowDetails";
 
 
 
@@ -58,7 +59,7 @@ const MilestoneDetails = (props) => {
         };
         getListOfBidders();
         
-    }, [milestone,api?.query.palletTasking])
+    }, [api, milestone,api?.query.palletTasking])
 
 
     const attributes = getAttributesForMilestone(milestone);
@@ -101,6 +102,7 @@ const MilestoneDetails = (props) => {
                 active={activeIndex===index+1}
                 index={index+1}
                 onClick={handleAccordionClick}
+                // style={{'background-color':'#f2f2f2'}}
             >
                 <Icon name='dropdown' />
                 {`Milestone ${index+1}`}
@@ -134,7 +136,7 @@ const MilestoneDetails = (props) => {
                             Milestone Id: {milestone.milestoneId}
                         </List.Item>
                         <List.Item>
-                            Milestone Cost: {milestone.cost}
+                            Milestone Cost: {convertCost(milestone.cost)} Units
                         </List.Item>
                         <List.Item>
                             Milestone Deadline: {milestone.deadline}
@@ -209,6 +211,10 @@ const MilestoneDetails = (props) => {
                         ))}
    
                     </div>
+                    <div style={{'margin-top':'10px'}}>
+                        <EscrowDetails bidderList={bidderList} milestone={milestone} publisher={project.publisherName} />
+                    </div>
+                    <br/>
                     <div>
 
                         {/* Complete Milestone button (Only visible to the worker) */}
@@ -240,7 +246,7 @@ const MilestoneDetails = (props) => {
                                                     show:true,
                                                     onClickHandler:handleApproveMilestone,
                                                     title: "Approve milestone and Provide Rating",
-                                                    label: "Provide Worker Rating"
+                                                    label: "Provide Worker Rating (between 1 to 5)"
                                                 })
                                             }}
                                         >
@@ -281,7 +287,7 @@ const MilestoneDetails = (props) => {
                                                     show:true,
                                                     onClickHandler:handleProvideCustomerRating,
                                                     title: "Provide Customer Rating",
-                                                    label: "Provide Customer Rating"
+                                                    label: "Provide Customer Rating (between 1 to 5)"
                                                 })
                                             }}
                                         >

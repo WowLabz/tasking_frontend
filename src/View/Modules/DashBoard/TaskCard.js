@@ -3,11 +3,11 @@ import { Badge, Card, Button, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import _ from 'lodash';
 import * as constants from './constants';
-import { useSelector } from 'react-redux';
 import { TASK_STATUS } from '../TaskDetails/constants';
 import BalanceImg from '../../../assets/images/balance.png';
+import { convertCost } from '../../../Utilities/convertCost';
 
-const TaskCard = ({ data, showFormModal }) => {
+const TaskCard = ({ data }) => {
   const history = useHistory();
   const [attributesForCard, setAttributesForCard] = useState({});
   const [cardDetails, setCardDetails] = useState({
@@ -33,13 +33,6 @@ const TaskCard = ({ data, showFormModal }) => {
     showAttachments: false,
     attachments: [],
   });
-
-  const connectedAccounts = useSelector(
-    (state) => state.headerReducer.accountsAvailableInWallet
-  );
-  const defaultAccounts = useSelector(
-    (state) => state.headerReducer.defaultAccounts
-  );
 
   const getAttributesForCard = (status) => {
     switch (status) {
@@ -197,19 +190,7 @@ const TaskCard = ({ data, showFormModal }) => {
           ),
         };
       default:
-        console.log(`----------status: ${status}-------------`);
-        return {
-          badgeColor: 'blue',
-          button: (
-            <Button
-              variant="warning"
-              name={constants.FORM_TYPES.BID_FOR_TASK.type}
-              onClick={(e) => showFormModal(e, data)}
-            >
-              <b>Default</b>
-            </Button>
-          ),
-        };
+        return null;
     }
   };
 
@@ -337,7 +318,7 @@ const TaskCard = ({ data, showFormModal }) => {
             {cardDetails.deadline} days
           </Card.Text>
           <Card.Text>
-            <b>TaskCost:</b> {cardDetails.cost}
+            <b>TaskCost:</b> {convertCost(cardDetails.cost)} Units
           </Card.Text>
           <div>
             <b>tags:</b>

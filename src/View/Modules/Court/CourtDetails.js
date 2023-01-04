@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Badge } from "react-bootstrap";
 import { Accordion, List, Icon, Segment, Header } from "semantic-ui-react";
-
+import { convertCost } from "../../../Utilities/convertCost";
 
 import "react-circular-progressbar/dist/styles.css";
 
@@ -52,7 +52,7 @@ const CourtDetails = (props) => {
                             Deadline: {milestone.deadline} days
                         </List.Item>
                         <List.Item>
-                            Cost: {milestone.cost}
+                            Cost: {convertCost(milestone.cost)} Units
                         </List.Item>
                     </List>
                     <div>

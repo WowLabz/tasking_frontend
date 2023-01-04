@@ -83,6 +83,11 @@ const UserDashboard = () => {
                     </div>
                     <CardForAirDrop />
                 </Row>
+                <CustomBreadcrumb
+                    home={0}
+                    link={'/user'}
+                    name={"User Dashboard"} 
+                />
                 <Container>
                     <Segment placeholder onClick={(e) => {
                         if(!isWalletConnected) {

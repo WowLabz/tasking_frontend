@@ -44,7 +44,7 @@ const Routes = ({ match }) => {
                 setCaller(true);
             }
         }
-    },[api?.query.palletTasking]);
+    },[api?.query.palletTasking, api, caller]);
 
     // Fetching logic ends here 
 
@@ -71,7 +71,7 @@ const Routes = ({ match }) => {
                         component={UserDashboard}
                     />
                     <ProtectedRoute 
-                        path="/projectdetails/:id"
+                        path="/projectdetails/:id/:mid?"
                         component={ProjectDetails}
                     />
                 </Switch>
