@@ -8,6 +8,7 @@ import "react-circular-progressbar/dist/styles.css";
 
 const CourtDetails = (props) => {
     const milestone = props.milestone;
+    const dispute = milestone.dispute;
 
     const [ activeIndex, setActiveIndex ] = useState(0);
 
@@ -54,6 +55,11 @@ const CourtDetails = (props) => {
                         <List.Item>
                             Cost: {convertCost(milestone.cost)} Units
                         </List.Item>
+                        { dispute.winner && dispute.winner.length > 0 && (
+                            <List.Item style={{'background-color':'yellow'}}>
+                                Winner: {dispute.winner === 'Worker' ? milestone.workerName : milestone.publisherName}
+                            </List.Item>
+                        )}
                     </List>
                     <div>
                         {milestone.tags.map((tag, idx) => (
