@@ -78,7 +78,7 @@ const CompleteMilestone = (props) => {
                                             {fileHeader}
                                         </Header>
                                         <Button onClick={e => {
-                                            {document.getElementById('imgupload').click()}
+                                            document.getElementById('imgupload').click()
                                             }}>
                                             Add File
                                         </Button>

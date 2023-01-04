@@ -7,7 +7,7 @@ import MilestoneModal from '../CreateProject/MilestoneModal';
 import MilestoneDetails from './MilestoneDetails';
 import { getAttributesForCard } from './ProjectDetailCard';
 import { useSubstrateState } from '../../../substrate-lib';
-import { addMilestoneToProjectTx, addProjectToMarketplaceTx, getAllProjects, closeProjectTx, bidForMilestoneTx  } from '../../../palletTaskingFunctions';
+import { addMilestoneToProjectTx, addProjectToMarketplaceTx, getAllProjects, closeProjectTx } from '../../../palletTaskingFunctions';
 import * as dashboardActionCreators from '../DashBoard/actionCreators';
 import ConfirmModal from '../../../Utilities/ConfirmModal';
 import CustomBreadcrumb from '../UserDashboard/CustomBreadCrumb';
@@ -71,13 +71,13 @@ const ProjectDetails = (props) => {
         const tempProject = projects.filter(project => project.projectId === projectId);
         if(tempProject.length !== 0)
             setUserProject(tempProject[0]);
-    }, []);
+    }, [projectId, projects]);
 
     useEffect(() => {
         const tempProject = projects.filter(project => project.projectId === projectId);
         if(tempProject.length !== 0)
             setUserProject(tempProject[0]);
-    }, [projects])
+    }, [projects, projectId])
 
     if(!userProject) {
         return (

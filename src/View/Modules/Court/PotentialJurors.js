@@ -36,7 +36,7 @@ const PotentialJurors = (props) => {
           <b>Potential Jurors</b>
         </Accordion.Title>
         <Accordion.Content
-          active={activeIndex==0}
+          active={activeIndex===0}
         >
           <List bulleted>
             {dispute.potentialJurors.map((juror,idx) => {

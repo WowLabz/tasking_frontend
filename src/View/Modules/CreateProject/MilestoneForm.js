@@ -108,10 +108,9 @@ const MilestoneForm = (props) => {
     const onFileUpload = async (event) => {
         event.preventDefault();
         if(file === null){
-            setErrors({
-                ...errors,
-                ['publisherAttachments']: 'Please provide a file'
-            })
+            const tempErrors = {...errors};
+            tempErrors.publisherAttachments = 'Please provide a file';
+            setErrors(tempErrors);
             return;
         }
         let headerObj = {
@@ -130,16 +129,14 @@ const MilestoneForm = (props) => {
                 tempMilestone.publisherAttachments = res.data.message;
                 setMilestone(tempMilestone);
             }else {
-                setErrors({
-                    ...errors,
-                    ['publisherAttachments']: res.data.message
-                });
+                const tempErrors = {...errors};
+                tempErrors.publisherAttachments = res.data.message;
+                setErrors(tempErrors);
             }
         }catch(e) {
-            setErrors({
-                ...errors,
-                ['publisherAttachments']: 'Something went wrong'
-            });
+            const tempErrors = {...errors};
+            tempErrors.publisherAttachments = 'Something went wrong';
+            setErrors(tempErrors);
         }
         
     }
@@ -218,7 +215,7 @@ const MilestoneForm = (props) => {
                                         {fileHeader}
                                     </Header>
                                     <Button onClick={e => {
-                                        {document.getElementById('imgupload').click()}
+                                        document.getElementById('imgupload').click()
                                     }}>
                                         Add File
                                     </Button>
