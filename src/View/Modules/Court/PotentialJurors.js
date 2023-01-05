@@ -3,48 +3,37 @@ import { Accordion, List, Icon, Button } from "semantic-ui-react";
 
 import { getJuror } from "./helpers";
 
-
 const PotentialJurors = (props) => {
-
   const dispute = props.dispute;
   const user = props.user;
   const onClickHandler = props.onClickHandler;
 
-  const [ activeIndex, setActiveIndex ] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleAccordionClick = (event, titleProps) => {
     const { index } = titleProps;
     const newIndex = activeIndex === index ? -1 : index;
     setActiveIndex(newIndex);
-
-  }
-
+  };
 
   return (
     <>
-      <Accordion
-        fluid
-        styled
-      >
+      <Accordion fluid styled>
         <Accordion.Title
-          active={activeIndex===0}
+          active={activeIndex === 0}
           index={0}
           onClick={handleAccordionClick}
-          style={{'background-color':'#f2f2f2'}}
+          style={{ "background-color": "#f2f2f2" }}
         >
           <Icon name="dropdown" />
           <b>Potential Jurors</b>
         </Accordion.Title>
-        <Accordion.Content
-          active={activeIndex===0}
-        >
+        <Accordion.Content active={activeIndex === 0}>
           <List bulleted>
-            {dispute.potentialJurors.map((juror,idx) => {
-              return(
+            {dispute.potentialJurors.map((juror, idx) => {
+              return (
                 <List.Item key={idx}>
-                  <div>
-                    {getJuror(juror)}
-                  </div>
+                  <div>{getJuror(juror)}</div>
                   <div>
                     {user.address === juror ? (
                       <Button
@@ -53,10 +42,9 @@ const PotentialJurors = (props) => {
                         color="blue"
                         onClick={() => {
                           props.setShowVoteModal({
-                            show:true,
-                            onClickHandler: onClickHandler
-                          })
-                          
+                            show: true,
+                            onClickHandler: onClickHandler,
+                          });
                         }}
                       >
                         Cast Vote
@@ -65,7 +53,7 @@ const PotentialJurors = (props) => {
                   </div>
                   <br />
                 </List.Item>
-              )
+              );
             })}
           </List>
         </Accordion.Content>

@@ -3,41 +3,35 @@ import { Accordion, List, Icon } from "semantic-ui-react";
 
 import { getJuror } from "./helpers";
 
-
 const FinalJurors = (props) => {
   const dispute = props.dispute;
 
-  const [ activeIndex, setActiveIndex ] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleAccordionClick = (event, titleProps) => {
     const { index } = titleProps;
     const newIndex = activeIndex === index ? -1 : index;
     setActiveIndex(newIndex);
-  }
+  };
 
   console.log(dispute.finalJurors);
 
   return (
     <>
-      <Accordion
-        fluid
-        styled
-      >
+      <Accordion fluid styled>
         <Accordion.Title
-          active={activeIndex===0}
+          active={activeIndex === 0}
           index={0}
           onClick={handleAccordionClick}
-          style={{'background-color':'#f2f2f2'}}
+          style={{ "background-color": "#f2f2f2" }}
         >
           <Icon name="dropdown" />
           <b>Final Jurors</b>
         </Accordion.Title>
-        <Accordion.Content
-          active={activeIndex===0}
-        >
+        <Accordion.Content active={activeIndex === 0}>
           <List bulleted>
-            { Object.keys(dispute.finalJurors).map((juror,idx) => {
-              return(
+            {Object.keys(dispute.finalJurors).map((juror, idx) => {
+              return (
                 <List.Item key={idx}>
                   {getJuror(juror)}
                   <List bulleted>
@@ -45,7 +39,8 @@ const FinalJurors = (props) => {
                       Voted for: {dispute.finalJurors[juror].votedFor}
                     </List.Item>
                     <List.Item>
-                      Publisher Rating: {dispute.finalJurors[juror].publisherRating}
+                      Publisher Rating:{" "}
+                      {dispute.finalJurors[juror].publisherRating}
                     </List.Item>
                     <List.Item>
                       Worker Rating: {dispute.finalJurors[juror].workerRating}
@@ -59,7 +54,6 @@ const FinalJurors = (props) => {
       </Accordion>
     </>
   );
-
-}
+};
 
 export default FinalJurors;
