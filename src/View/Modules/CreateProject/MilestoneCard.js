@@ -31,7 +31,7 @@ const MilestoneCard = (props) => {
               </div>
             </div>
             <Card.Text>
-              <b>Milestone Cost:</b> {milestone.cost}
+              <b>Milestone Cost:</b> {milestone.cost / 1000000000000}
             </Card.Text>
             <Card.Text>
               <b>Milestone Deadline:</b> {milestone.deadline} days
