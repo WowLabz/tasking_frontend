@@ -181,7 +181,7 @@ const MilestoneForm = (props) => {
                             required
                             type="number"
                             placeholder="Milestone Cost"
-                            value={milestone.cost > 0 ? milestone.cost : ''}
+                            value={milestone.cost > 0 ? milestone.cost/unit : ''}
                             onChange={(event) => onValueChange(event,'cost')}
                             isInvalid={!!errors.cost}
                         />
