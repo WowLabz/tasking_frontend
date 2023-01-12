@@ -38,6 +38,7 @@ const MilestoneForm = (props) => {
   // to show the file name
   const [fileHeader, setFileHeader] = useState("Add a file");
 
+  const [cost, setCost] = useState(0);
   // If the user is trying to edit the milestone then this will initialize the values
   useEffect(() => {
     if (index !== -1) {
@@ -50,18 +51,18 @@ const MilestoneForm = (props) => {
   useEffect(() => {
     if (
       milestone.name !== "" &&
-      milestone.cost !== 0 &&
+      cost !== 0 &&
       milestone.tags.length !== 0 &&
       milestone.deadline !== 0 &&
       milestone.publisherAttachments !== ""
     ) {
       setValid(true);
     }
-  }, [milestone]);
+  }, [milestone, cost]);
 
   // validation of form elements
   const validateForm = () => {
-    const { name, cost, tags, deadline, publisherAttachments } = milestone;
+    const { name, tags, deadline, publisherAttachments } = milestone;
     const tempErrors = {};
     if (!name || name === "") {
       tempErrors.name = "Name cannot be empty";
@@ -163,9 +164,9 @@ const MilestoneForm = (props) => {
               required
               type="number"
               placeholder="Milestone Cost"
-              value={milestone.cost > 0 ? milestone.cost/unit : ""}
-              onChange={(event) => onValueChange(event, "cost")}
-              isInvalid={!!errors.cost}
+              value={milestone.cost > 0 ? milestone.cost/unit : cost}
+              onChange={(event) => {/*onValueChange(event, "cost")*/ setCost(event.target.value)}
+              /* isInvalid={!!errors.cost */}
             />
             <Form.Control.Feedback type="invalid">
               {errors.cost}
@@ -266,7 +267,8 @@ const MilestoneForm = (props) => {
               type="submit"
               onClick={(event) => {
                 event.preventDefault();
-                milestone.cost = milestone.cost * unit;
+                /* milestone.cost = milestone.cost * unit; */
+                milestone.cost = cost * unit;
                 props.onFormSubmit(
                   event,
                   milestone,
