@@ -9,7 +9,13 @@ import BalanceImg from "../../../assets/images/balance.png";
 import { convertCost } from "../../../Utilities/convertCost";
 import { toast } from "react-toastify";
 
-const TaskCard = ({ data, showFormModal, isWalletConnected, toast }) => {
+const TaskCard = ({
+  data,
+  showFormModal,
+  isWalletConnected,
+  toast,
+  currentAddress,
+}) => {
   const history = useHistory();
   const [attributesForCard, setAttributesForCard] = useState({});
   const [cardDetails, setCardDetails] = useState({
@@ -20,6 +26,7 @@ const TaskCard = ({ data, showFormModal, isWalletConnected, toast }) => {
     cost: null,
     status: null,
     milestoneName: null,
+    publisher: null,
     publisherName: null,
     workerName: null,
     startDate: null,
@@ -70,92 +77,104 @@ const TaskCard = ({ data, showFormModal, isWalletConnected, toast }) => {
       case TASK_STATUS.InProgress:
         return {
           badgeColor: "yellow",
-          button: [
-            <Button
-              key={0}
-              variant="primary"
-              name={constants.FORM_TYPES.COMPLETE_TASK.type}
-              onClick={(e) =>
-                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
-              }
-            >
-              <b>Complete</b>
-            </Button>,
-          ],
+          button:
+            currentAddress === cardDetails.workerId
+              ? [
+                  <Button
+                    key={0}
+                    variant="primary"
+                    name={constants.FORM_TYPES.COMPLETE_TASK.type}
+                    onClick={(e) =>
+                      onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+                    }
+                  >
+                    <b>Complete</b>
+                  </Button>,
+                ]
+              : [],
         };
 
       case TASK_STATUS.PendingApproval:
         return {
           badgeColor: "red",
-          button: [
-            <Button
-              variant="success"
-              name={constants.FORM_TYPES.APPROVE_TASK.type}
-              onClick={(e) =>
-                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
-              }
-            >
-              <b>Approve</b>
-            </Button>,
-            <Button
-              variant="danger"
-              name={constants.FORM_TYPES.APPROVE_TASK.type}
-              onClick={(e) =>
-                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
-              }
-            >
-              <b>Disapprove</b>
-            </Button>,
-          ],
+          button:
+            currentAddress === cardDetails.publisher
+              ? [
+                  <Button
+                    variant="success"
+                    name={constants.FORM_TYPES.APPROVE_TASK.type}
+                    onClick={(e) =>
+                      onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+                    }
+                  >
+                    <b>Approve</b>
+                  </Button>,
+                  <Button
+                    variant="danger"
+                    name={constants.FORM_TYPES.APPROVE_TASK.type}
+                    onClick={(e) =>
+                      onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+                    }
+                  >
+                    <b>Disapprove</b>
+                  </Button>,
+                ]
+              : [],
         };
 
       case TASK_STATUS.CustomerRatingPending:
         return {
           badgeColor: "red",
-          button: [
-            <Button
-              variant="success"
-              name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) =>
-                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
-              }
-            >
-              <b>Provide Customer Ratings</b>
-            </Button>,
-            <Button
-              variant="danger"
-              name={constants.FORM_TYPES.DISAPPROVE_WORKER_RATINGS.type}
-              onClick={(e) =>
-                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
-              }
-            >
-              <b>Disapprove Worker Ratings</b>
-            </Button>,
-          ],
+          button:
+            currentAddress === cardDetails.workerId
+              ? [
+                  <Button
+                    variant="success"
+                    name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
+                    onClick={(e) =>
+                      onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+                    }
+                  >
+                    <b>Provide Customer Ratings</b>
+                  </Button>,
+                  <Button
+                    variant="danger"
+                    name={constants.FORM_TYPES.DISAPPROVE_WORKER_RATINGS.type}
+                    onClick={(e) =>
+                      onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+                    }
+                  >
+                    <b>Disapprove Worker Ratings</b>
+                  </Button>,
+                ]
+              : [],
         };
       case TASK_STATUS.CustomerRatingProvided:
         return {
           badgeColor: "red",
-          button: [
-            <Button
-              variant="success"
-              name={constants.FORM_TYPES.CLOSE_TASK.type}
-              onClick={(e) =>
-                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
-              }
-            >
-              <b>Close</b>
-            </Button>,
-            <Button
-              variant="danger"
-              name={constants.FORM_TYPES.DISAPPROVE_CUSTOMER_RATINGS.type}
-              onClick={(e) =>
-                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
-              }
-            >
-              <b>Disapprove Customer Ratings</b>
-            </Button>,
-          ],
+          button:
+            currentAddress === cardDetails.publisher
+              ? [
+                  <Button
+                    variant="success"
+                    name={constants.FORM_TYPES.CLOSE_TASK.type}
+                    onClick={(e) =>
+                      onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+                    }
+                  >
+                    <b>Close</b>
+                  </Button>,
+                  <Button
+                    variant="danger"
+                    name={constants.FORM_TYPES.DISAPPROVE_CUSTOMER_RATINGS.type}
+                    onClick={(e) =>
+                      onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+                    }
+                  >
+                    <b>Disapprove Customer Ratings</b>
+                  </Button>,
+                ]
+              : [],
         };
       case TASK_STATUS.DisputeRaised:
         return {
@@ -199,17 +218,18 @@ const TaskCard = ({ data, showFormModal, isWalletConnected, toast }) => {
       case TASK_STATUS.Open:
         return {
           badgeColor: "blue",
-          button: (
-            <Button
-              variant="warning"
-              name={constants.FORM_TYPES.BID_FOR_TASK.type}
-              onClick={(e) =>
-                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
-              }
-            >
-              <b>Bid</b>
-            </Button>
-          ),
+          button:
+            currentAddress !== cardDetails.publisher ? (
+              <Button
+                variant="warning"
+                name={constants.FORM_TYPES.BID_FOR_TASK.type}
+                onClick={(e) =>
+                  onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+                }
+              >
+                <b>Bid</b>
+              </Button>
+            ) : null,
         };
       default:
         console.log(`----------status: ${status}-------------`);
@@ -279,7 +299,7 @@ const TaskCard = ({ data, showFormModal, isWalletConnected, toast }) => {
 
   useEffect(() => {
     init();
-  }, [data]);
+  }, [data, currentAddress]);
 
   return (
     <Col

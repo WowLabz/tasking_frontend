@@ -28,6 +28,7 @@ const DashBoard = (props) => {
       if (project.status === "Open") {
         project.milestones.map((milestone) => {
           milestone.publisherName = project.publisherName;
+          milestone.publisher = project.publisher;
           milestoneList.push(milestone);
         });
       }
@@ -37,11 +38,23 @@ const DashBoard = (props) => {
 
   // initial render
   const tasks = useSelector((state) => state.dashBoardReducer.tasks);
+  const currentAddress = useSelector((state) => {
+    try {
+      const address = state.headerReducer.currentWalletDetails.address;
+      if (address) {
+        return address;
+      } else {
+        return "";
+      }
+    } catch (error) {
+      return "";
+    }
+  });
   useEffect(() => {
-    console.log("The tasks are = ", tasks);
+    // console.log("The tasks are = ", tasks);
     const tmpMilestones = filterProjects(tasks);
     setMilestones(tmpMilestones);
-  }, []);
+  }, [tasks]);
 
   // re-render each time if tasks changes
   useEffect(() => {
@@ -149,6 +162,7 @@ const DashBoard = (props) => {
               key={index}
               isWalletConnected={isWalletConnected}
               toast={toast}
+              currentAddress={currentAddress}
             />
           ))}
       </Row>
