@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 // import { Accordion, Badge, Breadcrumb, Button, Card } from 'react-bootstrap';
 import { Row } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
 import {
   acceptJuryDutyAndCastVoteTx,
@@ -21,14 +22,20 @@ toast.configure();
 
 const Court = ({ match }) => {
   const { api } = useSubstrateState();
+  const history = useHistory();
 
-  const isWalletConnected = useSelector(
-    (state) => state.headerReducer.isWalletConnected
-  );
-
-  const walletUser = useSelector(
-    (state) => state.headerReducer.currentWalletDetails.meta
-  );
+  // const walletUser = useSelector(
+  //   (state) => state.headerReducer.currentWalletDetails.meta
+  // );
+  const walletUser = useSelector((state) => {
+    try {
+      const meta = state.headerReducer.currentWalletDetails.meta;
+      return meta;
+    } catch (error) {
+      console.error(error);
+      return history.push("/");
+    }
+  });
   walletUser.address = useSelector(
     (state) => state.headerReducer.currentWalletDetails.address
   );

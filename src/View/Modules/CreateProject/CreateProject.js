@@ -41,9 +41,16 @@ const CreateProject = () => {
 
   const [valid, setValid] = useState(false);
 
-  const walletUser = useSelector(
-    (state) => state.headerReducer.currentWalletDetails.meta
-  );
+  const walletUser = useSelector((state) => {
+    try {
+      const meta = state.headerReducer.currentWalletDetails.meta;
+      return meta;
+    } catch (error) {
+      console.error(error);
+      return history.push("/");
+    }
+  });
+
   walletUser.address = useSelector(
     (state) => state.headerReducer.currentWalletDetails.address
   );

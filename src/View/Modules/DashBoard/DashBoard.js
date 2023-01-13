@@ -143,7 +143,13 @@ const DashBoard = (props) => {
           ))} */}
         {milestones.length > 0 &&
           milestones.map((task, index) => (
-            <TaskCard data={task} showFormModal={showFormModal} key={index} />
+            <TaskCard
+              data={task}
+              showFormModal={showFormModal}
+              key={index}
+              isWalletConnected={isWalletConnected}
+              toast={toast}
+            />
           ))}
       </Row>
     </>

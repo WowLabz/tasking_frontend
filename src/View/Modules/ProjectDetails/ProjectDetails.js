@@ -9,6 +9,7 @@ import {
   List,
   Grid,
 } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
 
 import MilestoneModal from "../CreateProject/MilestoneModal";
 import MilestoneDetails from "./MilestoneDetails";
@@ -29,14 +30,33 @@ const ProjectDetails = (props) => {
   const projects = useSelector((state) => state.dashBoardReducer.tasks);
   const { api } = useSubstrateState();
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  const walletUser = useSelector(
-    (state) => state.headerReducer.currentWalletDetails.meta
-  );
-  walletUser.address = useSelector(
-    (state) => state.headerReducer.currentWalletDetails.address
-  );
+  // const walletUser = useSelector(
+  //   (state) => state.headerReducer.currentWalletDetails.meta
+  // );
+  //
+  const walletUser = useSelector((state) => {
+    try {
+      const meta = state.headerReducer.currentWalletDetails.meta;
+      return meta;
+    } catch (error) {
+      return history.push("/");
+    }
+  });
 
+  // walletUser.address = useSelector(
+  //   (state) => state.headerReducer.currentWalletDetails.address
+  // );
+
+  walletUser.address = useSelector((state) => {
+    try {
+      const address = state.headerReducer.currentWalletDetails.address;
+      return address;
+    } catch (error) {
+      return history.push("/");
+    }
+  });
   // // add project to marketplace modal show
   // const [ showConfirmModalMarketplace, setShowConfirmModalMarketplace ] = useState(false);
   // // close project modal show

@@ -7,8 +7,9 @@ import { useSelector } from "react-redux";
 import { TASK_STATUS } from "../TaskDetails/constants";
 import BalanceImg from "../../../assets/images/balance.png";
 import { convertCost } from "../../../Utilities/convertCost";
+import { toast } from "react-toastify";
 
-const TaskCard = ({ data, showFormModal }) => {
+const TaskCard = ({ data, showFormModal, isWalletConnected, toast }) => {
   const history = useHistory();
   const [attributesForCard, setAttributesForCard] = useState({});
   const [cardDetails, setCardDetails] = useState({
@@ -42,6 +43,19 @@ const TaskCard = ({ data, showFormModal }) => {
     (state) => state.headerReducer.defaultAccounts
   );
 
+  const checkForWalletConnected = () => {
+    if (!isWalletConnected) return false;
+    return true;
+  };
+
+  const onClickHandler = (pathname) => {
+    if (checkForWalletConnected()) {
+      return history.push({ pathname });
+    } else {
+      toast.error("Connect Crypto Wallet");
+    }
+  };
+
   const getAttributesForCard = (status) => {
     switch (status) {
       case TASK_STATUS.Completed:
@@ -62,9 +76,7 @@ const TaskCard = ({ data, showFormModal }) => {
               variant="primary"
               name={constants.FORM_TYPES.COMPLETE_TASK.type}
               onClick={(e) =>
-                history.push({
-                  pathname: `/projectdetails/${cardDetails.projectId}`,
-                })
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
               }
             >
               <b>Complete</b>
@@ -80,9 +92,7 @@ const TaskCard = ({ data, showFormModal }) => {
               variant="success"
               name={constants.FORM_TYPES.APPROVE_TASK.type}
               onClick={(e) =>
-                history.push({
-                  pathname: `/projectdetails/${cardDetails.projectId}`,
-                })
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
               }
             >
               <b>Approve</b>
@@ -91,9 +101,7 @@ const TaskCard = ({ data, showFormModal }) => {
               variant="danger"
               name={constants.FORM_TYPES.APPROVE_TASK.type}
               onClick={(e) =>
-                history.push({
-                  pathname: `/projectdetails/${cardDetails.projectId}`,
-                })
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
               }
             >
               <b>Disapprove</b>
@@ -109,9 +117,7 @@ const TaskCard = ({ data, showFormModal }) => {
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
               onClick={(e) =>
-                history.push({
-                  pathname: `/projectdetails/${cardDetails.projectId}`,
-                })
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
               }
             >
               <b>Provide Customer Ratings</b>
@@ -120,9 +126,7 @@ const TaskCard = ({ data, showFormModal }) => {
               variant="danger"
               name={constants.FORM_TYPES.DISAPPROVE_WORKER_RATINGS.type}
               onClick={(e) =>
-                history.push({
-                  pathname: `/projectdetails/${cardDetails.projectId}`,
-                })
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
               }
             >
               <b>Disapprove Worker Ratings</b>
@@ -137,9 +141,7 @@ const TaskCard = ({ data, showFormModal }) => {
               variant="success"
               name={constants.FORM_TYPES.CLOSE_TASK.type}
               onClick={(e) =>
-                history.push({
-                  pathname: `/projectdetails/${cardDetails.projectId}`,
-                })
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
               }
             >
               <b>Close</b>
@@ -148,9 +150,7 @@ const TaskCard = ({ data, showFormModal }) => {
               variant="danger"
               name={constants.FORM_TYPES.DISAPPROVE_CUSTOMER_RATINGS.type}
               onClick={(e) =>
-                history.push({
-                  pathname: `/projectdetails/${cardDetails.projectId}`,
-                })
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
               }
             >
               <b>Disapprove Customer Ratings</b>
@@ -164,7 +164,7 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
+              onClick={(e) => onClickHandler(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -177,7 +177,7 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
+              onClick={(e) => onClickHandler(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -190,7 +190,7 @@ const TaskCard = ({ data, showFormModal }) => {
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
+              onClick={(e) => onClickHandler(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -204,9 +204,7 @@ const TaskCard = ({ data, showFormModal }) => {
               variant="warning"
               name={constants.FORM_TYPES.BID_FOR_TASK.type}
               onClick={(e) =>
-                history.push({
-                  pathname: `/projectdetails/${cardDetails.projectId}`,
-                })
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
               }
             >
               <b>Bid</b>
@@ -293,11 +291,9 @@ const TaskCard = ({ data, showFormModal }) => {
     >
       <Card className="task-card  p-4" style={{ width: "fit-content" }}>
         <Card.Body
-          onClick={() =>
-            history.push({
-              pathname: `/projectdetails/${cardDetails.projectId}`,
-            })
-          }
+          onClick={() => {
+            onClickHandler(`/projectdetails/${cardDetails.projectId}`);
+          }}
         >
           <Card.Text className="d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center">

@@ -23,9 +23,16 @@ const UserDashboard = () => {
     (state) => state.headerReducer.isWalletConnected
   );
 
-  const walletUser = useSelector(
-    (state) => state.headerReducer.currentWalletDetails.meta
-  );
+  // const walletUser = useSelector(
+  //   (state) => state.headerReducer.currentWalletDetails.meta
+  // );
+  const walletUser = useSelector((state) => {
+    try {
+      return state.headerReducer.currentWalletDetails.meta;
+    } catch (error) {
+      return history.push("/");
+    }
+  });
   walletUser.address = useSelector(
     (state) => state.headerReducer.currentWalletDetails.address
   );
