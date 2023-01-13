@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Badge, Card, Button, Col } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
-import _ from 'lodash';
-import * as constants from './constants';
-import { TASK_STATUS } from '../TaskDetails/constants';
-import BalanceImg from '../../../assets/images/balance.png';
-import { convertCost } from '../../../Utilities/convertCost';
+import React, { useEffect, useState } from "react";
+import { Badge, Card, Button, Col } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import _ from "lodash";
+import * as constants from "./constants";
+import { TASK_STATUS } from "../TaskDetails/constants";
+import BalanceImg from "../../../assets/images/balance.png";
+import { convertCost } from "../../../Utilities/convertCost";
 
-const TaskCard = ({ data }) => {
+const TaskCard = ({ data, isWalletConnected, toast }) => {
   const history = useHistory();
   const [attributesForCard, setAttributesForCard] = useState({});
   const [cardDetails, setCardDetails] = useState({
@@ -26,7 +26,7 @@ const TaskCard = ({ data }) => {
     workerAttachments: [],
     publisherAttachments: [],
     projectId: null,
-    milestoneNumber: null
+    milestoneNumber: null,
   });
 
   const [attachments, setAttachments] = useState({
@@ -34,11 +34,24 @@ const TaskCard = ({ data }) => {
     attachments: [],
   });
 
+  const checkForWalletConnected = () => {
+    if (!isWalletConnected) return false;
+    return true;
+  };
+
+  const onClickHandler = (pathname) => {
+    if (checkForWalletConnected()) {
+      return history.push({ pathname });
+    } else {
+      toast.error("Connect Crypto Wallet");
+    }
+  };
+
   const getAttributesForCard = (status) => {
     switch (status) {
       case TASK_STATUS.Completed:
         return {
-          badgeColor: 'green',
+          badgeColor: "green",
           button: (
             <Button variant="secondary" name={`Task Successfully Completed`}>
               <b>Task Successfully Completed</b>
@@ -47,15 +60,15 @@ const TaskCard = ({ data }) => {
         };
       case TASK_STATUS.InProgress:
         return {
-          badgeColor: 'yellow',
+          badgeColor: "yellow",
           button: [
             <Button
               key={0}
               variant="primary"
               name={constants.FORM_TYPES.COMPLETE_TASK.type}
-              onClick={(e) => history.push({
-                pathname: `/projectdetails/${cardDetails.projectId}`,
-              })}
+              onClick={(e) =>
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+              }
             >
               <b>Complete</b>
             </Button>,
@@ -64,48 +77,48 @@ const TaskCard = ({ data }) => {
 
       case TASK_STATUS.PendingApproval:
         return {
-          badgeColor: 'red',
+          badgeColor: "red",
           button: [
             <Button
               variant="success"
               name={constants.FORM_TYPES.APPROVE_TASK.type}
-              onClick={(e) => history.push({
-                pathname: `/projectdetails/${cardDetails.projectId}`,
-              })}
+              onClick={(e) =>
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+              }
             >
               <b>Approve</b>
             </Button>,
             <Button
               variant="danger"
               name={constants.FORM_TYPES.APPROVE_TASK.type}
-              onClick={(e) => history.push({
-                pathname: `/projectdetails/${cardDetails.projectId}`,
-              })}
+              onClick={(e) =>
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+              }
             >
               <b>Disapprove</b>
-            </Button>
+            </Button>,
           ],
         };
 
       case TASK_STATUS.CustomerRatingPending:
         return {
-          badgeColor: 'red',
+          badgeColor: "red",
           button: [
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push({
-                pathname: `/projectdetails/${cardDetails.projectId}`,
-              })}
+              onClick={(e) =>
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+              }
             >
               <b>Provide Customer Ratings</b>
             </Button>,
             <Button
               variant="danger"
               name={constants.FORM_TYPES.DISAPPROVE_WORKER_RATINGS.type}
-              onClick={(e) => history.push({
-                pathname: `/projectdetails/${cardDetails.projectId}`,
-              })}
+              onClick={(e) =>
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+              }
             >
               <b>Disapprove Worker Ratings</b>
             </Button>,
@@ -113,23 +126,23 @@ const TaskCard = ({ data }) => {
         };
       case TASK_STATUS.CustomerRatingProvided:
         return {
-          badgeColor: 'red',
+          badgeColor: "red",
           button: [
             <Button
               variant="success"
               name={constants.FORM_TYPES.CLOSE_TASK.type}
-              onClick={(e) => history.push({
-                pathname: `/projectdetails/${cardDetails.projectId}`,
-              })}
+              onClick={(e) =>
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+              }
             >
               <b>Close</b>
             </Button>,
             <Button
               variant="danger"
               name={constants.FORM_TYPES.DISAPPROVE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push({
-                pathname: `/projectdetails/${cardDetails.projectId}`,
-              })}
+              onClick={(e) =>
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+              }
             >
               <b>Disapprove Customer Ratings</b>
             </Button>,
@@ -137,12 +150,12 @@ const TaskCard = ({ data }) => {
         };
       case TASK_STATUS.DisputeRaised:
         return {
-          badgeColor: 'red',
+          badgeColor: "red",
           button: (
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
+              onClick={(e) => onClickHandler(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -150,12 +163,12 @@ const TaskCard = ({ data }) => {
         };
       case TASK_STATUS.VodingPeriod:
         return {
-          badgeColor: 'red',
+          badgeColor: "red",
           button: (
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
+              onClick={(e) => onClickHandler(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -163,12 +176,12 @@ const TaskCard = ({ data }) => {
         };
       case TASK_STATUS.JuryDecisionReached:
         return {
-          badgeColor: 'red',
+          badgeColor: "red",
           button: (
             <Button
               variant="success"
               name={constants.FORM_TYPES.PROVIDE_CUSTOMER_RATINGS.type}
-              onClick={(e) => history.push(`/court/${data.milestoneId}`)}
+              onClick={(e) => onClickHandler(`/court/${data.milestoneId}`)}
             >
               <b>Show Court</b>
             </Button>
@@ -176,14 +189,14 @@ const TaskCard = ({ data }) => {
         };
       case TASK_STATUS.Open:
         return {
-          badgeColor: 'blue',
+          badgeColor: "blue",
           button: (
             <Button
               variant="warning"
               name={constants.FORM_TYPES.BID_FOR_TASK.type}
-              onClick={(e) => history.push({
-                pathname: `/projectdetails/${cardDetails.projectId}`,
-              })}
+              onClick={(e) =>
+                onClickHandler(`/projectdetails/${cardDetails.projectId}`)
+              }
             >
               <b>Bid</b>
             </Button>
@@ -194,11 +207,14 @@ const TaskCard = ({ data }) => {
     }
   };
 
-  const getProjectIdAndMilestoneNumber = ({milestoneId}) => {
-    const projectId = milestoneId.slice(0,-1);
-    const milestoneNumber = milestoneId.slice(milestoneId.length - 1, milestoneId.length).charCodeAt(0) - 97;
-    return [projectId,milestoneNumber];
-  }
+  const getProjectIdAndMilestoneNumber = ({ milestoneId }) => {
+    const projectId = milestoneId.slice(0, -1);
+    const milestoneNumber =
+      milestoneId
+        .slice(milestoneId.length - 1, milestoneId.length)
+        .charCodeAt(0) - 97;
+    return [projectId, milestoneNumber];
+  };
 
   const handleAttachments = (workerAttachments, publisherAttachments) => {
     let tempAttachments = [];
@@ -228,11 +244,11 @@ const TaskCard = ({ data }) => {
       // const publisher_name = getAccountName(client);
       // const worker_name = getAccountName(worker_id);
       handleAttachments(data.workerAttachments, data.publisherAttachments);
-      const [projectId,milestoneNumber] = getProjectIdAndMilestoneNumber(data);
+      const [projectId, milestoneNumber] = getProjectIdAndMilestoneNumber(data);
       setCardDetails({
         ...data,
         projectId,
-        milestoneNumber
+        milestoneNumber,
       });
       setAttributesForCard(getAttributesForCard(data.status));
     } catch (error) {
@@ -252,7 +268,7 @@ const TaskCard = ({ data }) => {
       lg={4}
       className="d-flex justify-content-center align-items-center"
     >
-      <Card className="task-card  p-4" style={{width:'fit-content'}}>
+      <Card className="task-card  p-4" style={{ width: "fit-content" }}>
         <Card.Body
           onClick={() =>
             history.push({
@@ -269,7 +285,7 @@ const TaskCard = ({ data }) => {
                   alt="balance"
                   width={20}
                   height={20}
-                  style={{ marginLeft: '8px', marginTop: '-9px' }}
+                  style={{ marginLeft: "8px", marginTop: "-9px" }}
                 />
               )}
             </div>
@@ -277,13 +293,13 @@ const TaskCard = ({ data }) => {
               variant={attributesForCard.badgeColor}
               className={`px-2 mx-2`}
               style={{
-                display: 'table',
+                display: "table",
                 color: `${
-                  attributesForCard.badgeColor === 'yellow' ? 'black' : 'white'
+                  attributesForCard.badgeColor === "yellow" ? "black" : "white"
                 }`,
                 backgroundColor: `${attributesForCard.badgeColor}`,
-                borderRadius: '10px',
-                padding: '0.4rem',
+                borderRadius: "10px",
+                padding: "0.4rem",
               }}
             >
               {cardDetails.status}
@@ -295,7 +311,7 @@ const TaskCard = ({ data }) => {
               <div>
                 <b>Publisher</b>
               </div>
-              <small style={{ fontSize: '13px' }}>
+              <small style={{ fontSize: "13px" }}>
                 {cardDetails.publisherName}
               </small>
             </div>
@@ -304,7 +320,7 @@ const TaskCard = ({ data }) => {
                 <div>
                   <b>Worker</b>
                 </div>
-                <small style={{ fontSize: '13px' }}>
+                <small style={{ fontSize: "13px" }}>
                   {cardDetails.workerName}
                 </small>
               </div>
@@ -329,11 +345,11 @@ const TaskCard = ({ data }) => {
                 variant={`secondary`}
                 className={`px-2 m-1`}
                 style={{
-                  color: `${'white'}`,
-                  backgroundColor: `${'#272b41'}`,
-                  borderRadius: '10px',
-                  padding: '0.4rem',
-                  fontSize: '10px',
+                  color: `${"white"}`,
+                  backgroundColor: `${"#272b41"}`,
+                  borderRadius: "10px",
+                  padding: "0.4rem",
+                  fontSize: "10px",
                 }}
                 key={idx}
               >
@@ -343,11 +359,17 @@ const TaskCard = ({ data }) => {
           </div>
         </Card.Body>
         <Card.Footer className="card-footer">
-          { cardDetails.publisherAttachments && cardDetails.publisherAttachments.length !== 0 ? (
-            <a href={cardDetails.publisherAttachments} target="_blank">Publisher Attachments</a>
+          {cardDetails.publisherAttachments &&
+          cardDetails.publisherAttachments.length !== 0 ? (
+            <a href={cardDetails.publisherAttachments} target="_blank">
+              Publisher Attachments
+            </a>
           ) : null}
-          { cardDetails.workerAttachments && cardDetails.workerAttachments.length !== 0 ? (
-            <a href={cardDetails.workerAttachments} target="_blank">Worker Attachments</a>
+          {cardDetails.workerAttachments &&
+          cardDetails.workerAttachments.length !== 0 ? (
+            <a href={cardDetails.workerAttachments} target="_blank">
+              Worker Attachments
+            </a>
           ) : null}
           <br />
           {attributesForCard.button}
@@ -356,7 +378,5 @@ const TaskCard = ({ data }) => {
     </Col>
   );
 };
-
-
 
 export default TaskCard;
