@@ -271,9 +271,7 @@ const TaskCard = ({ data, isWalletConnected, toast }) => {
       <Card className="task-card  p-4" style={{ width: "fit-content" }}>
         <Card.Body
           onClick={() =>
-            history.push({
-              pathname: `/projectdetails/${cardDetails.projectId}`,
-            })
+            onClickHandler(`/projectdetails/${cardDetails.projectId}`)
           }
         >
           <Card.Text className="d-flex justify-content-between align-items-center">
